@@ -1,0 +1,177 @@
+/* Base Styles */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  background-color: #f4fdf7;
+  color: #222;
+}
+
+a {
+  text-decoration: none;
+  color: #1a936f;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #ffffff;
+  border-bottom: 1px solid #ddd;
+}
+
+.navbar .logo {
+  font-weight: 600;
+  font-size: 1.5rem;
+  color: #1a936f;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.nav-links a {
+  color: #222;
+  font-weight: 500;
+  padding: 0.5rem;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  color: #1a936f;
+  border-bottom: 2px solid #1a936f;
+}
+
+/* Hero Section */
+.hero {
+  background: linear-gradient(to right, #a8e6cf, #dcedc1);
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.hero-content h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #064635;
+}
+
+.hero-content p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.cta-btn {
+  background-color: #1a936f;
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  border-radius: 30px;
+  transition: background 0.3s ease;
+}
+
+.cta-btn:hover {
+  background-color: #107154;
+}
+
+/* Sub Header */
+.sub-header {
+  background-color: #e0f5ec;
+  padding: 2rem;
+  text-align: center;
+  border-bottom: 1px solid #cdecd7;
+}
+
+.sub-header h1 {
+  margin: 0;
+  color: #064635;
+}
+
+/* Steps Section */
+.steps {
+  margin: 2rem auto;
+  max-width: 800px;
+  padding: 1rem;
+  line-height: 1.8;
+  font-size: 1.1rem;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+/* Forms */
+form {
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 1rem;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+form label {
+  display: block;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+form input,
+form textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-family: 'Poppins', sans-serif;
+}
+
+form button {
+  background-color: #1a936f;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+}
+
+form button:hover {
+  background-color: #0d6f53;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 1rem;
+  background-color: #ffffff;
+  font-size: 0.9rem;
+  color: #555;
+  border-top: 1px solid #ddd;
+}
+
+/* Map Section */
+#map {
+  height: 300px;
+  background-color: #d3f0e2;
+  text-align: center;
+  padding: 2rem;
+  font-weight: bold;
+  color: #1a936f;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .nav-links {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .hero-content h1 {
+    font-size: 2rem;
+  }
+}
