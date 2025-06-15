@@ -19,6 +19,7 @@ header {
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
+  position: relative;
 }
 
 .logo {
@@ -26,6 +27,27 @@ header {
   font-size: 1.5rem;
 }
 
+/* How It Works Button */
+.how-it-works-link {
+  margin-left: auto;
+  margin-right: 1rem;
+}
+
+.btn-link {
+  background-color: #00b894;
+  color: white !important;
+  padding: 8px 16px;
+  border-radius: 5px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+
+.btn-link:hover {
+  background-color: #019e7c;
+}
+
+/* Navigation links */
 .nav-links {
   display: flex;
   list-style: none;
@@ -42,8 +64,9 @@ header {
   font-weight: 300;
 }
 
+/* Hero Section */
 .hero {
-  background: url('../images/hero-bg.jpg') no-repeat center center/cover;
+  background: url('images/hero-bg.jpg') no-repeat center center/cover;
   height: 70vh;
   display: flex;
   align-items: center;
@@ -73,6 +96,7 @@ header {
   border-radius: 4px;
 }
 
+/* Footer */
 footer {
   background-color: #0077cc;
   color: white;
@@ -80,7 +104,7 @@ footer {
   padding: 1rem 0;
 }
 
-/* Hamburger menu */
+/* Hamburger Menu */
 .menu-toggle {
   display: none;
   font-size: 28px;
@@ -88,28 +112,7 @@ footer {
   color: white;
 }
 
-.how-it-works-link a {
-  color: white;
-  font-weight: 300;
-  text-decoration: none;
-  margin-right: 1rem;
-}
-
-/* Button style for How It Works */
-.btn-link {
-  background-color: #00b894;
-  color: white !important;
-  padding: 8px 16px;
-  border-radius: 5px;
-  font-weight: 600;
-  transition: background 0.3s ease;
-}
-
-.btn-link:hover {
-  background-color: #019e7c;
-}
-
-/* Responsive */
+/* Responsive Styling */
 @media (max-width: 768px) {
   .menu-toggle {
     display: block;
@@ -139,15 +142,13 @@ footer {
 
   .how-it-works-link {
     order: -1;
-    margin-right: auto;
-    padding-left: 20px;
+    margin: 0.5rem 1rem;
   }
 
   .btn-link {
-    background-color: transparent;
-    color: #0077cc;
-    font-weight: 500;
-    border: none;
+    background-color: #0077cc;
+    color: white !important;
+    font-weight: bold;
   }
 }
 
@@ -162,9 +163,5 @@ footer {
 
   .nav-links li {
     margin: 0 15px;
-  }
-
-  .how-it-works-link {
-    display: block;
   }
 }
