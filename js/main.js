@@ -2,7 +2,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   console.log("BottleBack India loaded!");
 
-  // Example: Add smooth scrolling for internal links
+  // Smooth scrolling for anchor links
   const links = document.querySelectorAll("a[href^='#']");
   links.forEach(link => {
     link.addEventListener("click", function(e) {
@@ -12,5 +12,13 @@ document.addEventListener("DOMContentLoaded", () => {
         target.scrollIntoView({ behavior: "smooth" });
       }
     });
+  });
+
+  // Hamburger menu toggle
+  const menuToggle = document.getElementById("mobile-menu");
+  const navLinks = document.getElementById("nav-links");
+
+  menuToggle.addEventListener("click", () => {
+    navLinks.classList.toggle("active");
   });
 });
