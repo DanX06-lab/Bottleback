@@ -3,32 +3,82 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Sign Up - BottleBack India</title>
-  <link rel="stylesheet" href="styles/style.css" />
+  <title>Sign Up – BottleBack India</title>
+
+  <!-- optional: keep global colours / navbar -->
+  <link rel="stylesheet" href="styles/style.css">
+
+  <style>
+    /*  ---- GLOBAL PASTEL & BUBBLE BACKGROUND (same as login) ---- */
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:"Poppins",sans-serif;
+      display:flex;justify-content:center;align-items:center;
+      min-height:100vh;
+      overflow:hidden;
+      background-size: cover;
+    }
+    
+
+    /*  ---- GLASS SIGN-UP CARD ---- */
+    .glass-card{
+      width:min(90%,440px);
+      padding:3rem 2.5rem;
+      border-radius:24px;
+      background:rgba(255,255,255,.22);
+      border:1px solid rgba(255,255,255,.35);
+      backdrop-filter:blur(18px);
+      box-shadow:0 10px 35px rgba(0,0,0,.12);
+      text-align:center;color:#1b1b1b;
+    }
+    h1{font-weight:600;margin-bottom:2rem;letter-spacing:.5px}
+
+    /*  ---- FORM ---- */
+    form{display:flex;flex-direction:column;gap:1.1rem}
+    input{
+      width:100%;padding:.85rem 1rem;
+      border-radius:50px;border:1px solid rgba(0,0,0,.18);
+      background:rgba(255,255,255,.75);
+      font-size:.95rem;
+    }
+    .btn{
+      padding:.9rem;border:none;border-radius:50px;
+      font-weight:600;font-size:1rem;cursor:pointer;
+      transition:.25s background;
+    }
+    .btn.primary{background:#000;color:#fff}
+    .btn.primary:hover{background:#333}
+    .btn.alt{background:rgba(0,0,0,.08);color:#000}
+
+    .login-link{text-align:center;font-size:.95rem;margin-top:1rem}
+    .login-link a{color:#00b894;text-decoration:none;font-weight:600}
+    .login-link a:hover{text-decoration:underline}
+
+    @media(max-width:480px){
+      .glass-card{padding:2.2rem 1.8rem}
+      h1{font-size:1.6rem}
+    }
+  </style>
 </head>
-<body>
-  <header class="sub-header">
-    <h1>Create Your Account</h1>
-  </header>
+<body background="images/image3.jpg">
 
-  <main class="login-container">
-    <form action="#" method="POST" class="login-form">
-      <label for="name">Full Name:</label>
-      <input type="text" id="name" name="name" required />
+  <div class="glass-card">
+    <h1>Create Account</h1>
 
-      <label for="email">Email:</label>
-      <input type="email" id="email" name="email" required />
+    <form class="signup-form">
+      <input type="text" placeholder="Full Name" required>
+      <input type="email" placeholder="Email Address" required>
+      <input type="password" placeholder="Password" required>
+      <input type="password" placeholder="Confirm Password" required>
 
-      <label for="password">Password:</label>
-      <input type="password" id="password" name="password" required />
-
-      <label for="confirm-password">Confirm Password:</label>
-      <input type="password" id="confirm-password" name="confirm-password" required />
-
-      <button type="submit">Sign Up</button>
+      <button class="btn primary" type="submit">Sign Up</button>
     </form>
 
-    <p class="signup-link">Already have an account? <a href="login.html">Login here</a></p>
-  </main>
+    <p class="login-link">
+      Already registered?
+      <a href="login.html">Log in here</a>
+    </p>
+  </div>
+
 </body>
 </html>

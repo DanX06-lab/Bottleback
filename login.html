@@ -3,140 +3,91 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login - BottleBack India</title>
-  <link rel="stylesheet" href="styles/style.css" />
+  <title>Log in – BottleBack India</title>
+
+  <!--  Google Font  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+
+  <!--  PAGE-SPECIFIC STYLES  -->
   <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f4f4f4;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      background: linear-gradient(to right, #141414, #1f1f1f);
+    /* === RESET & GLOBAL === */
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:"Poppins",sans-serif;
+      display:flex;justify-content:center;align-items:center;
+      min-height:100vh;
+      overflow:hidden;           /* hide stray bubbles */
+      background-size: cover;
     }
 
-    .login-container {
-      display: flex;
-      max-width: 900px;
-      width: 100%;
-      background: white;
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    /* === GLASS CARD === */
+    .glass-card{
+      width:min(90%,420px);
+      padding:3rem 2.5rem;
+      border-radius:24px;
+      background:rgba(255,255,255,.22);
+      border:1px solid rgba(255,255,255,.35);
+      backdrop-filter:blur(18px);
+      box-shadow:0 10px 35px rgba(0,0,0,.12);
+      text-align:center;
+      color:#1b1b1b;
     }
 
-    .login-left {
-      flex: 1;
-      background: url('https://images.unsplash.com/photo-1573164713988-8665fc963095') no-repeat center center/cover;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      padding: 2rem;
+    /* === TYPOGRAPHY === */
+    h1{font-weight:600;margin-bottom:2rem;letter-spacing:.5px}
+
+    /* === FORM === */
+    form{display:flex;flex-direction:column;gap:1.15rem}
+    input{
+      width:100%;padding:.85rem 1rem;
+      border-radius:50px;border:1px solid rgba(0,0,0,.18);
+      background:rgba(255,255,255,.75);
+      font-size:.95rem;
+    }
+    /* Rounded primary and secondary buttons */
+    .btn{
+      padding:.9rem;border:none;border-radius:50px;
+      font-weight:600;font-size:1rem;cursor:pointer;
+      transition:.25s background;
+    }
+    .btn.primary{background:#000;color:#fff}
+    .btn.primary:hover{background:#333}
+    .btn.alt{
+      background:rgba(0,0,0,.08);
+      color:#000;
     }
 
-    .login-left h2 {
-      font-size: 2rem;
-      font-weight: 600;
-    }
+    /* tiny row */
+    .row{display:flex;justify-content:space-between;font-size:.85rem;margin-top:-.35rem}
+    .row a{text-decoration:none;color:#000}
+    .row a:hover{text-decoration:underline}
 
-    .login-right {
-      flex: 1;
-      background-color: #fff;
-      padding: 3rem;
-    }
-
-    .login-right h2 {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-
-    .login-form {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .login-form input {
-      padding: 0.8rem;
-      margin-bottom: 1.2rem;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 1rem;
-    }
-
-    .login-form button {
-      padding: 0.8rem;
-      border-radius: 8px;
-      border: none;
-      background-color: #000;
-      color: white;
-      font-weight: 600;
-      font-size: 1rem;
-      cursor: pointer;
-      margin-bottom: 1rem;
-    }
-
-    .login-form .signup-btn {
-      background-color: #ccc;
-      color: #000;
-    }
-
-    .login-form .remember-forgot {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.9rem;
-      margin-bottom: 1.2rem;
-    }
-
-    .login-form .remember-forgot label {
-      display: flex;
-      align-items: center;
-    }
-
-    .login-form .remember-forgot a {
-      color: #0077cc;
-      text-decoration: none;
-    }
-
-    .login-form .remember-forgot a:hover {
-      text-decoration: underline;
-    }
-
-    @media (max-width: 768px) {
-      .login-container {
-        flex-direction: column;
-      }
-
-      .login-left, .login-right {
-        flex: none;
-        width: 100%;
-      }
+    @media(max-width:480px){
+      .glass-card{padding:2.2rem 1.8rem}
+      h1{font-size:1.6rem}
     }
   </style>
 </head>
-<body>
-  <div class="login-container">
-    <div class="login-left">
-      <h2>Welcome Back!</h2>
-    </div>
-    <div class="login-right">
-      <h2>Log in</h2>
-      <form action="#" method="POST" class="login-form">
-        <input type="text" placeholder="Username" required />
-        <input type="password" placeholder="Password" required />
+<body background="images/image3.jpg">
 
-        <div class="remember-forgot">
-          <label><input type="checkbox" /> Remember Me</label>
-          <a href="#">Forgot Password?</a>
-        </div>
+  <div class="glass-card">
+    <h1>Log in</h1>
 
-        <button type="submit">Log in</button>
-        <button type="button" class="signup-btn" onclick="location.href='signup.html'">Sign up</button>
-      </form>
-    </div>
+    <form>
+      <input type="text" placeholder="Username" required>
+      <input type="password" placeholder="Password" required>
+
+      <div class="row">
+        <label><input type="checkbox"> Remember&nbsp;me</label>
+        <a href="#">Forgot Password?</a>
+      </div>
+
+      <button class="btn primary" type="submit">Log in</button>
+      <button class="btn alt" type="button" onclick="location.href='signup.html'">Sign up</button>
+    </form>
   </div>
+
 </body>
 </html>
