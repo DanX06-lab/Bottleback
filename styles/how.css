@@ -1,0 +1,62 @@
+/* ===== HOW‑IT‑WORKS PAGE ===== */
+.hiw-hero{
+  text-align:center;
+  padding:3rem 1rem;
+  background:var(--accent);
+  color:#fff;
+}
+.hiw-hero h2{font-size:2.4rem;font-weight:700;margin-bottom:.6rem}
+.hiw-hero p{font-size:1.1rem}
+
+.hiw-steps{
+  max-width:1000px;margin:3rem auto;
+  display:grid;gap:1.5rem;
+  grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+}
+.step-card{
+  background:#fff;border-radius:12px;padding:2rem;text-align:center;
+  box-shadow:0 4px 12px rgba(0,0,0,.08);
+}
+.step-card span{
+  display:inline-block;width:52px;height:52px;line-height:52px;
+  border-radius:50%;background:var(--accent);color:#fff;font-weight:700;
+  font-size:1.2rem;margin-bottom:.8rem;
+}
+
+.hiw-video{
+  max-width:800px;margin:2rem auto;text-align:center;
+}
+.hiw-video video{width:100%;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.15)}
+
+.hiw-qr{
+  text-align:center;padding:2rem 1rem;
+}
+.hiw-qr img{width:160px;height:160px;margin:1rem auto}
+
+.hiw-flow{
+  max-width:700px;margin:3rem auto;text-align:center;
+}
+.hiw-flow img{width:100%;max-width:500px}
+
+.hiw-impact{
+  display:flex;justify-content:center;gap:2rem;flex-wrap:wrap;
+  margin:3rem auto;
+}
+.impact-box{
+  background:#fff;padding:1.5rem 2rem;border-radius:12px;
+  box-shadow:0 4px 12px rgba(0,0,0,.08);text-align:center;
+}
+.impact-box h3{font-size:2rem;color:var(--accent)}
+
+.hiw-faq{
+  max-width:800px;margin:2rem auto;padding:0 1rem;
+}
+.hiw-faq details{background:#fff;border-radius:8px;padding:1rem;margin-bottom:.8rem;
+  box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.hiw-faq summary{cursor:pointer;font-weight:600;color:var(--accent)}
+.hiw-faq p{margin-top:.5rem}
+
+@media(max-width:600px){
+  .hiw-hero h2{font-size:1.8rem}
+  .step-card{padding:1.5rem}
+}

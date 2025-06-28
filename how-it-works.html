@@ -1,25 +1,68 @@
-<!-- how-it-works.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>How It Works - BottleBack India</title>
-  <link rel="stylesheet" href="styles/style.css">
+  <title>How It Works – botalSePaisa</title>
+  <link rel="stylesheet" href="styles/how.css">
 </head>
 <body>
+  <!-- sub‑header reused from main theme -->
   <header class="sub-header">
     <h1>How It Works</h1>
   </header>
-  <main>
-    <section>
-      <ol class="steps">
-        <li><strong>Buy:</strong> Purchase a bottle from any participating brand or store.</li>
-        <li><strong>Scan:</strong> Scan the QR code on the bottle via our app/website.</li>
-        <li><strong>Return:</strong> Drop it at any BottleBack return kiosk/shop.</li>
-        <li><strong>Reward:</strong> Instantly receive ₹1 via UPI or earn eco-points.</li>
-      </ol>
-    </section>
-  </main>
+
+  <!-- hero intro -->
+  <section class="hiw-hero">
+    <h2>Scan • Drop • Earn</h2>
+    <p>Recycling a bottle has never been faster or more rewarding.</p>
+  </section>
+
+  <!-- 4‑step timeline -->
+  <section class="hiw-steps">
+    <div class="step-card"><span>1</span><h3>Buy</h3><p>Pick any botalSePaisa‑enabled drink.</p></div>
+    <div class="step-card"><span>2</span><h3>Scan</h3><p>Scan the QR code using our app or website.</p></div>
+    <div class="step-card"><span>3</span><h3>Drop</h3><p>Return the bottle at a nearby kiosk or partner shop.</p></div>
+    <div class="step-card"><span>4</span><h3>Earn</h3><p>Instant reward lands in your UPI or eco‑points wallet.</p></div>
+  </section>
+
+  <!-- demo video or GIF -->
+  <section class="hiw-video">
+    <video src="media/demo.mp4" controls poster="media/demo-thumb.jpg"></video>
+  </section>
+
+  <!-- interactive QR sample -->
+  <section class="hiw-qr">
+    <h2>Try It Now</h2>
+    <img src="images/demo-qr.png" alt="Sample QR to scan">
+    <p>Scan with your phone to see the reward flow.</p>
+  </section>
+
+  <!-- reward‑flow graphic -->
+  <section class="hiw-flow">
+    <img src="images/reward-flow.svg" alt="Flow diagram: User → Kiosk → Backend → UPI">
+  </section>
+
+  <!-- impact counters -->
+  <section class="hiw-impact">
+    <div class="impact-box"><h3>480k+</h3><p>Bottles Returned</p></div>
+    <div class="impact-box"><h3>₹4.8L+</h3><p>Rewards Sent</p></div>
+    <div class="impact-box"><h3>700+</h3><p>Kiosks Active</p></div>
+  </section>
+
+  <!-- mini‑FAQ -->
+  <section class="hiw-faq">
+    <details><summary>Which bottles are accepted?</summary><p>Any PET or HDPE bottle with a botalSePaisa QR.</p></details>
+    <details><summary>Is the money real?</summary><p>Yes, rewards land directly in your UPI‑linked account.</p></details>
+    <details><summary>Do I need the app?</summary><p>No, scanning via our mobile website works too.</p></details>
+  </section>
+
+  <!-- final CTA -->
+  <section class="cta-banner">
+    <h2>Ready to earn while you recycle?</h2>
+    <a href="signup.html">Join Now</a>
+  </section>
+
+  <footer>&copy; 2025 botalSePaisa. All rights reserved.</footer>
 </body>
 </html>
