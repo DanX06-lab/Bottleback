@@ -2,83 +2,81 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Sign Up – BottleBack India</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up – botalSePaisa</title>
 
-  <!-- optional: keep global colours / navbar -->
-  <link rel="stylesheet" href="styles/style.css">
-
+  <!-- Inline page styling -->
   <style>
-    /*  ---- GLOBAL PASTEL & BUBBLE BACKGROUND (same as login) ---- */
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --primary:#ff9933;--accent:#138808;--dark:#11113b;
+      --radius:18px;--shadow:0 8px 20px rgba(0,0,0,.15);
+      --font:'Poppins',sans-serif;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;font-family:var(--font)}
     body{
-      font-family:"Poppins",sans-serif;
-      display:flex;justify-content:center;align-items:center;
-      min-height:100vh;
-      overflow:hidden;
-      background-size: cover;
-    
+      background:url("images/indian flag.jpg") no-repeat center/cover;
+      min-height:100vh;display:flex;justify-content:center;align-items:center;
     }
-    
-
-    /*  ---- GLASS SIGN-UP CARD ---- */
-    .glass-card{
-      width:min(90%,440px);
-      padding:3rem 2.5rem;
-      border-radius:24px;
-      background:rgba(255,255,255,.22);
-      border:1px solid rgba(255,255,255,.35);
-      backdrop-filter:blur(18px);
-      box-shadow:0 10px 35px rgba(0,0,0,.12);
-      text-align:center;color:#1b1b1b;
+    .signup-container{
+      display:flex;max-width:900px;width:95%;
+      border-radius:var(--radius);overflow:hidden;
+      box-shadow:var(--shadow);
     }
-    h1{font-weight:600;margin-bottom:2rem;letter-spacing:.5px}
-
-    /*  ---- FORM ---- */
-    form{display:flex;flex-direction:column;gap:1.1rem}
-    input{
-      width:100%;padding:.85rem 1rem;
-      border-radius:50px;border:1px solid rgba(0,0,0,.18);
-      background:rgba(255,255,255,.75);
-      font-size:.95rem;
+    /* left image / message */
+    .signup-left{
+      flex:1;background:url("https://images.unsplash.com/photo-1573164713988-8665fc963095")
+      center/cover no-repeat;display:flex;align-items:center;justify-content:center;
+      color:#fff;padding:2rem;
+    }
+    .signup-left h2{font-size:2rem;font-weight:700;text-shadow:1px 1px 4px #000}
+    /* right glass form */
+    .signup-right{
+      flex:1;padding:3rem 2.5rem;background:rgba(255,255,255,.3);
+      backdrop-filter:blur(10px);
+    }
+    .signup-right h2{text-align:center;margin-bottom:2rem;color:var(--dark)}
+    .signup-form{display:flex;flex-direction:column}
+    .signup-form input{
+      padding:.9rem 1rem;margin-bottom:1.2rem;
+      border-radius:10px;border:1px solid #ccc;font-size:1rem;
+      background:rgba(255,255,255,.6)
     }
     .btn{
-      padding:.9rem;border:none;border-radius:50px;
-      font-weight:600;font-size:1rem;cursor:pointer;
-      transition:.25s background;
+      padding:.9rem;border:none;border-radius:10px;font-weight:600;cursor:pointer;
+      transition:.25s;background:var(--accent);color:#fff;font-size:1rem;margin:1rem 0;
     }
-    .btn.primary{background:#000;color:#fff}
-    .btn.primary:hover{background:#333}
-    .btn.alt{background:rgba(0,0,0,.08);color:#000}
-
-    .login-link{text-align:center;font-size:.95rem;margin-top:1rem}
-    .login-link a{color:#00b894;text-decoration:none;font-weight:600}
-    .login-link a:hover{text-decoration:underline}
-
-    @media(max-width:480px){
-      .glass-card{padding:2.2rem 1.8rem}
-      h1{font-size:1.6rem}
+    .btn:hover{background:#0b6600}
+    .login-link{text-align:center}
+    .login-link a{color:var(--primary);font-weight:600;text-decoration:none}
+    @media(max-width:768px){
+      .signup-container{flex-direction:column}
+      .signup-left{min-height:200px}
     }
   </style>
 </head>
-<body background="images/image3.jpg">
+<body>
 
-  <div class="glass-card">
-    <h1>Create Account</h1>
+  <div class="signup-container">
+    <div class="signup-left">
+      <h2>Join the Loop!</h2>
+    </div>
 
-    <form class="signup-form">
-      <input type="text" placeholder="Full Name" required>
-      <input type="email" placeholder="Email Address" required>
-      <input type="password" placeholder="Password" required>
-      <input type="password" placeholder="Confirm Password" required>
+    <div class="signup-right">
+      <h2>Create Account</h2>
+      <form class="signup-form">
+        <input type="text" placeholder="Full Name" required />
+        <input type="email" placeholder="Email Address" required />
+        <input type="password" placeholder="Password" required />
+        <input type="password" placeholder="Confirm Password" required />
 
-      <button class="btn primary" type="submit">Sign Up</button>
-    </form>
+        <button class="btn" type="submit">Sign Up</button>
+      </form>
 
-    <p class="login-link">
-      Already registered?
-      <a href="login.html">Log in here</a>
-    </p>
+      <p class="login-link">
+        Already registered?
+        <a href="login.html">Log in here</a>
+      </p>
+    </div>
   </div>
 
 </body>
