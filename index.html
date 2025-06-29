@@ -59,35 +59,20 @@
         our planet clean.</p>
       <a href="how-it-works.html" class="cta-primary">Get Started</a>
     </div>
-    <!-- HERO RIGHT: PPT‑style slider -->
-    <div class="hero-right fade-in" style="animation-delay:.4s">
-      <div class="ppt-slider" id="pptSlider">
-        <!-- Slide 1 -->
-        <div class="slide active">
-          <img src="images/ppt1.jpg" alt="Bottle scan demo">
-        </div>
-        <!-- Slide 2 -->
-        <div class="slide">
-          <img src="images/ppt2.jpg" alt="Drop point kiosk">
-        </div>
-        <!-- Slide 3 -->
-        <div class="slide">
-          <img src="images/ppt3.jpg" alt="Instant UPI reward">
-        </div>
-        <div class="slide">
-          <img src="images/ppt4.jpg" alt="Instant UPI reward">
-        </div>
-        <div class="slide">
-          <img src="images/ppt5.jpg" alt="Instant UPI reward">
-        </div>
-        <div class="slide">
-          <img src="images/ppt6.jpg" alt="Instant UPI reward">
-        </div>
-        <div class="slide">
-          <img src="images/ppt7.jpg" alt="Instant UPI reward">
-        </div>
-      </div>
+    <div class="ppt-slider" id="pptSlider">
+      <div class="slide active"><img src="images/ppt1.jpg" /></div>
+      <div class="slide"><img src="images/ppt2.jpg" /></div>
+      <div class="slide"><img src="images/ppt3.jpg" /></div>
+      <div class="slide"><img src="images/ppt4.jpg" /></div>
+      <div class="slide"><img src="images/ppt5.jpg" /></div>
+      <div class="slide"><img src="images/ppt6.jpg" /></div>
+      <div class="slide"><img src="images/ppt7.jpg" /></div>
     </div>
+
+    <div class="ppt-dots" margin-left="50%">
+      <span class="active-dot"></span><span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
+
 
 
   </section>
@@ -162,6 +147,20 @@
   </section>
 
   <footer class="fade-in" style="animation-delay:1.9s">&copy; 2025 BotalSePaisa India. All rights reserved.</footer>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const slides = document.querySelectorAll("#pptSlider .slide");
+      const dots = document.querySelectorAll(".ppt-dots span"); // if dots used
+      let idx = 0;
+      function show(i) {
+        slides.forEach((s, n) => s.classList.toggle("active", n === i));
+        dots.forEach((d, n) => d.classList.toggle("active-dot", n === i));
+      }
+      setInterval(() => { idx = (idx + 1) % slides.length; show(idx); }, 4000);
+    });
+  </script>
+
+
 </body>
 
 </html>
