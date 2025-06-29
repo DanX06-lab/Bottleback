@@ -1,141 +1,139 @@
-/* ===== THEME ===== */
+/* ---------------------------------------------------
+   BotalSePaisa – How‑It‑Works Enhanced Stylesheet
+   Everything below is self‑contained; no external edits
+----------------------------------------------------*/
+
 :root {
-  --primary: #ff9933;
-  --accent: #138808;
-  --dark: #11113b;
-  --bg: #f7f9fb;
-  --white: #ffffff;
-  --font: 'Poppins', sans-serif;
-  --shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
-  --radius: 16px;
+  /* Brand palette */
+  --primary:#ff9933;      /* saffron */
+  --accent:#138808;       /* green */
+  --dark:#0f2756;         /* deep navy */
+  --bg:#edf3ff;           /* soft bluish background */
+  --white:#ffffff;
+  /* Shared tokens */
+  --radius:18px;
+  --shadow:0 14px 32px rgba(0,0,0,.12);
+  --font:'Poppins',sans-serif;
 }
 
-/* ===== HOW IT WORKS PAGE ===== */
-.sub-header {
-  background: var(--primary);
-  color: white;
-  padding: 2rem 1rem;
-  text-align: center;
-  font-size: 2rem;
-  font-weight: 800;
+*{box-sizing:border-box;margin:0;padding:0;font-family:var(--font)}
+body{background:var(--bg);color:var(--dark);line-height:1.65}
+
+/* ===== SUB‑HEADER BAR ===== */
+.sub-header{
+  background:linear-gradient(135deg,var(--primary),#ffa749);
+  color:#fff;text-align:center;padding:2.2rem 1rem;
+  font-size:2.2rem;font-weight:800;
+  box-shadow:0 4px 14px rgba(0,0,0,.15);
+  letter-spacing:.5px;
 }
 
-.hiw-container {
-  max-width: 1000px;
-  margin: 2rem auto;
-  padding: 1rem 2rem;
-  text-align: center;
-  background: var(--white);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
+/* ===== WRAPPER ===== */
+.hiw-wrapper,.hiw-container{
+  max-width:1100px;margin:2.5rem auto 4rem;
+  background:var(--white);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:3rem 2.5rem;
 }
 
-.hiw-hero h2 {
-  font-size: 2rem;
-  color: var(--dark);
-  margin-bottom: 0.5rem;
-  font-weight: 700;
+/* ===== HERO ===== */
+.hiw-hero{text-align:center;margin-bottom:2.5rem}
+.hiw-hero h2{
+  text-transform:uppercase;
+  font-size:2.4rem;font-weight:800;
+  color:var(--accent);letter-spacing:1px;
+  background:linear-gradient(90deg,#0b6600 0%,var(--accent) 100%);
+  -webkit-background-clip:text;color:transparent;
 }
-.hiw-hero p {
-  color: #444;
-  font-size: 1rem;
-  margin-bottom: 2rem;
-}
+.hiw-hero p{font-size:1.15rem;color:#4a4a4a;margin-top:.7rem}
 
-.hiw-steps {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  gap: 2rem;
-  margin-bottom: 2.5rem;
+/* ===== STEP CARDS ===== */
+.hiw-steps{
+  display:grid;gap:2rem;
+  grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+  margin:3.2rem 0;
 }
-.step-card {
-  background: var(--white);
-  border-radius: var(--radius);
-  padding: 1.5rem;
-  width: 220px;
-  box-shadow: var(--shadow);
-  transition: transform 0.3s ease;
+.step-card{
+  background:radial-gradient(circle at 30% 30%,#ffffff 0%,#f4f7ff 100%);
+  border-radius:var(--radius);
+  padding:2rem 1.6rem;text-align:center;
+  position:relative;overflow:hidden;
+  transition:transform .35s cubic-bezier(.4,0,.2,1),box-shadow .35s;
 }
-.step-card:hover {
-  transform: translateY(-6px);
+.step-card:hover{
+  transform:translateY(-10px) scale(1.03);
+  box-shadow:0 18px 40px rgba(0,0,0,.15);
 }
-.step-card span {
-  display: inline-block;
-  background: var(--accent);
-  color: white;
-  width: 36px;
-  height: 36px;
-  line-height: 36px;
-  font-weight: 600;
-  border-radius: 50%;
-  margin-bottom: 1rem;
+.step-card span{
+  position:absolute;top:-24px;right:-24px;
+  width:80px;height:80px;border-radius:50%;
+  background:var(--accent);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.8rem;font-weight:700;
 }
+.step-card h3{margin:1.5rem 0 .6rem;font-size:1.25rem;color:var(--dark)}
+.step-card p{font-size:.95rem;color:#606060}
 
-.hiw-video video {
-  width: 100%;
-  max-width: 640px;
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  margin: 2rem auto;
-  display: block;
+/* ===== VIDEO ===== */
+.hiw-video video{
+  display:block;width:100%;max-width:720px;margin:0 auto;
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  transition:filter .3s;
 }
+.hiw-video video:hover{filter:brightness(.9)}
 
-.hiw-qr img,
-.hiw-flow img {
-  max-width: 300px;
-  width: 100%;
-  display: block;
-  margin: 1rem auto;
+/* ===== QR + FLOW IMAGES ===== */
+.hiw-qr,.hiw-flow{text-align:center;margin:3.5rem 0}
+.hiw-qr img,.hiw-flow img{
+  width:100%;max-width:320px;border-radius:var(--radius);
+  box-shadow:var(--shadow);transition:transform .35s;
 }
+.hiw-qr img:hover,.hiw-flow img:hover{transform:rotate(2deg) scale(1.05)}
 
-.hiw-impact {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 2rem;
-  margin: 3rem auto;
+/* ===== IMPACT COUNTERS ===== */
+.hiw-impact{
+  display:flex;flex-wrap:wrap;justify-content:center;gap:2rem;margin:4rem 0;
 }
-.impact-box {
-  background: #fff;
-  padding: 1.5rem 2rem;
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  text-align: center;
-  width: 200px;
+.impact-box{
+  width:200px;text-align:center;padding:1.7rem 1.4rem;
+  background:var(--white);border-radius:var(--radius);
+  box-shadow:var(--shadow);transition:transform .35s;
 }
-.impact-box h3 {
-  font-size: 1.8rem;
-  color: var(--accent);
-}
+.impact-box:hover{transform:scale(1.06)}
+.impact-box h3{font-size:2.2rem;color:var(--accent)}
 
-.hiw-faq {
-  max-width: 800px;
-  margin: 2rem auto;
-  text-align: left;
+/* ===== FAQ ACCORDION ===== */
+.hiw-faq{max-width:820px;margin:0 auto}
+.hiw-faq details{
+  background:var(--white);margin-bottom:1rem;padding:1.1rem 1rem 1.1rem 1.3rem;
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  transition:background .25s;
 }
-.hiw-faq details {
-  background: #fff;
-  border-radius: 8px;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  box-shadow: var(--shadow);
-}
-.hiw-faq summary {
-  font-weight: 600;
-  color: var(--accent);
-  cursor: pointer;
-}
+.hiw-faq details[open]{background:#f4faff}
+.hiw-faq summary{cursor:pointer;font-weight:600;color:var(--accent);outline:none}
+.hiw-faq p{margin-top:.8rem;color:#555;font-size:.95rem}
 
-@media (max-width: 768px) {
-  .hiw-steps {
-    flex-direction: column;
-    align-items: center;
-  }
-  .step-card {
-    width: 80%;
-  }
-  .impact-box {
-    width: 80%;
-  }
+/* ===== CTA BANNER ===== */
+.cta-banner{
+  text-align:center;padding:3.5rem 1rem;margin-top:4.5rem;
+  background:linear-gradient(135deg,var(--accent) 0%,#0b6600 100%);
+  color:#fff;border-radius:var(--radius);
+  box-shadow:var(--shadow);
+}
+.cta-banner h2{font-size:2.4rem;margin-bottom:1.4rem}
+.cta-banner a{
+  display:inline-block;padding:1rem 2.3rem;border-radius:50px;
+  background:linear-gradient(135deg,#ffb400 0%,#ff9a00 100%);
+  color:#000;text-decoration:none;font-weight:700;font-size:1.05rem;
+  transition:opacity .3s;
+}
+.cta-banner a:hover{opacity:.9}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:650px){
+  .hiw-hero h2{font-size:1.8rem}
+  .step-card span{width:64px;height:64px;top:-20px;right:-20px;font-size:1.4rem}
 }
