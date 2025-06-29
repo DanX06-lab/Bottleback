@@ -5,78 +5,55 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sign Up – botalSePaisa</title>
 
-  <!-- Inline page styling -->
+  <!-- Inline design (same vibe as contact page) -->
   <style>
     :root{
-      --primary:#ff9933;--accent:#138808;--dark:#11113b;
-      --radius:18px;--shadow:0 8px 20px rgba(0,0,0,.15);
+      --primary:#ff9933;--accent:#138808;--dark:#0f2756;
+      --radius:18px;--shadow:0 10px 30px rgba(0,0,0,.1);
       --font:'Poppins',sans-serif;
     }
     *{box-sizing:border-box;margin:0;padding:0;font-family:var(--font)}
     body{
-      background:url("images/indian flag.jpg") no-repeat center/cover;
-      min-height:100vh;display:flex;justify-content:center;align-items:center;
+      min-height:100vh;display:flex;align-items:center;justify-content:center;
+      background:linear-gradient(145deg,#eaf3ff,#d4e0f4);
+      padding:1.5rem;
     }
-    .signup-container{
-      display:flex;max-width:900px;width:95%;
-      border-radius:var(--radius);overflow:hidden;
-      box-shadow:var(--shadow);
+    .card{
+      width:100%;max-width:460px;background:#fff;
+      padding:2.7rem 2rem;border-radius:var(--radius);
+      box-shadow:var(--shadow);text-align:center;
     }
-    /* left image / message */
-    .signup-left{
-      flex:1;background:url("https://images.unsplash.com/photo-1573164713988-8665fc963095")
-      center/cover no-repeat;display:flex;align-items:center;justify-content:center;
-      color:#fff;padding:2rem;
+    h1{font-size:1.9rem;color:var(--dark);margin-bottom:1.8rem}
+    input{
+      width:100%;padding:0.9rem 1rem;margin-bottom:1.2rem;
+      border:1px solid #cdd4e0;border-radius:12px;font-size:1rem;
     }
-    .signup-left h2{font-size:2rem;font-weight:700;text-shadow:1px 1px 4px #000}
-    /* right glass form */
-    .signup-right{
-      flex:1;padding:3rem 2.5rem;background:rgba(255,255,255,.3);
-      backdrop-filter:blur(10px);
+    button{
+      width:100%;padding:1rem;border:none;border-radius:40px;
+      font-size:1rem;font-weight:600;color:#fff;cursor:pointer;
+      background:linear-gradient(135deg,#ffb400 0%,#118800 100%);
+      transition:opacity .25s;
     }
-    .signup-right h2{text-align:center;margin-bottom:2rem;color:var(--dark)}
-    .signup-form{display:flex;flex-direction:column}
-    .signup-form input{
-      padding:.9rem 1rem;margin-bottom:1.2rem;
-      border-radius:10px;border:1px solid #ccc;font-size:1rem;
-      background:rgba(255,255,255,.6)
-    }
-    .btn{
-      padding:.9rem;border:none;border-radius:10px;font-weight:600;cursor:pointer;
-      transition:.25s;background:var(--accent);color:#fff;font-size:1rem;margin:1rem 0;
-    }
-    .btn:hover{background:#0b6600}
-    .login-link{text-align:center}
-    .login-link a{color:var(--primary);font-weight:600;text-decoration:none}
-    @media(max-width:768px){
-      .signup-container{flex-direction:column}
-      .signup-left{min-height:200px}
-    }
+    button:hover{opacity:.9}
+    p{margin-top:1rem;font-size:.9rem}
+    p a{color:var(--primary);font-weight:600;text-decoration:none}
   </style>
 </head>
 <body>
 
-  <div class="signup-container">
-    <div class="signup-left">
-      <h2>Join the Loop!</h2>
-    </div>
+  <div class="card">
+    <h1>Create Account</h1>
 
-    <div class="signup-right">
-      <h2>Create Account</h2>
-      <form class="signup-form">
-        <input type="text" placeholder="Full Name" required />
-        <input type="email" placeholder="Email Address" required />
-        <input type="password" placeholder="Password" required />
-        <input type="password" placeholder="Confirm Password" required />
+    <form>
+      <input type="text" placeholder="Full Name" required />
+      <input type="email" placeholder="Email Address" required />
+      <input type="password" placeholder="Password" required />
+      <input type="password" placeholder="Confirm Password" required />
 
-        <button class="btn" type="submit">Sign Up</button>
-      </form>
+      <button type="submit">Sign Up</button>
+    </form>
 
-      <p class="login-link">
-        Already registered?
-        <a href="login.html">Log in here</a>
-      </p>
-    </div>
+    <p>Already a member? <a href="login.html">Log in</a></p>
   </div>
 
 </body>
