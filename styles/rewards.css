@@ -1,0 +1,82 @@
+/* ===== THEME ===== */
+:root {
+  --primary: #ff9933;
+  --accent: #138808;
+  --dark: #11113b;
+  --bg: #f7f9fb;
+  --white: #ffffff;
+  --font: 'Poppins', sans-serif;
+  --shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
+  --radius: 16px;
+}
+
+/* ===== REWARDS PAGE ===== */
+.sub-header {
+  background: var(--primary);
+  color: white;
+  padding: 2rem 1rem;
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.rewards-section {
+  max-width: 1000px;
+  margin: 3rem auto;
+  padding: 1rem;
+  text-align: center;
+}
+.rewards-section p {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+.rewards-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+  margin-bottom: 3rem;
+}
+.rewards-list li {
+  background: var(--white);
+  padding: 2rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  flex: 1 1 200px;
+  max-width: 300px;
+  list-style: none;
+  transition: transform 0.3s ease;
+}
+.rewards-list li:hover {
+  transform: translateY(-6px);
+}
+
+/* ===== CTA BANNER ===== */
+.cta-banner {
+  background: var(--accent);
+  color: #fff;
+  text-align: center;
+  padding: 3rem 1rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin: 4rem auto;
+  max-width: 800px;
+}
+.cta-banner h2 {
+  font-size: 2.2rem;
+  margin-bottom: 1rem;
+}
+.cta-banner a {
+  display: inline-block;
+  background: #ffb400;
+  color: #000;
+  padding: 0.9rem 2rem;
+  border-radius: 40px;
+  font-weight: 700;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: background 0.3s ease;
+}
+.cta-banner a:hover {
+  background: #e69c00;
+}

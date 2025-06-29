@@ -3,9 +3,11 @@
   --primary: #ff9933; /* saffron */
   --accent: #138808;  /* green */
   --dark: #11113b;    /* navy */
-  --bg: #f4f4f4;
+  --bg: #f7f9fb;
   --white: #ffffff;
   --font: 'Poppins', sans-serif;
+  --shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
+  --radius: 16px;
 }
 
 * {
@@ -19,12 +21,17 @@
 body {
   background: var(--bg);
   color: var(--dark);
+  line-height: 1.6;
 }
 
 /* ===== NAVBAR ===== */
 header {
   background: var(--primary);
   padding: 1rem 2rem;
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 .navbar {
   max-width: 1200px;
@@ -35,21 +42,26 @@ header {
 }
 .logo {
   color: #fff;
-  font-size: 1.6rem;
+  font-size: 1.7rem;
   font-weight: 800;
   display: flex;
   align-items: center;
   gap: 10px;
+  letter-spacing: 0.5px;
 }
 .nav-links {
   display: flex;
-  gap: 1.4rem;
+  gap: 1.6rem;
   list-style: none;
 }
 .nav-links a {
   text-decoration: none;
   color: #fff;
   font-weight: 500;
+  transition: color 0.3s ease;
+}
+.nav-links a:hover {
+  color: #003f00;
 }
 .btn-link,
 .nav-links a.login {
@@ -58,6 +70,10 @@ header {
   border-radius: 8px;
   color: #fff;
   font-weight: 600;
+  transition: background 0.3s ease;
+}
+.btn-link:hover {
+  background: #0b6600;
 }
 
 /* ===== HERO SECTION ===== */
@@ -67,10 +83,11 @@ header {
   display: flex;
   flex-wrap: wrap;
   background: var(--white);
-  border-radius: 20px;
+  border-radius: var(--radius);
   overflow: hidden;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  padding: 2rem;
+  box-shadow: var(--shadow);
+  padding: 2.5rem;
+  align-items: center;
 }
 .hero-left {
   flex: 1;
@@ -78,31 +95,38 @@ header {
 }
 .hero-left h2 {
   color: var(--dark);
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   font-weight: 700;
-  margin-bottom: 1rem;
+  margin-bottom: 0.8rem;
+  letter-spacing: 0.5px;
 }
 .hero-left h1 {
-  font-size: 2.8rem;
+  font-size: 3rem;
   font-weight: 800;
   line-height: 1.2;
-  color: #1a237e;
-  margin-bottom: 1rem;
+  color: #0a1e70;
+  margin-bottom: 1.2rem;
 }
 .hero-left p {
-  font-size: 1rem;
-  line-height: 1.6;
-  color: #3a3a3a;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #444;
   margin-bottom: 2rem;
 }
 .cta-primary {
   background: var(--accent);
   color: #fff;
-  padding: 0.8rem 2rem;
+  padding: 0.85rem 2.2rem;
   border-radius: 50px;
   font-weight: 600;
+  font-size: 1rem;
   text-decoration: none;
   display: inline-block;
+  transition: background 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+.cta-primary:hover {
+  background: #0b6600;
 }
 .hero-right {
   flex: 1;
@@ -112,21 +136,28 @@ header {
   padding: 2rem;
   background: #fff;
   border-left: 10px solid var(--accent);
-  border-radius: 10px;
+  border-radius: var(--radius);
+  text-align: center;
 }
 .hero-right img {
   width: 100%;
-  max-width: 300px;
+  max-width: 320px;
   border-radius: 12px;
+  box-shadow: var(--shadow);
+  transition: transform 0.3s ease;
+}
+.hero-right img:hover {
+  transform: scale(1.03);
 }
 
 /* ===== SECTION TITLE ===== */
 .section-title {
   text-align: center;
-  font-size: 2rem;
+  font-size: 2.4rem;
   color: var(--primary);
-  margin: 3rem 0 1.5rem;
-  font-weight: 700;
+  margin: 4rem 0 2rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
 }
 
 /* ===== CTA BANNER ===== */
@@ -135,20 +166,27 @@ header {
   color: #fff;
   text-align: center;
   padding: 3rem 1rem;
-  margin-top: 4rem;
+  margin-top: 5rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
 }
 .cta-banner h2 {
-  font-size: 2.2rem;
-  margin-bottom: 1rem;
+  font-size: 2.4rem;
+  margin-bottom: 1.2rem;
 }
 .cta-banner a {
   display: inline-block;
   background: #ffb400;
   color: #000;
-  padding: 0.8rem 2rem;
+  padding: 0.9rem 2rem;
   border-radius: 40px;
   font-weight: 700;
   text-decoration: none;
+  font-size: 1rem;
+  transition: background 0.3s ease;
+}
+.cta-banner a:hover {
+  background: #e69c00;
 }
 
 /* ===== FOOTER ===== */
@@ -158,17 +196,24 @@ footer {
   text-align: center;
   padding: 1rem 0;
   margin-top: 4rem;
+  font-weight: 500;
 }
 
 @media (max-width: 768px) {
   .hero {
     flex-direction: column;
-    padding: 1rem;
+    padding: 1.5rem;
   }
   .hero-left, .hero-right {
     padding: 1rem;
   }
   .hero-left h1 {
-    font-size: 2rem;
+    font-size: 2.2rem;
+  }
+  .hero-left p {
+    font-size: 1rem;
+  }
+  .cta-primary {
+    font-size: 0.95rem;
   }
 }
