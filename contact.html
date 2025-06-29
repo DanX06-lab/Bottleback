@@ -1,25 +1,201 @@
-<!-- contact.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contact - BottleBack India</title>
-  <link rel="stylesheet" href="styles/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact – DigiHelp</title>
+
+  <!-- Google Font + Font Awesome Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-u2JrHgRZ..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <style>
+    :root{
+      --grad-start:#6a11cb;
+      --grad-end:#2575fc;
+      --shadow:0 6px 18px rgba(0,0,0,.12);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:'Poppins',sans-serif;
+      background:linear-gradient(120deg,#dfe9f3 0%,#ffffff 100%);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      min-height:100vh;
+      padding:2rem 1rem;
+      color:#2c3e50;
+      overflow-x:hidden;
+    }
+    h1{font-size:2.6rem;margin-bottom:.4em;text-align:center}
+    p.lead{font-size:1.15rem;margin-bottom:2em;text-align:center;max-width:600px}
+
+    /* Wrapper keeps everything tidy on big screens */
+    .wrapper{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:2rem;
+      width:100%;
+      max-width:1000px;
+    }
+    @media(min-width:900px){
+      .wrapper{grid-template-columns:1fr 1fr}
+    }
+
+    /* ----- Contact Information Card ----- */
+    .info-card{
+      background:#fff;
+      border-radius:1rem;
+      padding:2rem;
+      box-shadow:var(--shadow);
+      display:flex;
+      flex-direction:column;
+      gap:1.25rem;
+      animation:fade-in .8s ease;
+    }
+    .info-item{
+      display:flex;
+      align-items:center;
+      gap:.9rem;
+      font-size:1rem;
+    }
+    .info-item i{
+      font-size:1.3rem;
+      color:var(--grad-start);
+    }
+
+    /* ----- Social Icons ----- */
+    .socials{
+      display:flex;
+      gap:1rem;
+      margin-top:.5rem;
+    }
+    .socials a{
+      width:42px;height:42px;
+      display:inline-flex;align-items:center;justify-content:center;
+      border-radius:50%;
+      color:#fff;
+      transition:transform .2s ease,box-shadow .2s ease;
+    }
+    .socials a:hover{
+      transform:translateY(-3px);
+      box-shadow:var(--shadow);
+    }
+    .socials .fa-facebook{background:#1877f2}
+    .socials .fa-x-twitter{background:#000}
+    .socials .fa-instagram{background:#e1306c}
+    .socials .fa-linkedin{background:#0077b5}
+
+    /* ----- Form ----- */
+    form{
+      background:#fff;
+      padding:2rem;
+      border-radius:1rem;
+      box-shadow:var(--shadow);
+      display:flex;
+      flex-direction:column;
+      gap:1.2rem;
+      animation:fade-in .8s ease .1s both;
+    }
+    input,textarea{
+      font-family:inherit;
+      padding:14px 16px;
+      font-size:1rem;
+      border:1px solid #ccc;
+      border-radius:8px;
+      outline:none;
+      transition:border-color .2s ease,box-shadow .2s ease;
+    }
+    input:focus,textarea:focus{
+      border-color:var(--grad-start);
+      box-shadow:0 0 0 3px rgba(106,17,203,.15);
+    }
+    textarea{resize:vertical;min-height:140px}
+
+    button{
+      padding:14px;
+      background:linear-gradient(135deg,var(--grad-start) 0%,var(--grad-end) 100%);
+      color:#fff;
+      border:none;
+      border-radius:30px;
+      font-weight:600;
+      cursor:pointer;
+      transition:transform .2s ease,box-shadow .2s ease;
+    }
+    button:hover{
+      transform:translateY(-3px);
+      box-shadow:0 10px 22px rgba(0,0,0,.12);
+    }
+
+    /* ----- Tiny “toast” success message ----- */
+    .toast{
+      position:fixed;
+      bottom:2rem;left:50%;transform:translateX(-50%) translateY(200%);
+      background:linear-gradient(135deg,var(--grad-start),var(--grad-end));
+      color:#fff;padding:.9rem 1.5rem;border-radius:40px;font-weight:500;
+      box-shadow:var(--shadow);opacity:0;pointer-events:none;
+      transition:opacity .4s ease,transform .4s ease;
+      z-index:999;
+    }
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    @keyframes fade-in{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+  </style>
 </head>
 <body>
-  <header class="sub-header">
-    <h1>Contact Us</h1>
-  </header>
-  <main>
-    <section>
-      <form action="#" method="post">
-        <label>Name: <input type="text" name="name" required></label><br>
-        <label>Email: <input type="email" name="email" required></label><br>
-        <label>Message: <textarea name="message" required></textarea></label><br>
-        <button type="submit">Send Message</button>
-      </form>
+
+  <h1>📬 Contact DigiHelp</h1>
+  <p class="lead">Have feedback, need assistance, or want to collaborate? We’d love to hear from you.</p>
+
+  <div class="wrapper">
+
+    <!-- Left column: info & socials -->
+    <section class="info-card">
+      <div class="info-item"><i class="fa-solid fa-envelope"></i> support@digihelp.org</div>
+      <div class="info-item"><i class="fa-solid fa-phone"></i> +91 98765 43210</div>
+      <div class="info-item"><i class="fa-solid fa-location-dot"></i> Kolkata, India</div>
+
+      <div style="margin-top:1rem;font-weight:600">Follow us</div>
+      <div class="socials">
+        <a href="#" aria-label="Facebook" class="fa-brands fa-facebook"></a>
+        <a href="#" aria-label="Twitter / X" class="fa-brands fa-x-twitter"></a>
+        <a href="#" aria-label="Instagram" class="fa-brands fa-instagram"></a>
+        <a href="#" aria-label="LinkedIn" class="fa-brands fa-linkedin"></a>
+      </div>
     </section>
-  </main>
+
+    <!-- Right column: contact form -->
+    <form id="contactForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+      <input type="text" name="name" placeholder="Your Name" required />
+      <input type="email" name="email" placeholder="Your Email" required />
+      <textarea name="message" placeholder="Your Message" required></textarea>
+      <button type="submit">Send Message</button>
+    </form>
+
+  </div>
+
+  <div class="toast" id="toast">Thanks! Your message has been sent. 🎉</div>
+
+  <script>
+    // 💌 Tiny success toast without extra libraries
+    const form = document.getElementById('contactForm');
+    const toast = document.getElementById('toast');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();        // keep page from navigating away
+      const data = new FormData(form);
+
+      /* Send the form with fetch — works with Formspree’s endpoint.
+         If you swap to a Flask route, just adjust the URL.           */
+      try{
+        await fetch(form.action, { method:'POST', body:data, headers:{ 'Accept':'application/json' }});
+        form.reset();
+        toast.classList.add('show');
+        setTimeout(()=>toast.classList.remove('show'), 3500);
+      }catch(err){
+        alert('Oops – something went wrong. Please email us directly.');
+      }
+    });
+  </script>
 </body>
 </html>
