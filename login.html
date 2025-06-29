@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Log In – botalSePaisa</title>
 
-  <!-- Inline design (matches contact‑us style) -->
+  <!-- Inline design with fade‑in animation -->
   <style>
     :root{
       --primary:#ff9933;--accent:#138808;--dark:#0f2756;
@@ -13,6 +13,15 @@
       --font:'Poppins',sans-serif;
     }
     *{box-sizing:border-box;margin:0;padding:0;font-family:var(--font)}
+
+    /* ------- Fade‑in animation ------- */
+    @keyframes fade-in{
+      from{opacity:0;transform:translateY(20px);}
+      to  {opacity:1;transform:translateY(0);}
+    }
+    .fade-in{animation:fade-in .8s ease-out both;}
+
+    /* ------- Layout ------- */
     body{
       min-height:100vh;display:flex;align-items:center;justify-content:center;
       background:linear-gradient(145deg,#eaf3ff,#d4e0f4);
@@ -22,14 +31,16 @@
       width:100%;max-width:420px;background:#fff;
       padding:2.5rem 2rem;border-radius:var(--radius);
       box-shadow:var(--shadow);text-align:center;
-      animation: fade-in .8s ease;
+      animation:fade-in .8s ease-out both;   /* applies fade‑in */
     }
     h1{font-size:1.9rem;color:var(--dark);margin-bottom:1.8rem}
     input{
       width:100%;padding:0.9rem 1rem;margin-bottom:1.2rem;
       border:1px solid #cdd4e0;border-radius:12px;font-size:1rem;
     }
-    .row{display:flex;justify-content:space-between;font-size:.85rem;margin-top:-.3rem;margin-bottom:1.3rem}
+    .row{
+      display:flex;justify-content:space-between;
+      font-size:.85rem;margin-top:-.3rem;margin-bottom:1.3rem}
     .row a{color:var(--primary);text-decoration:none}
     button{
       width:100%;padding:1rem;border:none;border-radius:40px;
