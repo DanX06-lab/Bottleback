@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BotalSePaisa · Dashboard</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Icons (Heroicons) -->
+  <script src="https://unpkg.com/feather-icons"></script>
+</head>
+
+<body class="bg-slate-50 min-h-screen flex flex-col">
+
+  <!-- ░░ TOP NAV ░░ -->
+  <header class="sticky top-0 z-40 bg-white shadow-md">
+    <div class="max-w-7xl mx-auto flex items-center justify-between px-4 py-3">
+      <!-- left -->
+      <div class="flex items-center gap-2">
+        <button id="burger" class="md:hidden text-xl" aria-label="Menu"><i data-feather="menu"></i></button>
+        <img src="images/main.png" alt="logo" class="h-8 w-8" />
+        <span class="font-extrabold text-lg">BotalSePaisa</span>
+      </div>
+
+      <!-- center nav (desktop) -->
+      <nav class="hidden md:flex gap-6 text-sm font-medium text-gray-600">
+        <a href="#">Home</a>
+        <a href="#">Drop Points</a>
+        <a href="#">Rewards</a>
+        <a href="#">My Activity</a>
+      </nav>
+
+      <!-- right icons -->
+      <div class="flex items-center gap-4">
+        <i data-feather="bell" class="w-5 h-5 cursor-pointer text-gray-600"></i>
+        <!-- Avatar -->
+        <!-- NAVBAR right side -->
+        <div class="nav-right">
+          <span class="nav-icon">&#128276;</span>
+
+          <!-- Click → opens profile.html -->
+          <a href="dashboard.html" title="Your Profile">
+            <img src="images/avatar-placeholder.png" class="nav-avatar" alt="avatar">
+          </a>
+        </div>
+
+        <!-- Dropdown -->
+        <ul class="absolute right-0 mt-2 w-40 bg-white shadow-xl rounded-md text-sm hidden group-hover:block">
+          <li><a class="block px-4 py-2 hover:bg-slate-100" href="#">Profile</a></li>
+          <li><a class="block px-4 py-2 hover:bg-slate-100" href="#">Settings</a></li>
+          <li><a class="block px-4 py-2 hover:bg-slate-100" href="#">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+    </div>
+  </header>
+
+  <!-- ░░ PAGE WRAPPER ░░ -->
+  <div class="flex flex-1">
+
+    <!-- ░░ SIDEBAR ░░ -->
+    <aside id="sidebar"
+      class="fixed md:static inset-y-0 left-0 w-64 bg-white shadow-xl overflow-y-auto transform -translate-x-full md:translate-x-0 transition-transform duration-200">
+      <ul class="mt-8 space-y-2 px-6 text-gray-700 text-sm">
+        <li><a class="flex items-center gap-3 py-2 font-semibold text-amber-600" href="#"><i
+              data-feather="home"></i>Dashboard</a></li>
+        <li><a class="flex items-center gap-3 py-2 hover:text-amber-600" href="#"><i data-feather="camera"></i>Scan QR
+            Code</a></li>
+        <li><a class="flex items-center gap-3 py-2 hover:text-amber-600" href="#"><i data-feather="activity"></i>Return
+            History</a></li>
+        <li><a class="flex items-center gap-3 py-2 hover:text-amber-600" href="#"><i
+              data-feather="credit-card"></i>Wallet / Rewards</a></li>
+        <li><a class="flex items-center gap-3 py-2 hover:text-amber-600" href="#"><i
+              data-feather="award"></i>Leaderboard</a></li>
+        <li><a class="flex items-center gap-3 py-2 hover:text-amber-600" href="#"><i data-feather="users"></i>Invite
+            Friends</a></li>
+        <li><a class="flex items-center gap-3 py-2 hover:text-amber-600" href="#"><i
+              data-feather="help-circle"></i>Support</a></li>
+      </ul>
+    </aside>
+
+    <!-- overlay for mobile sidebar -->
+    <div id="overlay" class="fixed inset-0 bg-black/40 hidden md:hidden"></div>
+
+    <!-- ░░ MAIN CONTENT ░░ -->
+    <main class="flex-1 overflow-y-auto p-6 md:ml-0">
+      <!-- Overview cards -->
+      <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-white rounded-xl shadow p-6 flex items-center gap-4">
+          <div class="bg-emerald-100 p-3 rounded-full"><i data-feather="refresh-ccw"></i></div>
+          <div>
+            <h3 class="text-xl font-bold">240</h3>
+            <p class="text-xs text-gray-500">Bottles Returned</p>
+          </div>
+        </div>
+        <div class="bg-white rounded-xl shadow p-6 flex items-center gap-4">
+          <div class="bg-amber-100 p-3 rounded-full"><i data-feather="rupee-sign"></i></div>
+          <div>
+            <h3 class="text-xl font-bold">₹240</h3>
+            <p class="text-xs text-gray-500">UPI Earned</p>
+          </div>
+        </div>
+        <div class="bg-white rounded-xl shadow p-6 flex items-center gap-4">
+          <div class="bg-indigo-100 p-3 rounded-full"><i data-feather="leaf"></i></div>
+          <div>
+            <h3 class="text-xl font-bold">4.8 kg</h3>
+            <p class="text-xs text-gray-500">Plastic Diverted</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Recent Activity -->
+      <section class="mt-8">
+        <h2 class="text-lg font-semibold mb-4">Recent Activity</h2>
+        <div class="overflow-x-auto bg-white rounded-xl shadow">
+          <table class="min-w-full text-sm">
+            <thead class="bg-slate-100 text-gray-600">
+              <tr>
+                <th class="p-3 text-left">Bottle ID</th>
+                <th class="p-3 text-left">Date</th>
+                <th class="p-3 text-left">Location</th>
+                <th class="p-3 text-left">Status</th>
+                <th class="p-3 text-left">Reward</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b">
+                <td class="p-3">#BLB90523</td>
+                <td class="p-3">Jun 25</td>
+                <td class="p-3">Radhe Store</td>
+                <td class="p-3 text-emerald-600">♻ Recycled</td>
+                <td class="p-3">₹1</td>
+              </tr>
+              <!-- duplicate rows as needed -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Wallet & Leaderboard -->
+      <section class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
+        <!-- Wallet -->
+        <div class="bg-white rounded-xl shadow p-6">
+          <h2 class="text-lg font-semibold mb-3">Wallet Balance</h2>
+          <p class="text-3xl font-bold mb-4">₹240.00</p>
+          <button class="bg-amber-500 text-white px-4 py-2 rounded-full">Withdraw Now</button>
+        </div>
+        <!-- Leaderboard -->
+        <div class="bg-white rounded-xl shadow p-6">
+          <h2 class="text-lg font-semibold mb-3">Leaderboard Sneak Peek</h2>
+          <p>You are <span class="font-bold text-emerald-600">#12</span> in Kolkata!</p>
+          <p class="text-sm mt-2">Next Milestone: 300 bottles → ₹10 Bonus</p>
+        </div>
+      </section>
+    </main>
+  </div><!-- /wrapper -->
+
+  <!-- ░░ MOBILE CTA ░░ -->
+  <a href="#"
+    class="md:hidden fixed bottom-4 right-4 bg-gradient-to-r from-amber-400 to-emerald-600 text-white px-6 py-3 rounded-full shadow-lg flex items-center gap-2">
+    <i data-feather="camera"></i><span class="font-semibold">Return Bottle</span>
+  </a>
+
+  <!-- feather icons init & sidebar toggle -->
+  <script>
+    feather.replace();
+
+    const burger = document.getElementById('burger');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+
+    burger?.addEventListener('click', () => {
+      sidebar.classList.toggle('-translate-x-full');
+      overlay.classList.toggle('hidden');
+    });
+    overlay?.addEventListener('click', () => {
+      sidebar.classList.add('-translate-x-full');
+      overlay.classList.add('hidden');
+    });
+  </script>
+</body>
+
+</html>

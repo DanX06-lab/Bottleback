@@ -1,8 +1,11 @@
 /* ===== THEME VARIABLES ===== */
 :root {
-  --primary: #FF9933; /* saffron */
-  --accent: #138808;  /* green */
-  --dark: #0d1a72;    /* navy */
+  --primary: #FF9933;
+  /* saffron */
+  --accent: #138808;
+  /* green */
+  --dark: #0d1a72;
+  /* navy */
   --bg: whitesmoke;
 }
 
@@ -24,6 +27,7 @@ header {
   background: var(--primary);
   padding: 1rem 2rem;
 }
+
 .navbar {
   max-width: 1200px;
   margin: auto;
@@ -31,21 +35,25 @@ header {
   align-items: center;
   justify-content: space-between;
 }
+
 .logo {
   color: #fff;
   font-size: 1.6rem;
   font-weight: 800;
 }
+
 .nav-links {
   display: flex;
   gap: 1.4rem;
   list-style: none;
 }
+
 .nav-links a {
   text-decoration: none;
   color: #fff;
   font-weight: 500;
 }
+
 .btn-link {
   background: var(--accent);
   padding: 0.45rem 1.2rem;
@@ -65,22 +73,26 @@ header {
   overflow: hidden;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
+
 .hero-left {
   flex: 1;
   padding: 3rem 2.5rem;
 }
+
 .hero-left h1 {
   font-size: 2.8rem;
   font-weight: 800;
   line-height: 1.1;
   margin: 1rem 0;
 }
+
 .hero-left p {
   max-width: 480px;
   font-size: 1rem;
   line-height: 1.6;
   margin-bottom: 2rem;
 }
+
 .cta-primary {
   background: var(--accent);
   color: #fff;
@@ -89,14 +101,25 @@ header {
   font-weight: 600;
   text-decoration: none;
 }
-.hero-right {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 400px;
-  background: #e9e9e9;
+
+/* Keep PPT iframe responsive */
+.ppt-frame {
+  width: 100%;
+  max-width: 320px;
+  /* match your hero image width */
+  aspect-ratio: 16/13;
+  /* tweak height by ratio */
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .1);
 }
+
+.ppt-frame iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
 .browser-frame {
   width: 80%;
   border: 4px solid var(--accent);
@@ -104,6 +127,7 @@ header {
   border-radius: 8px 8px 0 0;
   overflow: hidden;
 }
+
 .browser-frame img {
   width: 100%;
   display: block;
@@ -116,17 +140,20 @@ header {
   padding: 0 1rem;
   text-align: center;
 }
+
 .section h2 {
   font-size: 2.2rem;
   font-weight: 700;
   margin-bottom: 1rem;
   color: var(--primary);
 }
+
 .section p.lead {
   max-width: 700px;
   margin: 0 auto 2rem;
   color: #555;
 }
+
 .grid {
   display: grid;
   gap: 1.5rem;
@@ -136,12 +163,14 @@ header {
 .why-grid {
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
 }
+
 .why-item {
   background: #fff;
   border-radius: 12px;
   padding: 2rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
+
 .why-item h3 {
   color: var(--accent);
   margin-bottom: 0.6rem;
@@ -151,12 +180,14 @@ header {
 .steps-grid {
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 }
+
 .step {
   padding: 1.5rem;
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
+
 .step span {
   display: inline-block;
   width: 46px;
@@ -176,12 +207,14 @@ header {
   gap: 3rem;
   flex-wrap: wrap;
 }
+
 .counter {
   background: #fff;
   padding: 1.5rem 2rem;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
+
 .counter h3 {
   font-size: 2rem;
   color: var(--accent);
@@ -195,10 +228,12 @@ header {
   padding: 3rem 1rem;
   margin-top: 4rem;
 }
+
 .cta-banner h2 {
   font-size: 2.2rem;
   margin-bottom: 1rem;
 }
+
 .cta-banner a {
   display: inline-block;
   background: #ffb400;
@@ -223,15 +258,17 @@ footer {
   .hero {
     flex-direction: column;
   }
+
   .hero-left {
     text-align: center;
   }
+
   .hero-left h1 {
     font-size: 2.2rem;
   }
- 
 
-/* base “hidden” state for anything we want to animate */
+
+  /* base “hidden” state for anything we want to animate */
 
 
 

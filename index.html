@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,10 +13,24 @@
 
   <!-- Fade‑in animation used across sections -->
   <style>
-    @keyframes fadeInUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
-    .fade-in{animation:fadeInUp .8s ease-out both;}
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fade-in {
+      animation: fadeInUp .8s ease-out both;
+    }
   </style>
 </head>
+
 <body>
   <!-- ===== NAVBAR ===== -->
   <header class="fade-in" style="animation-delay:.1s">
@@ -40,24 +55,38 @@
     <div class="hero-left fade-in" style="animation-delay:.3s">
       <h2 class="tagline">Hi, there!</h2>
       <h1><span class="dark-text">Return Your Bottle.</span><br><span class="accent-text">Earn Your Rupee.</span></h1>
-      <p class="lead">Join India’s most rewarding recycling loop — scan, return, and get instant cashback while keeping our planet clean.</p>
+      <p class="lead">Join India’s most rewarding recycling loop — scan, return, and get instant cashback while keeping
+        our planet clean.</p>
       <a href="how-it-works.html" class="cta-primary">Get Started</a>
     </div>
+    <!-- HERO RIGHT : embedded PPT slider -->
     <div class="hero-right fade-in" style="animation-delay:.4s">
-      <div class="browser-frame">
-        <img src="images/main.png" alt="Girl holding recycled bottle" />
+      <div class="ppt-frame">
+        <iframe src="https://github.com/DanX06-lab/botalsepaisa/raw/refs/heads/main/hero.pptx" width="320" height="260"
+          frameborder="0" allowfullscreen></iframe>
       </div>
     </div>
+
   </section>
 
   <!-- ===== WHY BotalSePaisa ===== -->
   <section class="section fade-in" id="why" style="animation-delay:.5s">
     <h2>Why botalSePaisa?</h2>
-    <p class="lead">India generates 3.5 million tonnes of plastic waste every year. BotalSePaisa’s deposit‑return model offers a simple, instant‑reward solution.</p>
+    <p class="lead">India generates 3.5 million tonnes of plastic waste every year. BotalSePaisa’s deposit‑return model
+      offers a simple, instant‑reward solution.</p>
     <div class="grid why-grid">
-      <div class="why-item fade-in" style="animation-delay:.6s"><h3>Plastic Problem</h3><p>Mounting bottles in landfills & rivers.</p></div>
-      <div class="why-item fade-in" style="animation-delay:.7s"><h3>Instant Reward</h3><p>Scan & get ₹1 via UPI in seconds.</p></div>
-      <div class="why-item fade-in" style="animation-delay:.8s"><h3>Swachh Bharat</h3><p>Every return keeps streets & oceans cleaner.</p></div>
+      <div class="why-item fade-in" style="animation-delay:.6s">
+        <h3>Plastic Problem</h3>
+        <p>Mounting bottles in landfills & rivers.</p>
+      </div>
+      <div class="why-item fade-in" style="animation-delay:.7s">
+        <h3>Instant Reward</h3>
+        <p>Scan & get ₹1 via UPI in seconds.</p>
+      </div>
+      <div class="why-item fade-in" style="animation-delay:.8s">
+        <h3>Swachh Bharat</h3>
+        <p>Every return keeps streets & oceans cleaner.</p>
+      </div>
     </div>
   </section>
 
@@ -65,10 +94,22 @@
   <section class="section fade-in" id="snapshot" style="animation-delay:.9s">
     <h2>How It Works</h2>
     <div class="grid steps-grid">
-      <div class="step fade-in" style="animation-delay:1s"><span>1</span><h4>Buy</h4><p>Grab any BotalSePaisa‑enabled drink.</p></div>
-      <div class="step fade-in" style="animation-delay:1.1s"><span>2</span><h4>Scan</h4><p>Scan the QR with our app/website.</p></div>
-      <div class="step fade-in" style="animation-delay:1.2s"><span>3</span><h4>Drop</h4><p>Return bottle at the nearest kiosk.</p></div>
-      <div class="step fade-in" style="animation-delay:1.3s"><span>4</span><h4>Earn</h4><p>Instantly receive ₹1 to your UPI.</p></div>
+      <div class="step fade-in" style="animation-delay:1s"><span>1</span>
+        <h4>Buy</h4>
+        <p>Grab any BotalSePaisa‑enabled drink.</p>
+      </div>
+      <div class="step fade-in" style="animation-delay:1.1s"><span>2</span>
+        <h4>Scan</h4>
+        <p>Scan the QR with our app/website.</p>
+      </div>
+      <div class="step fade-in" style="animation-delay:1.2s"><span>3</span>
+        <h4>Drop</h4>
+        <p>Return bottle at the nearest kiosk.</p>
+      </div>
+      <div class="step fade-in" style="animation-delay:1.3s"><span>4</span>
+        <h4>Earn</h4>
+        <p>Instantly receive ₹1 to your UPI.</p>
+      </div>
     </div>
   </section>
 
@@ -76,9 +117,18 @@
   <section class="section fade-in" id="impact" style="animation-delay:1.4s">
     <h2>Our Impact So Far</h2>
     <div class="impact">
-      <div class="counter fade-in" style="animation-delay:1.5s"><h3>0</h3><p>Bottles Returned</p></div>
-      <div class="counter fade-in" style="animation-delay:1.6s"><h3>0</h3><p>Rewards Issued</p></div>
-      <div class="counter fade-in" style="animation-delay:1.7s"><h3>0</h3><p>Kiosks Active</p></div>
+      <div class="counter fade-in" style="animation-delay:1.5s">
+        <h3>0</h3>
+        <p>Bottles Returned</p>
+      </div>
+      <div class="counter fade-in" style="animation-delay:1.6s">
+        <h3>0</h3>
+        <p>Rewards Issued</p>
+      </div>
+      <div class="counter fade-in" style="animation-delay:1.7s">
+        <h3>0</h3>
+        <p>Kiosks Active</p>
+      </div>
     </div>
   </section>
 
@@ -90,4 +140,5 @@
 
   <footer class="fade-in" style="animation-delay:1.9s">&copy; 2025 BotalSePaisa India. All rights reserved.</footer>
 </body>
+
 </html>
