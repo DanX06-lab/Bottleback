@@ -82,6 +82,24 @@
   </section>
 
   <footer>&copy; 2025 BottleBack India. All rights reserved.</footer>
+
+<script>
+/* Fade‑in on scroll using Intersection Observer */
+const observer = new IntersectionObserver(
+  entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('show');         // fire animation
+        observer.unobserve(e.target);           // run only once
+      }
+    });
+  },
+  { threshold: 0.15 }                           // reveal when 15 % visible
+);
+
+/* observe every element that has the .reveal class */
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
 </body>
 </html>
 
