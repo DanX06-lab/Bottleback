@@ -181,6 +181,13 @@
       overlay.classList.add('hidden');
     });
   </script>
+  <script>
+    // Protect dashboard: redirect to login if not authenticated
+    const token = localStorage.getItem('bottleback_token');
+    if (!token) {
+      window.location.href = 'login.html';
+    }
+  </script>
 </body>
 
 </html>

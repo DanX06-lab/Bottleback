@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign Up – BottleBack India</title>
+
+  <!-- optional: keep global colours / navbar -->
+  <link rel="stylesheet" href="styles/style.css">
+
+  <style>
+    /*  ---- GLOBAL PASTEL & BUBBLE BACKGROUND (same as login) ---- */
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:"Poppins",sans-serif;
+      display:flex;justify-content:center;align-items:center;
+      min-height:100vh;
+      overflow:hidden;
+      background-size: cover;
+      
+    }
+    
+
+    /*  ---- GLASS SIGN-UP CARD ---- */
+    .glass-card{
+      width:min(90%,440px);
+      padding:3rem 2.5rem;
+      border-radius:24px;
+      background:rgba(255,255,255,.22);
+      border:1px solid rgba(255,255,255,.35);
+      backdrop-filter:blur(18px);
+      box-shadow:0 10px 35px rgba(0,0,0,.12);
+      text-align:center;color:#1b1b1b;
+    }
+    h1{font-weight:600;margin-bottom:2rem;letter-spacing:.5px}
+
+    /*  ---- FORM ---- */
+    form{display:flex;flex-direction:column;gap:1.1rem}
+    input{
+      width:100%;padding:.85rem 1rem;
+      border-radius:50px;border:1px solid rgba(0,0,0,.18);
+      background:rgba(255,255,255,.75);
+      font-size:.95rem;
+    }
+    .btn{
+      padding:.9rem;border:none;border-radius:50px;
+      font-weight:600;font-size:1rem;cursor:pointer;
+      transition:.25s background;
+    }
+    .btn.primary{background:#000;color:#fff}
+    .btn.primary:hover{background:#333}
+    .btn.alt{background:rgba(0,0,0,.08);color:#000}
+
+    .login-link{text-align:center;font-size:.95rem;margin-top:1rem}
+    .login-link a{color:#00b894;text-decoration:none;font-weight:600}
+    .login-link a:hover{text-decoration:underline}
+
+    @media(max-width:480px){
+      .glass-card{padding:2.2rem 1.8rem}
+      h1{font-size:1.6rem}
+    }
+  </style>
+</head>
+<body background="images/image3.jpg">
+
+  <div class="glass-card">
+    <h1>Create Account</h1>
+
+    <form class="signup-form">
+      <input type="text" placeholder="Full Name" required>
+      
+      <input type="password" placeholder="Password" required>
+      <input type="password" placeholder="Confirm Password" required>
+
+      <button class="btn primary" type="submit">Sign Up</button>
+    </form>
+
+    <p class="login-link">
+      Already registered?
+      <a href="login.html">Log in here</a>
+    </p>
+  </div>
+
+  <script>
+    document.querySelector('.signup-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const name = this.querySelector('input[placeholder="Full Name"]').value.trim();
+      
+      const password = this.querySelector('input[placeholder="Password"]').value;
+      const confirmPassword = this.querySelector('input[placeholder="Confirm Password"]').value;
+
+      if (!name || !password || !confirmPassword) {
+        alert('Please fill all fields.');
+        return;
+      }
+      if (password !== confirmPassword) {
+        alert('Passwords do not match.');
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/auth/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, password })
+        });
+        const data = await response.json();
+        if (response.ok) {
+          alert('Signup successful! Please log in.');
+          window.location.href = 'login.html';
+        } else {
+          alert(data.error || 'Signup failed.');
+        }
+      } catch (err) {
+        alert('Network error. Please try again.');
+      }
+    });
+  </script>
+</body>
+</html>

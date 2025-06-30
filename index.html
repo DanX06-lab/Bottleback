@@ -147,18 +147,7 @@
   </section>
 
   <footer class="fade-in" style="animation-delay:1.9s">&copy; 2025 BotalSePaisa India. All rights reserved.</footer>
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const slides = document.querySelectorAll("#pptSlider .slide");
-      const dots = document.querySelectorAll(".ppt-dots span"); // if dots used
-      let idx = 0;
-      function show(i) {
-        slides.forEach((s, n) => s.classList.toggle("active", n === i));
-        dots.forEach((d, n) => d.classList.toggle("active-dot", n === i));
-      }
-      setInterval(() => { idx = (idx + 1) % slides.length; show(idx); }, 4000);
-    });
-  </script>
+
 
 
 </body>

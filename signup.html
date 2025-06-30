@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,48 +8,95 @@
 
   <!-- Inline design (same vibe as contact page) -->
   <style>
-    :root{
-      --primary:#ff9933;--accent:#138808;--dark:#0f2756;
-      --radius:18px;--shadow:0 10px 30px rgba(0,0,0,.1);
-      --font:'Poppins',sans-serif;
+    :root {
+      --primary: #ff9933;
+      --accent: #138808;
+      --dark: #0f2756;
+      --radius: 18px;
+      --shadow: 0 10px 30px rgba(0, 0, 0, .1);
+      --font: 'Poppins', sans-serif;
     }
-    *{box-sizing:border-box;margin:0;padding:0;font-family:var(--font)}
-    body{
-      min-height:100vh;display:flex;align-items:center;justify-content:center;
-      background:linear-gradient(145deg,#eaf3ff,#d4e0f4);
-      padding:1.5rem;
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: var(--font)
     }
-    .card{
-      width:100%;max-width:460px;background:#fff;
-      padding:2.7rem 2rem;border-radius:var(--radius);
-      box-shadow:var(--shadow);text-align:center;
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(145deg, #eaf3ff, #d4e0f4);
+      padding: 1.5rem;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 460px;
+      background: #fff;
+      padding: 2.7rem 2rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      text-align: center;
       animation: fade-in .8s ease;
     }
-    h1{font-size:1.9rem;color:var(--dark);margin-bottom:1.8rem}
-    input{
-      width:100%;padding:0.9rem 1rem;margin-bottom:1.2rem;
-      border:1px solid #cdd4e0;border-radius:12px;font-size:1rem;
+
+    h1 {
+      font-size: 1.9rem;
+      color: var(--dark);
+      margin-bottom: 1.8rem
     }
-    button{
-      width:100%;padding:1rem;border:none;border-radius:40px;
-      font-size:1rem;font-weight:600;color:#fff;cursor:pointer;
-      background:linear-gradient(135deg,#ffb400 0%,#118800 100%);
-      transition:opacity .25s;
+
+    input {
+      width: 100%;
+      padding: 0.9rem 1rem;
+      margin-bottom: 1.2rem;
+      border: 1px solid #cdd4e0;
+      border-radius: 12px;
+      font-size: 1rem;
     }
-    button:hover{opacity:.9}
-    p{margin-top:1rem;font-size:.9rem}
-    p a{color:var(--primary);font-weight:600;text-decoration:none}
+
+    button {
+      width: 100%;
+      padding: 1rem;
+      border: none;
+      border-radius: 40px;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #fff;
+      cursor: pointer;
+      background: linear-gradient(135deg, #ffb400 0%, #118800 100%);
+      transition: opacity .25s;
+    }
+
+    button:hover {
+      opacity: .9
+    }
+
+    p {
+      margin-top: 1rem;
+      font-size: .9rem
+    }
+
+    p a {
+      color: var(--primary);
+      font-weight: 600;
+      text-decoration: none
+    }
   </style>
 </head>
+
 <body>
 
   <div class="card">
-    <h1>Create Account</h1>
-
-    <form>
-      <input type="text" placeholder="Full Name" required />
-      <input type="email" placeholder="Email Address" required />
-      <input type="password" placeholder="Password" required />
+    <form class="signup-form">
+      <h1>Sign Up</h1>
+      <input type="text" placeholder="Full Name" required name="name" />
+      <input type="tel" placeholder="Phone Number" required name="phoneNumber" />
+      <input type="password" placeholder="Password" required name="password" />
       <input type="password" placeholder="Confirm Password" required />
 
       <button type="submit">Sign Up</button>
@@ -56,6 +104,45 @@
 
     <p>Already a member? <a href="login.html">Log in</a></p>
   </div>
+  <script>
+    document.querySelector('.signup-form').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const name = this.querySelector('input[name="name"]').value.trim();
+      const phoneNumber = this.querySelector('input[name="phoneNumber"]').value.trim();
+      const password = this.querySelector('input[name="password"]').value;
+      const confirmPassword = this.querySelector('input[placeholder="Confirm Password"]').value;
 
+      if (!name || !phoneNumber || !password || !confirmPassword) {
+        alert('All fields are required.');
+        return;
+      }
+      if (!/^\d{10}$/.test(phoneNumber)) {
+        alert('Please enter a valid 10-digit phone number.');
+        return;
+      }
+      if (password !== confirmPassword) {
+        alert('Passwords do not match.');
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, phoneNumber, password })
+        });
+        const data = await response.json();
+        if (response.ok) {
+          alert('Signup successful! Please log in.');
+          window.location.href = 'login.html';
+        } else {
+          alert(data.error || 'Signup failed.');
+        }
+      } catch (err) {
+        alert('Network error. Please try again.');
+      }
+    });
+  </script>
 </body>
+
 </html>
