@@ -6,6 +6,9 @@ const bcrypt = require('bcryptjs');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+if (!process.env.PORT) {
+    console.warn('⚠️  Warning: process.env.PORT is not set. Defaulting to 3000. This is fine for local development, but Render will set PORT automatically.');
+}
 const SECRET = 'your_jwt_secret'; // Use env variable in production
 
 // Middleware
@@ -84,7 +87,7 @@ app.post('/api/auth/signup', async (req, res) => {
 
         // Generate JWT token
         const token = jwt.sign({ user_id: newUser[0].user_id }, SECRET, { expiresIn: '24h' });
-        
+
         res.status(201).json({
             user: newUser[0],
             token: token
@@ -114,7 +117,7 @@ app.get('/api/user/dashboard', auth, async (req, res) => {
         const user = await bottleBackDB.userModel.getUserByPhone(req.user.phone_number);
         const returns = await bottleBackDB.returnLogModel.getUserReturns(req.user.user_id);
         const transactions = await bottleBackDB.rewardTransactionModel.getUserTransactions(req.user.user_id);
-        
+
         res.json({
             user,
             returns,
