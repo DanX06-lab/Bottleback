@@ -14,14 +14,15 @@ const SECRET = 'your_jwt_secret'; // Use env variable in production
 // Middleware
 app.use(express.json());
 // Serve all static files from the root directory
+// Serve static files from the root directory (for Render, __dirname is the project root)
 app.use(express.static(__dirname));
 
 // Initialize database
 const bottleBackDB = new BottleBackDatabase();
 
-// Routes
+// Serve index.html for root route (works for both local and Render)
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'Bottleback', 'index.html'));
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // API Routes
