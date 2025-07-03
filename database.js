@@ -221,9 +221,9 @@ class UserModel {
     }
 
     // Get user by phone number
-    async getUserByPhone(phoneNumber) {
+    async getUserByPhone(phone) {
         const query = 'SELECT * FROM users WHERE phone_number = ?';
-        const users = await this.db.executeQuery(query, [phoneNumber]);
+        const users = await this.db.executeQuery(query, [phone]);
         return users[0];
     }
 

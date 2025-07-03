@@ -9,8 +9,8 @@ const app = express();
 
 // Enable CORS for GitHub Pages frontend
 app.use(cors({
-  origin: 'https://danx06-lab.github.io',
-  credentials: false // Set to true only if using cookies/auth headers
+    origin: 'https://danx06-lab.github.io',
+    credentials: false // Set to true only if using cookies/auth headers
 }));
 const PORT = process.env.PORT || 3000;
 if (!process.env.PORT) {
@@ -311,7 +311,6 @@ app.post('/api/auth/signup', async (req, res) => {
     res.json({ message: 'Signup successful' });
 });
 
-// User Login
 app.post('/api/auth/login', async (req, res) => {
     console.log('LOGIN BODY:', req.body);
     const { phone, password } = req.body;
