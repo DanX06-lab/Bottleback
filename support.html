@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support | BottleBack</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+</head>
+
+<body class="bg-gray-50 min-h-screen flex flex-col">
+    <header class="bg-white shadow p-4 flex items-center justify-between">
+        <a href="home.html" class="flex items-center gap-2 text-amber-600 font-bold text-lg">
+            <i data-feather="arrow-left"></i> Back to Dashboard
+        </a>
+        <span class="font-semibold text-gray-700">Support</span>
+    </header>
+
+    <main class="flex-1 flex items-center justify-center">
+        <div class="bg-white rounded-lg shadow-lg p-8 max-w-md w-full">
+            <h1 class="text-2xl font-bold mb-4 text-amber-600 flex items-center gap-2"><i
+                    data-feather="help-circle"></i>Need Help?</h1>
+            <p class="mb-6 text-gray-700">We're here to help! Fill out the form below and our support team will get back
+                to you as soon as possible.</p>
+            <form class="space-y-4" id="supportForm">
+                <input type="text" id="name" name="name" placeholder="Your Name" class="w-full border rounded px-3 py-2"
+                    required>
+                <input type="email" id="email" name="email" placeholder="Your Email"
+                    class="w-full border rounded px-3 py-2" required>
+                <textarea id="message" name="message" placeholder="Describe your issue or question..."
+                    class="w-full border rounded px-3 py-2 h-28" required></textarea>
+                <button type="submit"
+                    class="w-full bg-amber-600 text-white font-semibold py-2 rounded hover:bg-amber-700 transition">Submit</button>
+                <div id="supportSuccess" class="hidden text-green-600 font-semibold mt-2">Thank you! Your message has
+                    been sent.</div>
+            </form>
+            <div class="mt-6 text-gray-500 text-sm">
+                Or email us directly at <a href="mailto:bottleback@gmail.com"
+                    class="text-amber-600 underline">bottleback@gmail.com</a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        feather.replace();
+        document.getElementById('supportForm').onsubmit = function (e) {
+            e.preventDefault();
+            // For demo: just show success message. In production, send to backend or email service.
+            document.getElementById('supportSuccess').classList.remove('hidden');
+            this.reset();
+        };
+    </script>
+</body>
+
+</html>
