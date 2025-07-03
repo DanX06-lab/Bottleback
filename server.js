@@ -248,6 +248,24 @@ app.delete('/api/users/:id', async (req, res) => {
     }
 });
 
+// Leaderboard API: Get top users by returns and rewards
+app.get('/api/leaderboard', async (req, res) => {
+    try {
+        await bottleBackDB.initialize();
+        // Adjust the query to match your DB schema (returns and rewards columns)
+        const topUsers = await bottleBackDB.db.executeQuery(
+            `SELECT name, phone_number AS phone, total_returns AS returns, wallet_balance AS rewards
+             FROM users
+             ORDER BY total_returns DESC, wallet_balance DESC
+             LIMIT 20`
+        );
+        res.json(topUsers);
+    } catch (error) {
+        console.error('Error fetching leaderboard:', error);
+        res.status(500).json({ error: 'Failed to fetch leaderboard' });
+    }
+});
+
 // Get user statistics
 app.get('/api/stats', async (req, res) => {
     try {

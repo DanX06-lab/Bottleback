@@ -1,13 +1,14 @@
+require('dotenv').config(); // Loads .env for local development
 const mysql = require('mysql2/promise');
 const bcrypt = require('bcryptjs');
 
 // Database Configuration
 const dbConfig = {
-    host: 'localhost',
-    user: 'root',
-    password: 'Souvik@0606', // Updated with user's MySQL password
-    database: 'botalsepaisa_system',
-    port: 3306,
+    host: process.env.DB_HOST || 'localhost',
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || 'Souvik@0606',
+    database: process.env.DB_NAME || 'bottleback_system',
+    port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 3306,
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
@@ -102,12 +103,12 @@ class DatabaseConnection {
             console.log('Attempting to get connection from pool...');
             const connection = await this.pool.getConnection();
             console.log('Got connection:', connection);
-            
+
             // Check if we can execute a simple query
             console.log('Testing connection with simple query...');
             const [rows] = await connection.execute('SELECT 1 + 1 AS result');
             console.log('Simple query result:', rows[0].result);
-            
+
             // Drop existing tables in correct order to avoid foreign key constraints
             console.log('Dropping existing tables...');
             await connection.execute('SET FOREIGN_KEY_CHECKS = 0');
@@ -119,7 +120,7 @@ class DatabaseConnection {
             await connection.execute('DROP TABLE IF EXISTS users');
             await connection.execute('SET FOREIGN_KEY_CHECKS = 1');
             console.log('Tables dropped successfully');
-            
+
             // Create tables in correct order with foreign key dependencies
             console.log('Creating tables...');
             console.log('Creating companies table...');
@@ -137,18 +138,18 @@ class DatabaseConnection {
             console.log('Creating return_logs table...');
             await connection.execute(TABLES.return_logs);
             console.log('All tables created successfully');
-            
+
             // Verify tables were created
             const tables = await connection.execute('SHOW TABLES');
             console.log('Tables in database:', tables[0].map(t => t.Tables_in_botalsepaisa_system));
-            
+
             // Verify kiosks table structure
             const columns = await connection.execute('DESCRIBE kiosks');
             console.log('Kiosks table columns:', columns[0]);
-            
+
             // Release the connection
             connection.release();
-            
+
             console.log('✅ Database initialized successfully!');
             return true;
         } catch (error) {
