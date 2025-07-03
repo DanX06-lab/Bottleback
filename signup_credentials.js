@@ -1,21 +1,25 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
-const sql = require('mssql');
+const mysql = require('mysql2/promise');
 require('dotenv').config();
 
 const app = express();
 app.use(express.json());
 
 const dbConfig = {
+  host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
-  server: process.env.DB_SERVER,
-  database: 'botalsepaisa_system',
-  options: {
-    encrypt: true,
-    trustServerCertificate: true, // Use for local dev
-  }
+  database: process.env.DB_NAME,
+  port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 3306,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
 };
+
+// Create a MySQL connection pool
+const pool = mysql.createPool(dbConfig);
+
 
 // Route: Register New User
 app.post('/api/register', async (req, res) => {
