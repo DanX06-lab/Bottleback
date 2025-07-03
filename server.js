@@ -1,10 +1,17 @@
 const express = require('express');
+const cors = require('cors');
 const path = require('path');
 const { BottleBackDatabase } = require('./database');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
 const app = express();
+
+// Enable CORS for GitHub Pages frontend
+app.use(cors({
+  origin: 'https://danx06-lab.github.io',
+  credentials: false // Set to true only if using cookies/auth headers
+}));
 const PORT = process.env.PORT || 3000;
 if (!process.env.PORT) {
     console.warn('⚠️  Warning: process.env.PORT is not set. Defaulting to 3000. This is fine for local development, but Render will set PORT automatically.');
