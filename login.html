@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
 
-  <!--  PAGE-SPECIFIC STYLES  -->
+
   <style>
     /* === RESET & GLOBAL === */
     *,
@@ -21,7 +21,6 @@
       margin: 0;
       padding: 0
     }
-
     body {
       font-family: "Poppins", sans-serif;
       display: flex;
@@ -32,7 +31,6 @@
       /* hide stray bubbles */
       background-size: cover;
     }
-
     /* === GLASS CARD === */
     .glass-card {
       width: min(90%, 420px);
@@ -45,21 +43,18 @@
       text-align: center;
       color: #1b1b1b;
     }
-
     /* === TYPOGRAPHY === */
     h1 {
       font-weight: 600;
       margin-bottom: 2rem;
       letter-spacing: .5px
     }
-
     /* === FORM === */
     form {
       display: flex;
       flex-direction: column;
       gap: 1.15rem
     }
-
     input {
       width: 100%;
       padding: .85rem 1rem;
@@ -68,7 +63,6 @@
       background: rgba(255, 255, 255, .75);
       font-size: .95rem;
     }
-
     /* Rounded primary and secondary buttons */
     .btn {
       padding: .9rem;
@@ -79,21 +73,17 @@
       cursor: pointer;
       transition: .25s background;
     }
-
     .btn.primary {
       background: #000;
       color: #fff
     }
-
     .btn.primary:hover {
       background: #333
     }
-
     .btn.alt {
       background: rgba(0, 0, 0, .08);
       color: #000;
     }
-
     /* tiny row */
     .row {
       display: flex;
@@ -101,26 +91,21 @@
       font-size: .85rem;
       margin-top: -.35rem
     }
-
     .row a {
       text-decoration: none;
       color: #000
     }
-
     .row a:hover {
       text-decoration: underline
     }
-
     @media(max-width:480px) {
       .glass-card {
         padding: 2.2rem 1.8rem
       }
-
       h1 {
         font-size: 1.6rem
       }
     }
-
     .error {
       color: #e74c3c;
       margin-bottom: 12px;

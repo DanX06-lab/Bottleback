@@ -11,6 +11,31 @@
 
   <!-- Icons (Heroicons) -->
   <script src="https://unpkg.com/feather-icons"></script>
+
+
+  <style>
+    .loading-state {
+      min-height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f8fafc;
+      border-radius: 1rem;
+    }
+    .loading-spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid #e5e7eb;
+      border-top-color: #3b82f6;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
 </head>
 
 <body class="bg-slate-50 min-h-screen flex flex-col">
@@ -28,8 +53,7 @@
       <!-- center nav (desktop) -->
       <nav class="hidden md:flex gap-6 text-sm font-medium text-gray-600">
         <a href="#">Home</a>
-        <a href="#">Drop Points</a>
-        <a href="#">Rewards</a>
+
         <a href="#">My Activity</a>
       </nav>
 
@@ -72,7 +96,7 @@
         <li><a class="flex items-center gap-3 py-2 hover:text-amber-600" href="#"><i data-feather="activity"></i>Return
             History</a></li>
 
-        <li><a class="flex items-center gap-3 py-2 hover:text-amber-600" href="leaderboard.html"><i
+        <li><a class="flex items-center gap-3 py-2 hover:text-amber-600" href="#"><i
               data-feather="award"></i>Leaderboard</a></li>
         <li><a class="flex items-center gap-3 py-2 hover:text-amber-600" href="#"><i data-feather="users"></i>Invite
             Friends</a></li>
@@ -87,28 +111,22 @@
     <!-- ░░ MAIN CONTENT ░░ -->
     <main class="flex-1 overflow-y-auto p-6 md:ml-0">
       <!-- Overview cards -->
-      <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <section id="overview-cards" class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div class="bg-white rounded-xl shadow p-6 flex items-center gap-4">
           <div class="bg-emerald-100 p-3 rounded-full"><i data-feather="refresh-ccw"></i></div>
           <div>
-            <h3 class="text-xl font-bold">240</h3>
+            <h3 id="bottles-returned" class="text-xl font-bold">0</h3>
             <p class="text-xs text-gray-500">Bottles Returned</p>
           </div>
         </div>
         <div class="bg-white rounded-xl shadow p-6 flex items-center gap-4">
-          <div class="bg-amber-100 p-3 rounded-full"><i data-feather="rupee-sign"></i></div>
+          <div class="bg-amber-100 p-3 rounded-full"><span>₹</span></div>
           <div>
-            <h3 class="text-xl font-bold">₹240</h3>
+            <h3 id="upi-earned" class="text-xl font-bold">₹0</h3>
             <p class="text-xs text-gray-500">UPI Earned</p>
           </div>
         </div>
-        <div class="bg-white rounded-xl shadow p-6 flex items-center gap-4">
-          <div class="bg-indigo-100 p-3 rounded-full"><i data-feather="leaf"></i></div>
-          <div>
-            <h3 class="text-xl font-bold">4.8 kg</h3>
-            <p class="text-xs text-gray-500">Plastic Diverted</p>
-          </div>
-        </div>
+
       </section>
 
       <!-- Recent Activity -->
@@ -125,15 +143,8 @@
                 <th class="p-3 text-left">Reward</th>
               </tr>
             </thead>
-            <tbody>
-              <tr class="border-b">
-                <td class="p-3">#BLB90523</td>
-                <td class="p-3">Jun 25</td>
-                <td class="p-3">Radhe Store</td>
-                <td class="p-3 text-emerald-600">♻ Recycled</td>
-                <td class="p-3">₹1</td>
-              </tr>
-              <!-- duplicate rows as needed -->
+            <tbody id="activity-table-body">
+              <!-- Activity rows will be populated by JavaScript -->
             </tbody>
           </table>
         </div>
@@ -142,17 +153,23 @@
       <!-- Wallet & Leaderboard -->
       <section class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
         <!-- Wallet -->
-        <div class="bg-white rounded-xl shadow p-6">
+        <div id="wallet-section" class="bg-white rounded-xl shadow p-6">
           <h2 class="text-lg font-semibold mb-3">Wallet Balance</h2>
-          <p class="text-3xl font-bold mb-4">₹240.00</p>
-          <button class="bg-amber-500 text-white px-4 py-2 rounded-full">Withdraw Now</button>
+          <p id="wallet-balance" class="text-3xl font-bold mb-4">₹0.00</p>
+          <button onclick="handleWithdraw()"
+            class="bg-amber-500 text-white px-4 py-2 rounded-full hover:bg-amber-600">Withdraw Now</button>
         </div>
-        <!-- Leaderboard -->
-        <div class="bg-white rounded-xl shadow p-6">
-          <h2 class="text-lg font-semibold mb-3">Leaderboard Sneak Peek</h2>
-          <p>You are <span class="font-bold text-emerald-600">#12</span> in Kolkata!</p>
-          <p class="text-sm mt-2">Next Milestone: 300 bottles → ₹10 Bonus</p>
-        </div>
+        <!-- Leaderboard section -->
+        <section class="leaderboard-section mt-8">
+          <h2 class="text-lg font-semibold mb-4">Leaderboard</h2>
+          <div class="bg-white rounded-xl shadow p-6 flex flex-col items-center">
+            <div class="flex flex-col items-center mb-2">
+              <span id="leaderboard-rank" class="text-2xl font-bold">#0</span>
+              <span id="leaderboard-city" class="text-gray-600">City Region</span>
+            </div>
+            <div id="leaderboard-milestone" class="text-sm text-gray-500">Next Milestone: 0 bottles → ₹0 Bonus</div>
+          </div>
+        </section>
       </section>
     </main>
   </div><!-- /wrapper -->
@@ -164,7 +181,7 @@
   </a>
 
   <!-- feather icons init & sidebar toggle -->
-  <!-- <script>
+  <script>
     feather.replace();
 
     const burger = document.getElementById('burger');
@@ -179,14 +196,99 @@
       sidebar.classList.add('-translate-x-full');
       overlay.classList.add('hidden');
     });
-  </script>
-  <script>
-    // Protect dashboard: redirect to login if not authenticated
-    const token = localStorage.getItem('bottleback_token');
-    if (!token) {
-      window.location.href = 'login.html';
+
+    // Function to update overview cards
+    function updateOverviewCards(data) {
+      document.getElementById('bottles-returned').textContent = data.bottlesReturned;
+      document.getElementById('upi-earned').textContent = `₹${data.upiEarned}`;
     }
-  </script> -->
+
+    // Function to update activity table
+    function updateActivityTable(activities) {
+      const tbody = document.getElementById('activity-table-body');
+      if (!Array.isArray(activities) || activities.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="p-3 text-center text-gray-400">No activity found</td></tr>';
+        return;
+      }
+      tbody.innerHTML = activities.map(activity => `
+        <tr class="border-b">
+          <td class="p-3">#${activity.bottleId}</td>
+          <td class="p-3">${new Date(activity.date).toLocaleDateString()}</td>
+          <td class="p-3">${activity.location}</td>
+          <td class="p-3 ${activity.status === 'Recycled' ? 'text-emerald-600' : 'text-gray-600'}">
+            ♻ ${activity.status}
+          </td>
+          <td class="p-3">₹${activity.reward}</td>
+        </tr>
+      `).join('');
+    }
+
+    // Function to update wallet
+    function updateWallet(balance) {
+      const safeBalance = (typeof balance === 'number' && !isNaN(balance)) ? balance : 0;
+      document.getElementById('wallet-balance').textContent = `₹${safeBalance.toFixed(2)}`;
+    }
+
+    // Function to update leaderboard
+    function updateLeaderboard(data) {
+      document.getElementById('leaderboard-rank').textContent = `#${data.rank}`;
+      document.getElementById('leaderboard-city').textContent = `${data.city} Region`;
+      document.getElementById('leaderboard-milestone').textContent = `Next Milestone: ${data.nextMilestone.bottles} bottles → ₹${data.nextMilestone.reward} Bonus`;
+    }
+
+    // Withdraw function
+    function handleWithdraw() {
+      const balance = parseFloat(document.getElementById('wallet-balance').textContent.replace('₹', ''));
+      if (balance <= 0) {
+        alert('Insufficient balance to withdraw');
+        return;
+      }
+
+      if (confirm(`Are you sure you want to withdraw ₹${balance}?`)) {
+        // Make API call to withdraw money
+        fetch('/api/user/wallet/withdraw', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('bottleback_token')}`
+          }
+        })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              alert('Withdrawal successful!');
+              // Refresh wallet balance
+              fetchWalletBalance();
+            } else {
+              throw new Error(data.error || 'Withdrawal failed');
+            }
+          })
+          .catch(error => {
+            alert('Error processing withdrawal: ' + error.message);
+          });
+      }
+    }
+
+    // Initialize dashboard
+    function initDashboard() {
+      // Check authentication
+      const token = localStorage.getItem('bottleback_token');
+      if (!token) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      // Fetch all data
+      Promise.all([
+        fetch('/api/user/profile', { headers: { 'Authorization': `Bearer ${token}` } }),
+        fetch('/api/user/activity', { headers: { 'Authorization': `Bearer ${token}` } }),
+        fetch('/api/user/wallet', { headers: { 'Authorization': `Bearer ${token}` } }),
+        fetch('/api/user/leaderboard', { headers: { 'Authorization': `Bearer ${token}` } })
+      ])
+    }
+
+  </script>
+  <script src="user_dashboard_credentials.js"></script>
 </body>
 
 </html>
