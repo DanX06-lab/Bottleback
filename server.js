@@ -1,109 +1,24 @@
 const express = require('express');
-const cors = require('cors');
 const path = require('path');
 const { BottleBackDatabase } = require('./database');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 
 const app = express();
-
-// Enable CORS for GitHub Pages frontend
-app.use(cors({
-    origin: 'https://danx06-lab.github.io',
-    credentials: false // Set to true only if using cookies/auth headers
-}));
 const PORT = process.env.PORT || 3000;
-if (!process.env.PORT) {
-    console.warn('⚠️  Warning: process.env.PORT is not set. Defaulting to 3000. This is fine for local development, but Render will set PORT automatically.');
-}
 const SECRET = 'your_jwt_secret'; // Use env variable in production
 
 // Middleware
 app.use(express.json());
 // Serve all static files from the root directory
-// Serve static files from the root directory (for Render, __dirname is the project root)
 app.use(express.static(__dirname));
 
 // Initialize database
 const bottleBackDB = new BottleBackDatabase();
 
-// Serve index.html for root route (works for both local and Render)
+// Routes
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
-});
-
-// API Routes
-
-// Phone number-based registration
-app.post('/api/register', async (req, res) => {
-    const { name, phoneNumber, password } = req.body;
-
-    if (!name || !phoneNumber || !password) {
-        return res.status(400).json({ error: 'Name, phone number, and password are required.' });
-    }
-
-    try {
-        await bottleBackDB.initialize();
-
-        // Check if user already exists
-        const existingUser = await bottleBackDB.db.executeQuery(
-            'SELECT * FROM users WHERE phone = ?',
-            [phoneNumber]
-        );
-        if (existingUser.length > 0) {
-            return res.status(400).json({ error: 'User already exists' });
-        }
-
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        await bottleBackDB.db.executeQuery(
-            'INSERT INTO users (full_name, phone, password_hash) VALUES (?, ?, ?)',
-            [name, phoneNumber, hashedPassword]
-        );
-
-        res.status(201).json({ message: 'User registered successfully' });
-    } catch (err) {
-        console.error('Database Error:', err);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
-
-app.post('/api/auth/signup', async (req, res) => {
-    try {
-        const { name, password } = req.body;
-
-        if (!name || !password) {
-            return res.status(400).json({ error: 'Name and password are required' });
-        }
-
-        // Hash password
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        await bottleBackDB.initialize();
-
-        // Create new user
-        const result = await bottleBackDB.db.executeQuery(
-            'INSERT INTO users (name, password_hash) VALUES (?, ?)',
-            [name, hashedPassword]
-        );
-
-        // Get the newly created user
-        const newUser = await bottleBackDB.db.executeQuery(
-            'SELECT * FROM users WHERE user_id = ?',
-            [result.insertId]
-        );
-
-        // Generate JWT token
-        const token = jwt.sign({ user_id: newUser[0].user_id }, SECRET, { expiresIn: '24h' });
-
-        res.status(201).json({
-            user: newUser[0],
-            token: token
-        });
-    } catch (error) {
-        console.error('Error during signup:', error);
-        res.status(500).json({ error: 'Failed to create user: ' + error.message });
-    }
+    res.sendFile(path.join(__dirname, 'Bottleback', 'index.html'));
 });
 
 // API Routes
@@ -118,45 +33,65 @@ app.get('/api/users', async (req, res) => {
     }
 });
 
-// Add other API routes here
-app.get('/api/user/dashboard', auth, async (req, res) => {
+// Store QR code in database
+app.post('/api/store-qr', async (req, res) => {
     try {
         await bottleBackDB.initialize();
-        const user = await bottleBackDB.userModel.getUserByPhone(req.user.phone_number);
-        const returns = await bottleBackDB.returnLogModel.getUserReturns(req.user.user_id);
-        const transactions = await bottleBackDB.rewardTransactionModel.getUserTransactions(req.user.user_id);
+        const { qr_code } = req.body;
+
+        // Check if QR code already exists
+        const existing = await bottleBackDB.qrCodeModel.getQRCode(qr_code);
+        if (existing) {
+            return res.status(400).json({
+                success: false,
+                error: 'QR code already exists in database'
+            });
+        }
+
+        // Extract timestamp from QR code
+        const timestamp = qr_code.split('_')[2]; // Assuming format BOTTLE_000001_timestamp
+
+        // Store QR code in qr_code_values table
+        await bottleBackDB.qrCodeModel.createQRCode(qr_code, 1, timestamp); // Using 1 as default company_id
 
         res.json({
-            user,
-            returns,
-            transactions
+            success: true,
+            message: 'QR code stored successfully',
+            data: {
+                qr_code: qr_code,
+                created_at: timestamp,
+                status: 'unused'
+            }
         });
     } catch (error) {
-        console.error('Error fetching dashboard data:', error);
-        res.status(500).json({ error: 'Failed to fetch dashboard data' });
+        console.error('Error storing QR code:', error);
+        res.status(500).json({
+            success: false,
+            error: error.message
+        });
     }
 });
 
 app.post('/api/users', async (req, res) => {
     try {
-        const { phoneNumber, userName, initialBalance } = req.body;
+        const { phone, userName, initialBalance } = req.body;
 
-        if (!phoneNumber || !userName) {
+        if (!phone || !userName) {
             return res.status(400).json({ error: 'Phone number and name are required' });
         }
 
         await bottleBackDB.initialize();
 
         // Check if user already exists
-        const existingUser = await bottleBackDB.userModel.getUserByPhone(phoneNumber);
+        const existingUser = await bottleBackDB.userModel.getUserByPhone(phone);
         if (existingUser) {
             return res.status(400).json({ error: 'User with this phone number already exists' });
         }
 
         // Create new user with initial balance
-        await bottleBackDB.userModel.createUser(phoneNumber, userName, initialBalance || 0);
+        await bottleBackDB.userModel.createUser(phone, userName, initialBalance || 0);
 
-        const newUser = await bottleBackDB.userModel.getUserByPhone(phoneNumber);
+        const newUser = await bottleBackDB.userModel.getUserByPhone(phone);
         res.status(201).json(newUser);
     } catch (error) {
         console.error('Error creating user:', error);
@@ -167,9 +102,9 @@ app.post('/api/users', async (req, res) => {
 app.put('/api/users/:id', async (req, res) => {
     try {
         const userId = parseInt(req.params.id);
-        const { phoneNumber, userName } = req.body;
+        const { phone, userName } = req.body;
 
-        if (!phoneNumber || !userName) {
+        if (!phone || !userName) {
             return res.status(400).json({ error: 'Phone number and name are required' });
         }
 
@@ -183,8 +118,8 @@ app.put('/api/users/:id', async (req, res) => {
 
         // Check if phone number is already taken by another user
         const existingUser = await bottleBackDB.db.executeQuery(
-            'SELECT * FROM users WHERE phone_number = ? AND user_id != ?',
-            [phoneNumber, userId]
+            'SELECT * FROM users WHERE phone = ? AND user_id != ?',
+            [phone, userId]
         );
         if (existingUser.length > 0) {
             return res.status(400).json({ error: 'Phone number is already registered by another user' });
@@ -192,8 +127,8 @@ app.put('/api/users/:id', async (req, res) => {
 
         // Update user
         await bottleBackDB.db.executeQuery(
-            'UPDATE users SET name = ?, phone_number = ? WHERE user_id = ?',
-            [userName, phoneNumber, userId]
+            'UPDATE users SET name = ?, phone = ? WHERE user_id = ?',
+            [userName, phone, userId]
         );
 
         const updatedUser = await bottleBackDB.db.executeQuery('SELECT * FROM users WHERE user_id = ?', [userId]);
@@ -255,24 +190,6 @@ app.delete('/api/users/:id', async (req, res) => {
     }
 });
 
-// Leaderboard API: Get top users by returns and rewards
-app.get('/api/leaderboard', async (req, res) => {
-    try {
-        await bottleBackDB.initialize();
-        // Adjust the query to match your DB schema (returns and rewards columns)
-        const topUsers = await bottleBackDB.db.executeQuery(
-            `SELECT name, phone_number AS phone, total_returns AS returns, wallet_balance AS rewards
-             FROM users
-             ORDER BY total_returns DESC, wallet_balance DESC
-             LIMIT 20`
-        );
-        res.json(topUsers);
-    } catch (error) {
-        console.error('Error fetching leaderboard:', error);
-        res.status(500).json({ error: 'Failed to fetch leaderboard' });
-    }
-});
-
 // Get user statistics
 app.get('/api/stats', async (req, res) => {
     try {
@@ -305,12 +222,13 @@ app.post('/api/auth/signup', async (req, res) => {
     const hash = await bcrypt.hash(password, 10);
     // Save password_hash in a new column in users table (add this column if not present)
     await bottleBackDB.db.executeQuery(
-        'INSERT INTO users (name, phone_number, password_hash) VALUES (?, ?, ?)',
+        'INSERT INTO users (name, phone, password_hash) VALUES (?, ?, ?)',
         [name, phone, hash]
     );
     res.json({ message: 'Signup successful' });
 });
 
+// User Login
 app.post('/api/auth/login', async (req, res) => {
     console.log('LOGIN BODY:', req.body);
     const { phone, password } = req.body;
@@ -318,12 +236,21 @@ app.post('/api/auth/login', async (req, res) => {
 
     await bottleBackDB.initialize();
     const user = await bottleBackDB.db.executeQuery(
-        'SELECT * FROM users WHERE phone_number = ?',
+        'SELECT * FROM users WHERE phone = ?',
         [phone]
     );
     if (!user[0]) return res.status(400).json({ error: 'Invalid credentials' });
 
-    const valid = await bcrypt.compare(password, user[0].password_hash);
+    console.log('password:', password, typeof password);
+    let hash = user[0].password_hash;
+    if (Buffer.isBuffer(hash)) {
+        hash = hash.toString('utf8');
+    }
+    console.log('hash after conversion:', hash, typeof hash);
+    if (typeof password !== 'string' || typeof hash !== 'string') {
+        return res.status(500).json({ error: 'Server error: password or hash not set correctly' });
+    }
+    const valid = await bcrypt.compare(password, hash);
     if (!valid) return res.status(400).json({ error: 'Invalid credentials' });
 
     // Create JWT
@@ -358,13 +285,157 @@ app.get('/api/user/dashboard', auth, async (req, res) => {
 
     res.json({
         name: user[0].name,
-        phone: user[0].phone_number,
+        phone: user[0].phone,
         wallet_balance: user[0].wallet_balance,
         total_returns: user[0].total_returns,
         reward_points: user[0].wallet_balance, // or another field if you track points separately
         recent_returns: returns
     });
 });
+
+// Leaderboard endpoint
+// GET  /api/user/leaderboard
+
+// Top recycler endpoint
+// GET /api/leaderboard/top
+app.get('/api/leaderboard/top', async (req, res) => {
+    try {
+        await bottleBackDB.initialize();
+        const users = await bottleBackDB.db.executeQuery(
+            'SELECT user_id, full_name, total_points, city FROM users ORDER BY total_points DESC LIMIT 1'
+        );
+        if (!users.length) {
+            return res.status(404).json({ error: 'No users found' });
+        }
+        const topUser = users[0];
+        res.json({
+            user_id: topUser.user_id,
+            name: topUser.full_name,
+            total_points: topUser.total_points,
+            city: topUser.city
+        });
+    } catch (error) {
+        console.error('Error fetching top user:', error);
+        res.status(500).json({ error: 'Failed to fetch top user' });
+    }
+});
+app.get('/api/user/leaderboard', auth, async (req, res) => {
+    try {
+        // 1. Make sure DB is ready
+        await bottleBackDB.initialize();
+
+        // 2. Pull every user, highest points first
+        const users = await bottleBackDB.db.executeQuery(
+            'SELECT user_id, total_points, city FROM users ORDER BY total_points DESC'
+        );
+
+        const userId = req.user.user_id;
+        let rank = null;
+        let userPoints = null;
+        let userCity = null;
+
+        // 3. Locate the current user in the list
+        for (let i = 0; i < users.length; i++) {
+            if (users[i].user_id === userId) {
+                rank = i + 1;
+                userPoints = users[i].total_points;
+                userCity = users[i].city;
+                break;
+            }
+        }
+
+        // 4. Work out the next milestone, if any
+        const milestones = [100, 250, 500, 1000];  // customise as you like
+        const nextMilestone =
+            userPoints !== null ? milestones.find((m) => m > userPoints) ?? null : null;
+
+        // 5. Send the response
+        res.json({
+            rank,
+            total_points: userPoints,
+            city: userCity,
+            next_milestone: nextMilestone
+        });
+    } catch (error) {
+        console.error('Error fetching leaderboard:', error);
+        res.status(500).json({ error: 'Failed to fetch leaderboard' });
+    }
+});
+
+// Scan QR code and add reward to user wallet
+app.post('/api/scan-qr', async (req, res) => {
+    try {
+        await bottleBackDB.initialize();
+        const { qrCode, userId } = req.body;
+
+        if (!qrCode || !userId) {
+            return res.status(400).json({
+                success: false,
+                message: 'QR code and user ID are required'
+            });
+        }
+
+        // Check if user exists
+        const user = await bottleBackDB.userModel.getUserByPhone(userId);
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: 'User not found'
+            });
+        }
+
+        // Check if QR code exists and is unused
+        const qrCodeData = await bottleBackDB.qrCodeModel.getQRCode(qrCode);
+        if (!qrCodeData) {
+            return res.status(404).json({
+                success: false,
+                message: 'Invalid QR code'
+            });
+        }
+
+        if (qrCodeData.status === 'used') {
+            return res.status(400).json({
+                success: false,
+                message: 'QR code has already been used'
+            });
+        }
+
+        // Mark QR code as used
+        await bottleBackDB.qrCodeModel.markQRCodeAsUsed(qrCode, user.user_id, 1); // Using kiosk_id 1 as default
+
+        // Add ₹1 to user's wallet
+        await bottleBackDB.userModel.updateWalletBalance(user.user_id, 1.00);
+
+        // Log the return
+        await bottleBackDB.returnLogModel.logReturn(user.user_id, qrCodeData.qr_id, 1, 1.00);
+
+        // Create reward transaction
+        await bottleBackDB.rewardTransactionModel.createTransaction(
+            user.user_id,
+            1.00,
+            'QR_SCAN',
+            'Bottle return reward'
+        );
+
+        res.json({
+            success: true,
+            message: '1 rs added to your wallet',
+            data: {
+                qr_code: qrCode,
+                user_id: user.user_id,
+                reward_amount: 1.00,
+                new_balance: user.wallet_balance + 1.00
+            }
+        });
+    } catch (error) {
+        console.error('Error scanning QR code:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to process QR code'
+        });
+    }
+});
+
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -384,14 +455,13 @@ app.listen(PORT, () => {
     console.log(`🔗 API Base URL: http://localhost:${PORT}/api`);
 });
 
-// Graceful shutdown on Ctrl+C
+// Graceful shutdown
 process.on('SIGINT', async () => {
     console.log('\n🛑 Shutting down server...');
     await bottleBackDB.close();
     process.exit(0);
 });
 
-// IMPORTANT: Do not put any shutdown, exit, or close logic outside the SIGINT handler above.
-// The server should keep running until you press Ctrl+C in the terminal.
 
-module.exports = app;
+
+module.exports = app; 

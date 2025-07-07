@@ -1,166 +1,25 @@
-require('dotenv').config(); // Loads .env for local development
 const mysql = require('mysql2/promise');
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 
 // Database Configuration
 const dbConfig = {
-    host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || 'Souvik@0606',
-    database: process.env.DB_NAME || 'bottleback_system',
-    port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 3306,
+    host: process.env.MYSQLHOST || 'localhost',
+    user: process.env.MYSQLUSER || 'root',
+    password: process.env.MYSQLPASSWORD || 'Souvik@0606',
+    database: process.env.MYSQLDATABASE || 'bottleback_system',
+    port: process.env.MYSQLPORT ? Number(process.env.MYSQLPORT) : 3306,
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
 };
 
-console.log('Database configuration:', dbConfig);
-console.log('Attempting to create pool...');
+// Create connection pool
 const pool = mysql.createPool(dbConfig);
-console.log('Pool created successfully');
-
-// Table creation SQL
-const TABLES = {
-    users: `
-        CREATE TABLE IF NOT EXISTS users (
-            user_id INT AUTO_INCREMENT PRIMARY KEY,
-            name VARCHAR(100) NOT NULL,
-            password_hash VARCHAR(255) NOT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-        )
-    `,
-    companies: `
-        CREATE TABLE IF NOT EXISTS companies (
-            company_id INT AUTO_INCREMENT PRIMARY KEY,
-            name VARCHAR(100) NOT NULL,
-            contact_email VARCHAR(100) NOT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-    `,
-    kiosks: `
-        CREATE TABLE IF NOT EXISTS kiosks (
-            kiosk_id INT AUTO_INCREMENT PRIMARY KEY,
-            company_id INT,
-            name VARCHAR(100) NOT NULL,
-            location VARCHAR(255) NOT NULL,
-            status ENUM('active', 'inactive') DEFAULT 'active',
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (company_id) REFERENCES companies(company_id)
-        )
-    `,
-    qr_codes: `
-        CREATE TABLE IF NOT EXISTS qr_codes (
-            qr_id INT AUTO_INCREMENT PRIMARY KEY,
-            qr_code VARCHAR(255) NOT NULL,
-            company_id INT,
-            is_used BOOLEAN DEFAULT FALSE,
-            assigned_to INT,
-            kiosk_id INT,
-            scanned_at TIMESTAMP,
-            FOREIGN KEY (company_id) REFERENCES companies(company_id)
-        )
-    `,
-    reward_transactions: `
-        CREATE TABLE IF NOT EXISTS reward_transactions (
-            transaction_id INT AUTO_INCREMENT PRIMARY KEY,
-            user_id INT,
-            amount DECIMAL(10, 2) NOT NULL,
-            method VARCHAR(100) NOT NULL,
-            description VARCHAR(255),
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (user_id) REFERENCES users(user_id)
-        )
-    `,
-    return_logs: `
-        CREATE TABLE IF NOT EXISTS return_logs (
-            log_id INT AUTO_INCREMENT PRIMARY KEY,
-            user_id INT,
-            qr_code_id INT,
-            kiosk_id INT,
-            returned_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            reward_amount DECIMAL(10, 2) NOT NULL,
-            FOREIGN KEY (user_id) REFERENCES users(user_id),
-            FOREIGN KEY (qr_code_id) REFERENCES qr_codes(qr_id),
-            FOREIGN KEY (kiosk_id) REFERENCES kiosks(kiosk_id)
-        )
-    `
-};
-
-// Export database configuration
-module.exports.dbConfig = dbConfig;
 
 // Database connection class
 class DatabaseConnection {
     constructor() {
         this.pool = pool;
-    }
-
-    // Initialize database and create tables
-    async initialize() {
-        try {
-            // Get a connection from the pool
-            console.log('Attempting to get connection from pool...');
-            const connection = await this.pool.getConnection();
-            console.log('Got connection:', connection);
-
-            // Check if we can execute a simple query
-            console.log('Testing connection with simple query...');
-            const [rows] = await connection.execute('SELECT 1 + 1 AS result');
-            console.log('Simple query result:', rows[0].result);
-
-            // Drop existing tables in correct order to avoid foreign key constraints
-            console.log('Dropping existing tables...');
-            await connection.execute('SET FOREIGN_KEY_CHECKS = 0');
-            await connection.execute('DROP TABLE IF EXISTS return_logs');
-            await connection.execute('DROP TABLE IF EXISTS reward_transactions');
-            await connection.execute('DROP TABLE IF EXISTS qr_codes');
-            await connection.execute('DROP TABLE IF EXISTS kiosks');
-            await connection.execute('DROP TABLE IF EXISTS companies');
-            await connection.execute('DROP TABLE IF EXISTS users');
-            await connection.execute('SET FOREIGN_KEY_CHECKS = 1');
-            console.log('Tables dropped successfully');
-
-            // Create tables in correct order with foreign key dependencies
-            console.log('Creating tables...');
-            console.log('Creating companies table...');
-            await connection.execute(TABLES.companies);
-            console.log('Companies table created successfully');
-            console.log('Creating users table...');
-            await connection.execute(TABLES.users);
-            console.log('Users table created successfully');
-            console.log('Creating kiosks table...');
-            await connection.execute(TABLES.kiosks);
-            console.log('Creating qr_codes table...');
-            await connection.execute(TABLES.qr_codes);
-            console.log('Creating reward_transactions table...');
-            await connection.execute(TABLES.reward_transactions);
-            console.log('Creating return_logs table...');
-            await connection.execute(TABLES.return_logs);
-            console.log('All tables created successfully');
-
-            // Verify tables were created
-            const tables = await connection.execute('SHOW TABLES');
-            console.log('Tables in database:', tables[0].map(t => t.Tables_in_botalsepaisa_system));
-
-            // Verify kiosks table structure
-            const columns = await connection.execute('DESCRIBE kiosks');
-            console.log('Kiosks table columns:', columns[0]);
-
-            // Release the connection
-            connection.release();
-
-            console.log('✅ Database initialized successfully!');
-            return true;
-        } catch (error) {
-            console.error('❌ Error initializing database:', error);
-            throw error;
-        }
-    }
-
-    // Get connection from pool
-    async getConnection() {
-        return this.pool.getConnection();
     }
 
     // Test database connection
@@ -184,13 +43,8 @@ class DatabaseConnection {
     // Execute query with parameters
     async executeQuery(query, params = []) {
         try {
-            const connection = await this.getConnection();
-            try {
-                const [rows] = await connection.execute(query, params);
-                return rows;
-            } finally {
-                connection.release();
-            }
+            const [rows] = await this.pool.execute(query, params);
+            return rows;
         } catch (error) {
             console.error('Query execution error:', error);
             throw error;
@@ -211,12 +65,12 @@ class UserModel {
     }
 
     // Create new user
-    async createUser(phoneNumber, name, wallet_balance = 0, total_returns = 0) {
+    async createUser(phone, name, wallet_balance = 0, total_returns = 0) {
         const query = `
-            INSERT INTO users (name, password_hash) 
-            VALUES (?, ?)
+            INSERT INTO users (phone, name, wallet_balance, total_returns) 
+            VALUES (?, ?, ?, ?)
         `;
-        const result = await this.db.executeQuery(query, [phoneNumber, name, wallet_balance, total_returns]);
+        const result = await this.db.executeQuery(query, [phone, name, wallet_balance, total_returns]);
         return result.insertId;
     }
 
@@ -243,6 +97,23 @@ class UserModel {
         const query = 'SELECT * FROM users ORDER BY user_id ASC';
         return await this.db.executeQuery(query);
     }
+
+    // Store QR code for user
+    async storeQRCode(phone, qrCode) {
+        const query = `
+            UPDATE users 
+            SET qr_code_value = ? 
+            WHERE phone = ?
+        `;
+        return await this.db.executeQuery(query, [qrCode, phone]);
+    }
+
+    // Get user by QR code
+    async getUserByQRCode(qrCode) {
+        const query = 'SELECT * FROM users WHERE qr_code_value = ?';
+        const users = await this.db.executeQuery(query, [qrCode]);
+        return users[0];
+    }
 }
 
 // QR Code Model
@@ -252,33 +123,39 @@ class QRCodeModel {
     }
 
     // Create new QR code
-    async createQRCode(qrCode, companyId) {
+    async createQRCode(qrCode, companyId, timestamp) {
         const query = `
-            INSERT INTO qr_codes (qr_code, company_id) 
-            VALUES (?, ?)
+            INSERT INTO qr_code_values (qr_code_value, company_id, created_at, status)
+            VALUES (?, ?, FROM_UNIXTIME(?), 'unused')
         `;
-        const result = await this.db.executeQuery(query, [qrCode, companyId]);
+        const result = await this.db.executeQuery(query, [qrCode, companyId, timestamp]);
         return result.insertId;
     }
 
     // Mark QR code as used
-    async markQRCodeAsUsed(qrId, userId, kioskId) {
+    async markQRCodeAsUsed(qrCode, userId, kioskId) {
         const query = `
-            UPDATE qr_codes 
-            SET is_used = TRUE, 
-                assigned_to = ?, 
-                kiosk_id = ?, 
-                scanned_at = NOW() 
-            WHERE qr_id = ?
+            UPDATE qr_code_values 
+            SET status = 'used',
+                assigned_to_user_id = ?,
+                kiosk_id = ?,
+                used_at = NOW()
+            WHERE qr_code_value = ?
         `;
-        return await this.db.executeQuery(query, [userId, kioskId, qrId]);
+        return await this.db.executeQuery(query, [userId, kioskId, qrCode]);
     }
 
     // Get QR code details
     async getQRCode(qrCode) {
-        const query = 'SELECT * FROM qr_codes WHERE qr_code = ?';
+        const query = 'SELECT * FROM qr_code_values WHERE qr_code_value = ?';
         const codes = await this.db.executeQuery(query, [qrCode]);
         return codes[0];
+    }
+
+    // Get all unused QR codes
+    async getUnusedQRCodes() {
+        const query = 'SELECT * FROM qr_code_values WHERE status = "unused" ORDER BY created_at DESC';
+        return await this.db.executeQuery(query);
     }
 }
 
@@ -289,12 +166,12 @@ class CompanyModel {
     }
 
     // Create new company
-    async createCompany(name, contactEmail) {
+    async createCompany(name, contactEmail, logoUrl) {
         const query = `
-            INSERT INTO companies (name, contact_email) 
-            VALUES (?, ?)
+            INSERT INTO companies (name, contact_email, logo_url) 
+            VALUES (?, ?, ?)
         `;
-        const result = await this.db.executeQuery(query, [name, contactEmail]);
+        const result = await this.db.executeQuery(query, [name, contactEmail, logoUrl]);
         return result.insertId;
     }
 
@@ -312,18 +189,18 @@ class KioskModel {
     }
 
     // Create new kiosk
-    async createKiosk(name, location, companyId) {
+    async createKiosk(name, location) {
         const query = `
-            INSERT INTO kiosks (name, location, company_id, status) 
-            VALUES (?, ?, ?, 'active')
+            INSERT INTO kiosks (name, location) 
+            VALUES (?, ?)
         `;
-        const result = await this.db.executeQuery(query, [name, location, companyId]);
+        const result = await this.db.executeQuery(query, [name, location]);
         return result.insertId;
     }
 
     // Get all active kiosks
     async getActiveKiosks() {
-        const query = 'SELECT * FROM kiosks WHERE status = "active"';
+        const query = 'SELECT * FROM kiosks WHERE is_active = TRUE';
         return await this.db.executeQuery(query);
     }
 }
@@ -439,21 +316,21 @@ class SampleData {
 
     // Insert sample companies
     async insertSampleCompanies() {
-        const sampleCompanies = [
-            { name: 'Coca-Cola', contact_email: 'contact@cocacola.com' },
-            { name: 'PepsiCo', contact_email: 'contact@pepsico.com' },
-            { name: 'Tata Steel', contact_email: 'contact@tatasteel.com' }
+        const companies = [
+            { name: 'Bisleri International Pvt Ltd', contactEmail: 'csr@bisleri.com', logoUrl: 'https://bisleri.com/logo.png' },
+            { name: 'Coca-Cola India', contactEmail: 'sustainability@coca-cola.in', logoUrl: 'https://coca-cola.in/logo.png' },
+            { name: 'Parle Agro Pvt Ltd', contactEmail: 'csr@parleagro.com', logoUrl: 'https://parleagro.com/logo.png' },
+            { name: 'PepsiCo India', contactEmail: 'csr@pepsico.in', logoUrl: 'https://pepsico.in/logo.png' }
         ];
 
-        for (const company of sampleCompanies) {
-            await this.companyModel.createCompany(company.name, company.contact_email);
+        for (const company of companies) {
+            await this.companyModel.createCompany(company.name, company.contactEmail, company.logoUrl);
         }
         console.log('✅ Sample companies inserted');
     }
 
     // Insert sample kiosks
     async insertSampleKiosks() {
-        const companies = await this.companyModel.getAllCompanies();
         const kiosks = [
             { name: 'Mumbai Central Station Kiosk', location: 'Mumbai Central Railway Station, Mumbai' },
             { name: 'Delhi Metro Kiosk - Rajiv Chowk', location: 'Rajiv Chowk Metro Station, Delhi' },
@@ -463,9 +340,7 @@ class SampleData {
         ];
 
         for (const kiosk of kiosks) {
-            // Assign each kiosk to a different company
-            const companyId = companies[Math.floor(Math.random() * companies.length)].company_id;
-            await this.kioskModel.createKiosk(kiosk.name, kiosk.location, companyId);
+            await this.kioskModel.createKiosk(kiosk.name, kiosk.location);
         }
         console.log('✅ Sample kiosks inserted');
     }
@@ -473,20 +348,20 @@ class SampleData {
     // Insert sample users
     async insertSampleUsers() {
         const users = [
-            { phoneNumber: '+919876543210', name: 'Rahul Sharma', wallet_balance: 15.50, total_returns: 8 },
-            { phoneNumber: '+919876543211', name: 'Priya Patel', wallet_balance: 8.25, total_returns: 4 },
-            { phoneNumber: '+919876543212', name: 'Amit Kumar', wallet_balance: 22.75, total_returns: 12 },
-            { phoneNumber: '+919876543213', name: 'Neha Singh', wallet_balance: 5.00, total_returns: 2 },
-            { phoneNumber: '+919876543214', name: 'Vikram Malhotra', wallet_balance: 18.75, total_returns: 9 },
-            { phoneNumber: '+919876543215', name: 'Anjali Desai', wallet_balance: 12.50, total_returns: 6 },
-            { phoneNumber: '+919876543216', name: 'Rajesh Gupta', wallet_balance: 30.00, total_returns: 15 },
-            { phoneNumber: '+919876543217', name: 'Sneha Iyer', wallet_balance: 7.25, total_returns: 3 },
-            { phoneNumber: '+919876543218', name: 'Karan Mehta', wallet_balance: 25.50, total_returns: 13 },
-            { phoneNumber: '+919876543219', name: 'Pooja Reddy', wallet_balance: 9.75, total_returns: 5 }
+            { phone: '+919876543210', name: 'Rahul Sharma', wallet_balance: 15.50, total_returns: 8 },
+            { phone: '+919876543211', name: 'Priya Patel', wallet_balance: 8.25, total_returns: 4 },
+            { phone: '+919876543212', name: 'Amit Kumar', wallet_balance: 22.75, total_returns: 12 },
+            { phone: '+919876543213', name: 'Neha Singh', wallet_balance: 5.00, total_returns: 2 },
+            { phone: '+919876543214', name: 'Vikram Malhotra', wallet_balance: 18.75, total_returns: 9 },
+            { phone: '+919876543215', name: 'Anjali Desai', wallet_balance: 12.50, total_returns: 6 },
+            { phone: '+919876543216', name: 'Rajesh Gupta', wallet_balance: 30.00, total_returns: 15 },
+            { phone: '+919876543217', name: 'Sneha Iyer', wallet_balance: 7.25, total_returns: 3 },
+            { phone: '+919876543218', name: 'Karan Mehta', wallet_balance: 25.50, total_returns: 13 },
+            { phone: '+919876543219', name: 'Pooja Reddy', wallet_balance: 9.75, total_returns: 5 }
         ];
 
         for (const user of users) {
-            await this.userModel.createUser(user.phoneNumber, user.name, user.wallet_balance, user.total_returns);
+            await this.userModel.createUser(user.phone, user.name, user.wallet_balance, user.total_returns);
         }
         console.log('✅ Sample users inserted with balances and returns');
     }

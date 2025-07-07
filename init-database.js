@@ -14,7 +14,7 @@ async function initializeDatabase() {
             console.error('❌ Database connection failed!');
             console.error('Please ensure:');
             console.error('- MySQL server is running');
-            console.error('- Database "botalsepaisa_system" exists');
+            console.error('- Database "bottleback_system" exists');
             console.error('- Database credentials are correct in database.js');
             return;
         }

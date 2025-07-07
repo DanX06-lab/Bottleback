@@ -27,7 +27,7 @@ async function testDatabase() {
         if (users.length > 0) {
             console.log('👥 Sample users:');
             users.slice(0, 3).forEach(user => {
-                console.log(`   - ${user.name} (${user.phone_number}) - Balance: ₹${user.wallet_balance}`);
+                console.log(`   - ${user.name} (${user.phone}) - Balance: ₹${user.wallet_balance}`);
             });
         }
 
@@ -100,7 +100,7 @@ async function testDatabase() {
             console.log(`   Kiosk: ${kiosk.name}`);
 
             // Get updated user info
-            const updatedUser = await bottleBackDB.userModel.getUserByPhone(user.phone_number);
+            const updatedUser = await bottleBackDB.userModel.getUserByPhone(user.phone);
             console.log(`   Updated balance: ₹${updatedUser.wallet_balance}`);
         }
 

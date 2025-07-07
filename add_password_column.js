@@ -33,7 +33,7 @@ async function addPasswordColumn() {
 
         // Update existing users with a default password (for testing)
         const users = await bottleBackDB.userModel.getAllUsers();
-        const bcrypt = require('bcryptjs');
+        const bcrypt = require('bcrypt');
 
         for (const user of users) {
             if (!user.password_hash) {
@@ -43,14 +43,14 @@ async function addPasswordColumn() {
                     'UPDATE users SET password_hash = ? WHERE user_id = ?',
                     [hash, user.user_id]
                 );
-                console.log(`✅ Set default password for user: ${user.name} (phone: ${user.phone_number})`);
+                console.log(`✅ Set default password for user: ${user.name} (phone: ${user.phone})`);
             }
         }
 
         console.log('\n🎉 Password column setup completed!');
         console.log('\n📋 Default passwords for existing users:');
         console.log('- Password: password123');
-        console.log('- Use phone number as username');
+        console.log('- Use phone as username');
 
     } catch (error) {
         console.error('❌ Error adding password column:', error);
