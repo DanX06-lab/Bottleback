@@ -169,6 +169,24 @@
     });
   </script>
 
+  <!-- API call to backend example -->
+  <script>
+    // Replace with your actual Render backend URL
+    const BACKEND_URL = 'https://botalsepaisa.onrender.com';
+    document.addEventListener('DOMContentLoaded', () => {
+      fetch(`${BACKEND_URL}/api/users`)
+        .then(res => res.json())
+        .then(data => {
+          console.log('Users from backend:', data);
+          // Optionally, display in HTML
+          // document.body.insertAdjacentHTML('beforeend', `<pre>${JSON.stringify(data, null, 2)}</pre>`);
+        })
+        .catch(err => {
+          console.error('Error fetching users:', err);
+        });
+    });
+  </script>
+
 </body>
 
 </html>
