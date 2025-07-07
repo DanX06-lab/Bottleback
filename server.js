@@ -1,10 +1,17 @@
 const express = require('express');
+const cors = require('cors');
 const path = require('path');
 const { BottleBackDatabase } = require('./database');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 const app = express();
+
+app.use(cors({
+    origin: 'https://danx06-lab.github.io',
+    credentials: false // Set to true only if using cookies/auth headers
+}));
+
 const PORT = process.env.PORT || 3000;
 const SECRET = process.env.JWT_SECRET || 'your_jwt_secret'; // Use env variable in production
 

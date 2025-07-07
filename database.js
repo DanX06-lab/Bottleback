@@ -1,14 +1,14 @@
+require('dotenv').config(); // Loads .env for local development
 const mysql = require('mysql2/promise');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 // Database Configuration
-// Use Render/DO environment variables for cloud MySQL
 const dbConfig = {
-    host: process.env.DB_HOST || process.env.MYSQLHOST || 'localhost',
-    user: process.env.DB_USER || process.env.MYSQLUSER || 'root',
-    password: process.env.DB_PASSWORD || process.env.MYSQLPASSWORD || '',
-    database: process.env.DB_NAME || process.env.MYSQLDATABASE || 'bottleback_system',
-    port: process.env.DB_PORT ? Number(process.env.DB_PORT) : (process.env.MYSQLPORT ? Number(process.env.MYSQLPORT) : 3306),
+    host: process.env.DB_HOST || 'localhost',
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || 'Souvik@0606',
+    database: process.env.DB_NAME || 'bottleback_system',
+    port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 3306,
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
