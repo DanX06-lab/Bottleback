@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const SECRET = 'your_jwt_secret'; // Use env variable in production
+const SECRET = process.env.JWT_SECRET || 'your_jwt_secret'; // Use env variable in production
 
 // Middleware
 app.use(express.json());
@@ -449,19 +449,19 @@ app.use((req, res) => {
 });
 
 // Start server
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log(`🚀 BottleBack India Server running on http://localhost:${PORT}`);
     console.log(`📊 User Management Dashboard: http://localhost:${PORT}`);
     console.log(`🔗 API Base URL: http://localhost:${PORT}/api`);
 });
 
-// Graceful shutdown
+// Graceful shutdown: only on SIGINT
 process.on('SIGINT', async () => {
     console.log('\n🛑 Shutting down server...');
     await bottleBackDB.close();
-    process.exit(0);
+    server.close(() => {
+        process.exit(0);
+    });
 });
-
-
 
 module.exports = app; 
