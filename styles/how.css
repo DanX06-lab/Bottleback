@@ -271,3 +271,332 @@ body {
     font-size: 1.4rem
   }
 }
+
+/* =======================================================
+   RESPONSIVE: ANDROID / MOBILE (≤600px)
+   ======================================================= */
+@media (max-width: 600px) {
+  .sub-header {
+    font-size: 1.3rem;
+    padding: 1.2rem 0.4rem;
+  }
+
+  .hiw-wrapper,
+  .hiw-container {
+    padding: 1.2rem 0.5rem;
+    border-radius: 10px;
+    box-shadow: none;
+  }
+
+  .hiw-hero h2 {
+    font-size: 1.2rem;
+  }
+
+  .hiw-hero p {
+    font-size: 0.97rem;
+  }
+
+  .hiw-steps {
+    gap: 0.8rem;
+    grid-template-columns: 1fr !important;
+  }
+
+  .step-card {
+    padding: 1rem 0.5rem;
+    border-radius: 10px;
+  }
+
+  .step-card span {
+    width: 48px;
+    height: 48px;
+    font-size: 1.1rem;
+    top: -12px;
+    right: -12px;
+  }
+
+  .step-card h3 {
+    font-size: 1.05rem;
+  }
+
+  .step-card p {
+    font-size: 0.92rem;
+  }
+
+  .hiw-video video {
+    max-width: 100%;
+    height: 140px;
+  }
+
+  .hiw-qr img,
+  .hiw-flow img {
+    max-width: 180px;
+  }
+
+  .hiw-impact {
+    flex-direction: column;
+    gap: 1rem;
+    margin: 2rem 0;
+  }
+
+  .impact-box {
+    width: 100%;
+    padding: 1rem 0.5rem;
+    border-radius: 10px;
+  }
+
+  .impact-box h3 {
+    font-size: 1.2rem;
+  }
+
+  .hiw-faq {
+    max-width: 100%;
+    padding: 0 0.2rem;
+  }
+
+  .hiw-faq details {
+    padding: 0.7rem 0.5rem 0.7rem 0.8rem;
+    border-radius: 10px;
+  }
+
+  .hiw-faq p {
+    font-size: 0.92rem;
+  }
+
+  .cta-banner {
+    padding: 1.2rem 0.5rem;
+    margin-top: 2rem;
+    border-radius: 10px;
+  }
+
+  .cta-banner h2 {
+    font-size: 1.3rem;
+  }
+
+  .cta-banner a {
+    padding: 0.7rem 1.2rem;
+    font-size: 0.97rem;
+    border-radius: 30px;
+  }
+}
+
+/* =======================================================
+   RESPONSIVE: TABLET (601px–1024px)
+   ======================================================= */
+@media (min-width: 601px) and (max-width: 1024px) {
+  .sub-header {
+    font-size: 1.7rem;
+    padding: 1.7rem 0.7rem;
+  }
+
+  .hiw-wrapper,
+  .hiw-container {
+    padding: 2rem 1rem;
+    border-radius: 15px;
+  }
+
+  .hiw-hero h2 {
+    font-size: 1.7rem;
+  }
+
+  .hiw-hero p {
+    font-size: 1.05rem;
+  }
+
+  .hiw-steps {
+    gap: 1.2rem;
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .step-card {
+    padding: 1.3rem 1rem;
+    border-radius: 15px;
+  }
+
+  .step-card span {
+    width: 64px;
+    height: 64px;
+    font-size: 1.3rem;
+    top: -18px;
+    right: -18px;
+  }
+
+  .step-card h3 {
+    font-size: 1.17rem;
+  }
+
+  .step-card p {
+    font-size: 0.98rem;
+  }
+
+  .hiw-video video {
+    max-width: 100%;
+    height: 210px;
+  }
+
+  .hiw-qr img,
+  .hiw-flow img {
+    max-width: 220px;
+  }
+
+  .hiw-impact {
+    gap: 1.4rem;
+    margin: 2.5rem 0;
+  }
+
+  .impact-box {
+    width: 70%;
+    padding: 1.2rem 0.8rem;
+    border-radius: 15px;
+  }
+
+  .impact-box h3 {
+    font-size: 1.5rem;
+  }
+
+  .hiw-faq {
+    max-width: 100%;
+    padding: 0 0.5rem;
+  }
+
+  .hiw-faq details {
+    padding: 1rem 0.7rem 1rem 1rem;
+    border-radius: 15px;
+  }
+
+  .hiw-faq p {
+    font-size: 0.98rem;
+  }
+
+  .cta-banner {
+    padding: 2rem 0.7rem;
+    margin-top: 3rem;
+    border-radius: 15px;
+  }
+
+  .cta-banner h2 {
+    font-size: 1.7rem;
+  }
+
+  .cta-banner a {
+    padding: 0.9rem 1.7rem;
+    font-size: 1.05rem;
+    border-radius: 35px;
+  }
+}
+
+/* =======================================================
+   RESPONSIVE: DESKTOP / PC (≥1025px)
+   ======================================================= */
+@media (min-width: 1025px) {
+  .sub-header {
+    font-size: 2.2rem;
+    padding: 2.2rem 1rem;
+  }
+
+  .hiw-wrapper,
+  .hiw-container {
+    padding: 3rem 2.5rem;
+    border-radius: 18px;
+  }
+
+  .hiw-hero h2 {
+    font-size: 2.4rem;
+  }
+
+  .hiw-hero p {
+    font-size: 1.15rem;
+  }
+
+  .hiw-steps {
+    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)) !important;
+  }
+
+  .step-card {
+    padding: 2rem 1.6rem;
+    border-radius: 18px;
+  }
+
+  .step-card span {
+    width: 80px;
+    height: 80px;
+    font-size: 1.8rem;
+    top: -24px;
+    right: -24px;
+  }
+
+  .step-card h3 {
+    font-size: 1.25rem;
+  }
+
+  .step-card p {
+    font-size: 0.95rem;
+  }
+
+  .hiw-video video {
+    max-width: 720px;
+    height: auto;
+  }
+
+  .hiw-qr img,
+  .hiw-flow img {
+    max-width: 320px;
+  }
+
+  .hiw-impact {
+    gap: 2rem;
+    margin: 4rem 0;
+  }
+
+  .impact-box {
+    width: 200px;
+    padding: 1.7rem 1.4rem;
+    border-radius: 18px;
+  }
+
+  .impact-box h3 {
+    font-size: 2.2rem;
+  }
+
+  .hiw-faq {
+    max-width: 820px;
+    padding: 0;
+  }
+
+  .hiw-faq details {
+    padding: 1.1rem 1rem 1.1rem 1.3rem;
+    border-radius: 18px;
+  }
+
+  .hiw-faq p {
+    font-size: 0.95rem;
+  }
+
+  .cta-banner {
+    padding: 3.5rem 1rem;
+    margin-top: 4.5rem;
+    border-radius: 18px;
+  }
+
+  .cta-banner h2 {
+    font-size: 2.4rem;
+  }
+
+  .cta-banner a {
+    padding: 1rem 2.3rem;
+    font-size: 1.05rem;
+    border-radius: 50px;
+  }
+}
+
+.hiw-hero h2 {
+  font-size: 1.8rem
+}
+
+.step-card span {
+  width: 64px;
+  height: 64px;
+  top: -20px;
+  right: -20px;
+  font-size: 1.4rem
+}

@@ -1,0 +1,57 @@
+/* Extracted from user_dashboard.html */
+.loading-state {
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8fafc;
+  border-radius: 1rem;
+}
+.loading-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #e5e7eb;
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive styles for tablets and PCs */
+/* Responsive styles for Android mobiles */
+@media (max-width: 600px) {
+  .loading-state {
+    min-height: 120px;
+    padding: 0.5rem;
+  }
+  .loading-spinner {
+    width: 24px;
+    height: 24px;
+    border-width: 2px;
+  }
+}
+
+@media (min-width: 768px) {
+  .loading-state {
+    min-height: 300px;
+  }
+  .loading-spinner {
+    width: 48px;
+    height: 48px;
+    border-width: 4px;
+  }
+}
+@media (min-width: 1024px) {
+  .loading-state {
+    min-height: 400px;
+  }
+  .loading-spinner {
+    width: 64px;
+    height: 64px;
+    border-width: 6px;
+  }
+}

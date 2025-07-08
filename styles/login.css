@@ -1,0 +1,178 @@
+/* Extracted from login.html */
+/* === RESET & GLOBAL === */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0
+}
+
+body {
+    font-family: "Poppins", sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+    /* hide stray bubbles */
+    background-size: cover;
+}
+
+/* === GLASS CARD === */
+.glass-card {
+    width: min(90%, 420px);
+    padding: 3rem 2.5rem;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, .22);
+    border: 1px solid rgba(255, 255, 255, .35);
+    backdrop-filter: blur(18px);
+    box-shadow: 0 10px 35px rgba(0, 0, 0, .12);
+    text-align: center;
+    color: #1b1b1b;
+}
+
+/* === TYPOGRAPHY === */
+h1 {
+    font-weight: 600;
+    margin-bottom: 2rem;
+    letter-spacing: .5px
+}
+
+/* === FORM === */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.15rem
+}
+
+input {
+    width: 100%;
+    padding: .85rem 1rem;
+    border-radius: 50px;
+    border: 1px solid rgba(0, 0, 0, .18);
+    background: rgba(255, 255, 255, .75);
+    font-size: .95rem;
+}
+
+/* Rounded primary and secondary buttons */
+.btn {
+    padding: .9rem;
+    border: none;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: .25s background;
+}
+
+.btn.primary {
+    background: #000;
+    color: #fff
+}
+
+.btn.primary:hover {
+    background: #333
+}
+
+.btn.alt {
+    background: rgba(0, 0, 0, .08);
+    color: #000;
+}
+
+/* tiny row */
+.row {
+    display: flex;
+    justify-content: space-between;
+    font-size: .85rem;
+    margin-top: -.35rem
+}
+
+.row a {
+    text-decoration: none;
+    color: #000
+}
+
+.row a:hover {
+    text-decoration: underline
+}
+
+@media(max-width:480px) {
+    .glass-card {
+        padding: 2.2rem 1.8rem
+    }
+
+    h1 {
+        font-size: 1.6rem
+    }
+}
+
+/* Responsive styles for Android mobiles */
+@media (max-width: 600px) {
+    .glass-card {
+        width: 100%;
+        padding: 1.2rem 0.6rem;
+    }
+
+    h1 {
+        font-size: 1.2rem;
+    }
+
+    form {
+        gap: 0.8rem;
+    }
+
+    input {
+        font-size: 1rem;
+        padding: .7rem 0.7rem;
+    }
+
+    .btn {
+        font-size: 1rem;
+        padding: .7rem;
+    }
+}
+
+.glass-card {
+    padding: 2.2rem 1.8rem
+}
+
+h1 {
+    font-size: 1.6rem
+}
+
+.error {
+    color: #e74c3c;
+    margin-bottom: 12px;
+}
+
+/* Responsive styles for tablets and PCs */
+@media (min-width: 768px) {
+    .glass-card {
+        width: 420px;
+        padding: 3.5rem 3rem;
+    }
+
+    h1 {
+        font-size: 2.1rem;
+    }
+
+    form {
+        gap: 2rem;
+    }
+
+    input {
+        font-size: 1.1rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .glass-card {
+        width: 480px;
+        padding: 4rem 3.5rem;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+    }
+}
