@@ -8,9 +8,16 @@ const bcrypt = require('bcryptjs');
 const app = express();
 
 app.use(cors({
-    origin: 'https://danx06-lab.github.io',
+    origin: [
+        'http://localhost:3000',
+        'http://127.0.0.1:3000',
+        'https://danx06-lab.github.io'
+    ],
     credentials: false // Set to true only if using cookies/auth headers
 }));
+
+// IMPORTANT: Set DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME as environment variables in your Render/Railway dashboard for production.
+// Local dev will use the defaults from database.js
 
 const PORT = process.env.PORT || 3000;
 const SECRET = process.env.JWT_SECRET || 'your_jwt_secret'; // Use env variable in production
@@ -285,10 +292,7 @@ app.get('/api/user/dashboard', auth, async (req, res) => {
     if (!user[0]) return res.status(404).json({ error: 'User not found' });
 
     // Fetch recent returns (last 5)
-    const returns = await bottleBackDB.db.executeQuery(
-        'SELECT * FROM return_logs WHERE user_id = ? ORDER BY returned_at DESC LIMIT 5',
-        [req.user.user_id]
-    );
+
 
     res.json({
         name: user[0].name,
