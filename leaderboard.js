@@ -6,8 +6,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   const tbody = document.getElementById('leaderboardBody');
   const emptyMsg = document.getElementById('leaderboardEmpty');
 
+  const API_BASE = 'https://botalsepaisa.onrender.com/api';
   try {
-    const response = await fetch('http://localhost:3000/api/leaderboard');
+    const response = await fetch(`${API_BASE}/user/leaderboard`, {
+      headers: {
+        'Authorization': 'Bearer ' + localStorage.getItem('bottleback_token')
+      }
+    });
     const leaderboard = await response.json();
     tbody.innerHTML = '';
     if (Array.isArray(leaderboard) && leaderboard.length > 0) {
