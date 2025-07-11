@@ -42,12 +42,18 @@ app.post('/api/register', async (req, res) => {
       return res.status(409).json({ error: 'User already exists.' });
     }
     // Hash password
-    const hash = await bcrypt.hash(password, 10);
-    // Insert user
-    await connection.execute(
-      'INSERT INTO users (name, phone, password_hash) VALUES (?, ?, ?)',
-      [name, phoneNumber, hash]
-    );
+    const API_BASE = 'https://botalsepaisa.onrender.com/api';
+    const response = await fetch(`${API_BASE}/register`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ name, phoneNumber, password })
+    });
+    const result = await response.json();
+    if (result.error) {
+      return res.status(500).json({ error: 'Registration failed.' });
+    }
     await connection.end();
     res.json({ message: 'Signup successful!' });
   } catch (err) {
