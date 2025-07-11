@@ -1,7 +1,7 @@
 // Handles dashboard data fetching and display for user dashboard
 // Now matches the current user table fields
 
-const API_BASE = 'http://localhost:3000/api';
+const API_BASE = 'https://botalsepaisa.onrender.com/api';
 
 document.addEventListener('DOMContentLoaded', function () {
     // Check authentication
@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Fetch and display the top user in the leaderboard section
-    fetch('/api/leaderboard')
+    fetch(`${API_BASE}/leaderboard`)
         .then(res => res.json())
         .then(data => {
             if (Array.isArray(data) && data.length > 0) {
