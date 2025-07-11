@@ -12,7 +12,11 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Fetch and display the top user in the leaderboard section
-    fetch(`${API_BASE}/leaderboard`)
+    fetch(`${API_BASE}/user/leaderboard`, {
+        headers: {
+            'Authorization': 'Bearer ' + token
+        }
+    })
         .then(res => res.json())
         .then(data => {
             if (Array.isArray(data) && data.length > 0) {
@@ -38,8 +42,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Fetch and display bottles returned and UPI earned for the logged-in user
     if (token) {
-        fetch('/api/user/profile', {
-            headers: { 'Authorization': `Bearer ${token}` }
+        fetch(`${API_BASE}/user/profile`, {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
         })
             .then(res => res.json())
             .then(data => {
