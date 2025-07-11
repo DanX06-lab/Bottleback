@@ -1,7 +1,7 @@
 // Handles dashboard data fetching and display for user dashboard
 // Now matches the current user table fields
 
-const API_BASE = 'https://botalsepaisa.onrender.com/api';
+const API_BASE = 'http://localhost:3000/api';
 
 document.addEventListener('DOMContentLoaded', function () {
     // Check authentication
@@ -11,92 +11,47 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
-    // Fetch user profile (single endpoint for all user info)
-    fetch(`${API_BASE}/user/profile`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-    })
-        .then(res => {
-            if (!res.ok) throw new Error('Failed to fetch profile');
-            return res.json();
-        })
-        .then(user => {
-            // Defensive checks for fields
-            const bottlesReturned = typeof user.bottles_returned === 'number' ? user.bottles_returned : 0;
-            const upiEarned = typeof user.wallet_balance === 'number' ? user.wallet_balance : 0;
-            // Update overview cards
-            if (document.getElementById('bottles-returned'))
-                document.getElementById('bottles-returned').textContent = bottlesReturned;
-            if (document.getElementById('upi-earned'))
-                document.getElementById('upi-earned').textContent = `₹${upiEarned}`;
-        })
-        .catch(error => {
-            console.error('Error fetching user profile:', error);
-            alert('Failed to load user dashboard. Please try again.');
-        });
-
-    // Fetch activity history (if you have a separate endpoint/table)
-    fetch(`${API_BASE}/user/activity`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-    })
-        .then(res => {
-            if (!res.ok) throw new Error('Failed to fetch activity');
-            return res.json();
-        })
+    // Fetch and display the top user in the leaderboard section
+    fetch('/api/leaderboard')
+        .then(res => res.json())
         .then(data => {
-            const activities = Array.isArray(data.history) ? data.history : [];
-            const tbody = document.getElementById('activity-table-body');
-            if (tbody) {
-                if (activities.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="5" class="p-3 text-center text-gray-400">No activity found</td></tr>';
-                } else {
-                    tbody.innerHTML = activities.map(activity => `
-                    <tr class="border-b">
-                        <td class="p-3">#${activity.bottleId}</td>
-                        <td class="p-3">${new Date(activity.date).toLocaleDateString()}</td>
-                        <td class="p-3">${activity.location}</td>
-                        <td class="p-3 ${activity.status === 'Recycled' ? 'text-emerald-600' : 'text-gray-600'}">♻ ${activity.status}</td>
-                        <td class="p-3">₹${activity.reward}</td>
-                    </tr>
-                `).join('');
-                }
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching activity:', error);
-        });
-
-    // Optionally, fetch leaderboard if you have those fields
-    fetch(`${API_BASE}/user/leaderboard`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-    })
-        .then(res => {
-            if (!res.ok) throw new Error('Failed to fetch leaderboard');
-            return res.json();
-        })
-        .then(data => {
-            if (data && typeof data.rank === 'number' && document.getElementById('leaderboard-rank')) {
-                document.getElementById('leaderboard-rank').textContent = `#${data.rank}`;
-            }
-            if (data && data.city && document.getElementById('leaderboard-city')) {
-                document.getElementById('leaderboard-city').textContent = `${data.city} Region`;
-            }
-            if (
-                data &&
-                data.nextMilestone &&
-                typeof data.nextMilestone.bottles === 'number' &&
-                typeof data.nextMilestone.reward === 'number' &&
-                document.getElementById('leaderboard-milestone')
-            ) {
-                document.getElementById('leaderboard-milestone').textContent =
-                    `Next Milestone: ${data.nextMilestone.bottles} bottles → ₹${data.nextMilestone.reward} Bonus`;
+            if (Array.isArray(data) && data.length > 0) {
+                const topUser = data[0];
+                if (document.getElementById('leaderboard-rank'))
+                    document.getElementById('leaderboard-rank').textContent = `#${topUser.rank}`;
+                if (document.getElementById('leaderboard-city'))
+                    document.getElementById('leaderboard-city').textContent = topUser.city || 'Top Recycler';
+                if (document.getElementById('leaderboard-milestone'))
+                    document.getElementById('leaderboard-milestone').textContent = `${topUser.name} — ${topUser.total_points} points`;
             } else if (document.getElementById('leaderboard-milestone')) {
-                document.getElementById('leaderboard-milestone').textContent = `No upcoming milestone`;
+                document.getElementById('leaderboard-milestone').textContent = 'No top user found';
+                if (document.getElementById('leaderboard-rank'))
+                    document.getElementById('leaderboard-rank').textContent = '#0';
+                if (document.getElementById('leaderboard-city'))
+                    document.getElementById('leaderboard-city').textContent = 'City Region';
             }
         })
-        .catch(error => {
-            console.error('Error fetching leaderboard:', error);
-            if (document.getElementById('leaderboard-milestone')) {
-                document.getElementById('leaderboard-milestone').textContent = `No upcoming milestone`;
-            }
+        .catch(() => {
+            if (document.getElementById('leaderboard-milestone'))
+                document.getElementById('leaderboard-milestone').textContent = 'Unable to load leaderboard';
         });
+
+    // Fetch and display bottles returned and UPI earned for the logged-in user
+    if (token) {
+        fetch('/api/user/profile', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.bottles_returned !== undefined && document.getElementById('bottles-returned'))
+                    document.getElementById('bottles-returned').textContent = data.bottles_returned;
+                if (data.upi_earned !== undefined && document.getElementById('upi-earned'))
+                    document.getElementById('upi-earned').textContent = `₹${data.upi_earned}`;
+                // Update wallet balance if updateWallet is available
+                if (typeof updateWallet === 'function' && data.upi_earned !== undefined) {
+                    updateWallet(Number(data.upi_earned));
+                }
+            });
+    }
+
 });

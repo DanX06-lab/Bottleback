@@ -7,18 +7,16 @@ document.addEventListener('DOMContentLoaded', async () => {
   const emptyMsg = document.getElementById('leaderboardEmpty');
 
   try {
-    const response = await fetch('https://botalsepaisa.onrender.com/api/leaderboard');
+    const response = await fetch('http://localhost:3000/api/leaderboard');
     const leaderboard = await response.json();
     tbody.innerHTML = '';
     if (Array.isArray(leaderboard) && leaderboard.length > 0) {
       leaderboard.forEach((user, i) => {
         const row = document.createElement('tr');
         row.innerHTML = `
-          <td class="px-4 py-2 font-bold text-amber-600">${i + 1}</td>
-          <td class="px-4 py-2">${user.name}</td>
-          <td class="px-4 py-2">${user.phone}</td>
-          <td class="px-4 py-2">${user.returns}</td>
-          <td class="px-4 py-2">${user.rewards}</td>
+          <td class="px-6 py-4 text-center font-bold text-amber-600">${i + 1}</td>
+          <td class="px-6 py-4 text-center">${user.name}</td>
+          <td class="px-6 py-4 text-center">${user.total_points}</td>
         `;
         tbody.appendChild(row);
       });

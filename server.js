@@ -7,20 +7,19 @@ const bcrypt = require('bcryptjs');
 
 const app = express();
 
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://127.0.0.1:3000',
+  process.env.FRONTEND_URL // e.g., https://your-username.github.io/your-repo
+].filter(Boolean);
+
 app.use(cors({
-    origin: [
-        'http://localhost:3000',
-        'http://127.0.0.1:3000',
-        'https://danx06-lab.github.io'
-    ],
-    credentials: false // Set to true only if using cookies/auth headers
+  origin: allowedOrigins,
+  credentials: false
 }));
 
-// IMPORTANT: Set DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME as environment variables in your Render/Railway dashboard for production.
-// Local dev will use the defaults from database.js
-
 const PORT = process.env.PORT || 3000;
-const SECRET = process.env.JWT_SECRET || 'your_jwt_secret'; // Use env variable in production
+const SECRET = process.env.SECRET || 'your_jwt_secret';
 
 // Middleware
 app.use(express.json());
@@ -304,32 +303,44 @@ app.get('/api/user/dashboard', auth, async (req, res) => {
     });
 });
 
-// Leaderboard endpoint
 // GET  /api/user/leaderboard
 
 // Top recycler endpoint
 // GET /api/leaderboard/top
-app.get('/api/leaderboard/top', async (req, res) => {
+app.get('/api/leaderboard', async (req, res) => {
     try {
         await bottleBackDB.initialize();
         const users = await bottleBackDB.db.executeQuery(
-            'SELECT user_id, full_name, total_points, city FROM users ORDER BY total_points DESC LIMIT 1'
+            'SELECT full_name, total_points FROM users ORDER BY total_points DESC'
         );
-        if (!users.length) {
-            return res.status(404).json({ error: 'No users found' });
-        }
-        const topUser = users[0];
-        res.json({
-            user_id: topUser.user_id,
-            name: topUser.full_name,
-            total_points: topUser.total_points,
-            city: topUser.city
-        });
+        res.json(users.map((user, i) => ({
+            rank: i + 1,
+            name: user.full_name,
+            total_points: user.total_points
+        })));
     } catch (error) {
-        console.error('Error fetching top user:', error);
-        res.status(500).json({ error: 'Failed to fetch top user' });
+        console.error('Error fetching leaderboard:', error);
+        res.status(500).json({ error: 'Failed to fetch leaderboard' });
     }
 });
+
+app.get('/api/user/profile', auth, async (req, res) => {
+    try {
+        await bottleBackDB.initialize();
+        const user = await bottleBackDB.db.executeQuery(
+            'SELECT bottles_returned, upi_earned FROM users WHERE user_id = ?',
+            [req.user.user_id]
+        );
+        if (!user.length) return res.status(404).json({ error: 'User not found' });
+        res.json({
+            bottles_returned: user[0].bottles_returned,
+            upi_earned: user[0].upi_earned
+        });
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to fetch user stats' });
+    }
+});
+
 app.get('/api/user/leaderboard', auth, async (req, res) => {
     try {
         // 1. Make sure DB is ready
@@ -370,6 +381,53 @@ app.get('/api/user/leaderboard', auth, async (req, res) => {
     } catch (error) {
         console.error('Error fetching leaderboard:', error);
         res.status(500).json({ error: 'Failed to fetch leaderboard' });
+    }
+});
+
+// Return history endpoint
+app.get('/api/user/activity', auth, async (req, res) => {
+    try {
+        await bottleBackDB.initialize();
+        const userId = req.user.user_id;
+        // Fetch directly from bottles_returned for the logged-in user
+        const bottles = await bottleBackDB.db.executeQuery(
+            'SELECT bottle_id, date, status, upi_earned, city FROM bottles_returned WHERE user_id = ? ORDER BY date DESC',
+            [userId]
+        );
+        res.json(bottles);
+    } catch (error) {
+        console.error('Error fetching return history:', error);
+        res.status(500).json({ error: 'Failed to fetch return history' });
+    }
+});
+
+// Registration endpoint for signup page
+app.post('/api/register', async (req, res) => {
+    const { full_name, email, phone, password } = req.body;
+    if (!full_name || !email || !phone || !password) {
+        return res.status(400).json({ error: 'All fields are required.' });
+    }
+    try {
+        await bottleBackDB.initialize();
+        // Check if user already exists by email or phone
+        const existingUser = await bottleBackDB.db.executeQuery(
+            'SELECT * FROM users WHERE email = ? OR phone = ?',
+            [email, phone]
+        );
+        if (existingUser.length > 0) {
+            return res.status(409).json({ error: 'User already exists.' });
+        }
+        // Hash password
+        const hash = await bcrypt.hash(password, 10);
+        // Insert user
+        await bottleBackDB.db.executeQuery(
+            'INSERT INTO users (full_name, email, phone, password_hash) VALUES (?, ?, ?, ?)',
+            [full_name, email, phone, hash]
+        );
+        res.json({ message: 'Signup successful!' });
+    } catch (err) {
+        console.error('Registration error:', err);
+        res.status(500).json({ error: 'Registration failed.' });
     }
 });
 
@@ -461,9 +519,9 @@ app.use((req, res) => {
 
 // Start server
 const server = app.listen(PORT, () => {
-    console.log(`🚀 BottleBack India Server running on http://localhost:${PORT}`);
-    console.log(`📊 User Management Dashboard: http://localhost:${PORT}`);
-    console.log(`🔗 API Base URL: http://localhost:${PORT}/api`);
+    console.log(`🚀 BottleBack India Server running on http://localhost:3000`);
+    console.log(`📊 User Management Dashboard: http://localhost:3000`);
+    console.log(`🔗 API Base URL: http://localhost:3000/api`);
 });
 
 // Graceful shutdown: only on SIGINT

@@ -6,16 +6,58 @@ require('dotenv').config();
 const app = express();
 app.use(express.json());
 
+// CORS configuration to allow local dev and github pages
+const cors = require('cors');
+app.use(cors({
+  origin: [
+    'http://localhost:3000',
+    'http://127.0.0.1:3000'
+  ],
+  credentials: true
+}));
+
 const dbConfig = {
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 3306,
+  host: 'localhost',
+  user: 'root',
+  password: 'Souvik@0606',
+  database: 'bottleback_system',
+  port: 3306,
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0
 };
+
+// Registration endpoint for localhost
+app.post('/api/register', async (req, res) => {
+  const { name, phoneNumber, password } = req.body;
+  if (!name || !phoneNumber || !password) {
+    return res.status(400).json({ error: 'All fields are required.' });
+  }
+  try {
+    const connection = await sql.createConnection(dbConfig);
+    // Check if user already exists
+    const [existing] = await connection.execute('SELECT * FROM users WHERE phone = ?', [phoneNumber]);
+    if (existing.length > 0) {
+      await connection.end();
+      return res.status(409).json({ error: 'User already exists.' });
+    }
+    // Hash password
+    const hash = await bcrypt.hash(password, 10);
+    // Insert user
+    await connection.execute(
+      'INSERT INTO users (name, phone, password_hash) VALUES (?, ?, ?)',
+      [name, phoneNumber, hash]
+    );
+    await connection.end();
+    res.json({ message: 'Signup successful!' });
+  } catch (err) {
+    console.error('Registration error:', err);
+    res.status(500).json({ error: 'Registration failed.' });
+  }
+});
+
+
+
 // Route: Register New User
 app.post('/api/register', async (req, res) => {
   const { name, email, password } = req.body;
