@@ -17,6 +17,19 @@
 
 
 </head>
+<style>
+  #sidebar {
+    z-index: 1000;
+  }
+
+  #overlay {
+    z-index: 900;
+  }
+
+  .sidebar-open {
+    transform: translateX(0%) !important;
+  }
+</style>
 
 <body class="bg-slate-50 min-h-screen flex flex-col">
 
@@ -71,7 +84,8 @@
       <ul class="mt-8 space-y-2 px-6 text-gray-700 text-sm">
         <li><a class="flex items-center gap-3 py-2 font-semibold text-amber-600" href="#"><i
               data-feather="home"></i>Dashboard</a></li>
-        <li><a class="flex items-center gap-3 py-2 hover:text-amber-600" href="#"><i data-feather="camera"></i>Scan QR
+        <li><a class="flex items-center gap-3 py-2 hover:text-amber-600" href="scan_qr.html"><i
+              data-feather="camera"></i>Scan QR
             Code</a></li>
         <li><a class="flex items-center gap-3 py-2 hover:text-amber-600" href="return_history.html"><i
               data-feather="activity"></i>Return
@@ -79,7 +93,8 @@
 
         <li><a class="flex items-center gap-3 py-2 hover:text-amber-600" href="leaderboard.html"><i
               data-feather="award"></i>Leaderboard</a></li>
-        <li><a class="flex items-center gap-3 py-2 hover:text-amber-600" href="#"><i data-feather="users"></i>Invite
+        <li><a class="flex items-center gap-3 py-2 hover:text-amber-600" href="invite_friends.html"><i
+              data-feather="users"></i>Invite
             Friends</a></li>
         <li><a class="flex items-center gap-3 py-2 hover:text-amber-600" href="support.html"><i
               data-feather="help-circle"></i>Support</a></li>
@@ -170,12 +185,44 @@
     const overlay = document.getElementById('overlay');
 
     burger?.addEventListener('click', () => {
-      sidebar.classList.toggle('-translate-x-full');
+      sidebar.classList.toggle('sidebar-open');
       overlay.classList.toggle('hidden');
+      document.body.classList.toggle('overflow-hidden');
     });
+
     overlay?.addEventListener('click', () => {
-      sidebar.classList.add('-translate-x-full');
+      sidebar.classList.remove('sidebar-open');
       overlay.classList.add('hidden');
+      document.body.classList.remove('overflow-hidden');
+    });
+
+    document.querySelectorAll('#sidebar a').forEach(link => {
+      link.addEventListener('click', function (e) {
+        if (window.innerWidth <= 768) {
+          sidebar.classList.remove('sidebar-open');
+          overlay.classList.add('hidden');
+          document.body.classList.remove('overflow-hidden');
+        }
+      });
+    });
+
+    // Robust: Close sidebar on menu item click (mobile + navigation fix)
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelectorAll('#sidebar a').forEach(link => {
+        link.addEventListener('click', function (e) {
+          if (window.innerWidth <= 600) {
+            e.preventDefault(); // Always prevent default on mobile, we'll handle navigation
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.add('hidden');
+            const href = link.getAttribute('href');
+            if (href && href !== '#') {
+              setTimeout(() => {
+                window.location.href = href;
+              }, 120); // Allow sidebar to animate closed
+            }
+          }
+        });
+      });
     });
 
     // Function to update overview cards

@@ -50,7 +50,19 @@ h3 {
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: 28px;
-  margin-bottom: 28px
+  margin-bottom: 28px;
+  animation: slide-in 0.7s cubic-bezier(.39,.575,.565,1.000);
+}
+
+@keyframes slide-in {
+  0% {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
 }
 /* top profile */
 .profile-top {
@@ -63,7 +75,23 @@ h3 {
   width: 110px;
   border-radius: 50%;
   object-fit: cover;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, .1)
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .1);
+  animation: bounce-in 0.8s cubic-bezier(.39,.575,.565,1.000);
+}
+
+@keyframes bounce-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(-30px);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.05) translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 .profile-info h2 {
   font-size: 1.6rem
@@ -174,7 +202,24 @@ button {
   border-radius: 30px;
   font-weight: 600;
   color: #fff;
-  cursor: pointer
+  cursor: pointer;
+  box-shadow: 0 1px 8px rgba(255,153,51,0.08);
+  transition: box-shadow .3s, transform .3s;
+  animation: glow 2.2s infinite alternate;
+}
+
+@keyframes glow {
+  0% {
+    box-shadow: 0 1px 8px rgba(255,153,51,0.08);
+  }
+  100% {
+    box-shadow: 0 4px 24px rgba(19,136,8,0.14);
+  }
+}
+
+button:hover {
+  transform: scale(1.05) translateY(-2px);
+  box-shadow: 0 8px 32px rgba(19,136,8,0.18);
 }
 .edit {
   background: var(--primary)

@@ -9,34 +9,68 @@
 }
 
 body {
-    font-family: "Poppins", sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     min-height: 100vh;
-    overflow: hidden;
-    /* hide stray bubbles */
-    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(145deg, #eaf3ff, #d4e0f4);
+    padding: 1.5rem;
+    font-family: 'Poppins', sans-serif;
 }
 
 /* === GLASS CARD === */
-.glass-card {
-    width: min(90%, 420px);
-    padding: 3rem 2.5rem;
-    border-radius: 24px;
-    background: rgba(255, 255, 255, .22);
-    border: 1px solid rgba(255, 255, 255, .35);
-    backdrop-filter: blur(18px);
-    box-shadow: 0 10px 35px rgba(0, 0, 0, .12);
+.card {
+    width: 100%;
+    max-width: 460px;
+    background: #fff;
+    padding: 2.7rem 2rem;
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .1);
     text-align: center;
     color: #1b1b1b;
+    animation: scale-in 0.8s cubic-bezier(.39,.575,.565,1.000);
+}
+
+@keyframes scale-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.96) translateY(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade-in-down {
+    0% {
+        opacity: 0;
+        transform: translateY(-40px) scale(0.97);
+    }
+    100% {
+        opacity: 1;
+        transform: none;
+    }
 }
 
 /* === TYPOGRAPHY === */
 h1 {
+    font-size: 1.9rem;
+    color: #0f2756;
+    margin-bottom: 1.8rem;
     font-weight: 600;
-    margin-bottom: 2rem;
-    letter-spacing: .5px
+    letter-spacing: .5px;
+}
+
+@keyframes pulse-in {
+    0% {
+        opacity: 0.88;
+        transform: scale(1);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1.03);
+    }
 }
 
 /* === FORM === */
@@ -48,22 +82,56 @@ form {
 
 input {
     width: 100%;
-    padding: .85rem 1rem;
-    border-radius: 50px;
-    border: 1px solid rgba(0, 0, 0, .18);
-    background: rgba(255, 255, 255, .75);
-    font-size: .95rem;
+    padding: 0.9rem 1rem;
+    margin-bottom: 1.2rem;
+    border: 1px solid #cdd4e0;
+    border-radius: 12px;
+    font-size: 1rem;
 }
 
 /* Rounded primary and secondary buttons */
-.btn {
-    padding: .9rem;
+button, .btn {
+    width: 100%;
+    padding: 1rem;
     border: none;
-    border-radius: 50px;
-    font-weight: 600;
+    border-radius: 40px;
     font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
     cursor: pointer;
-    transition: .25s background;
+    background: linear-gradient(135deg, #ffb400 0%, #118800 100%);
+    transition: opacity .25s, box-shadow .4s, transform .4s;
+    box-shadow: 0 2px 12px rgba(255,180,0,0.10);
+    animation: shimmer 2.5s linear infinite alternate;
+}
+
+@keyframes shimmer {
+  0% {
+    box-shadow: 0 2px 12px rgba(255,180,0,0.10);
+  }
+  100% {
+    box-shadow: 0 6px 32px rgba(17,136,0,0.18);
+  }
+}
+
+button:hover, .btn:hover {
+    opacity: .95;
+    transform: translateY(-2px) scale(1.04) rotate(-1deg);
+    box-shadow: 0 10px 32px rgba(17,136,0,0.18);
+}
+
+@keyframes soft-glow {
+    0% {
+        box-shadow: 0 1px 8px rgba(0,0,0,0.08);
+    }
+    100% {
+        box-shadow: 0 6px 24px rgba(0,0,0,0.15);
+    }
+}
+
+.btn:hover {
+    transform: scale(1.04) translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
 }
 
 .btn.primary {
@@ -109,28 +177,21 @@ input {
 
 /* Responsive styles for Android mobiles */
 @media (max-width: 600px) {
-    .glass-card {
-        width: 100%;
-        padding: 1.2rem 0.6rem;
-    }
-
-    h1 {
-        font-size: 1.2rem;
-    }
-
-    form {
-        gap: 0.8rem;
-    }
-
-    input {
-        font-size: 1rem;
-        padding: .7rem 0.7rem;
-    }
-
-    .btn {
-        font-size: 1rem;
-        padding: .7rem;
-    }
+  .card {
+    max-width: 98vw;
+    padding: 1.2rem 0.6rem;
+  }
+  h1 {
+    font-size: 1.2rem;
+  }
+  input {
+    font-size: 1rem;
+    padding: 0.7rem 0.7rem;
+  }
+  button, .btn {
+    font-size: 1rem;
+    padding: 0.9rem;
+  }
 }
 
 .glass-card {
@@ -148,31 +209,53 @@ h1 {
 
 /* Responsive styles for tablets and PCs */
 @media (min-width: 768px) {
-    .glass-card {
-        width: 420px;
-        padding: 3.5rem 3rem;
-    }
-
-    h1 {
-        font-size: 2.1rem;
-    }
-
-    form {
-        gap: 2rem;
-    }
-
-    input {
-        font-size: 1.1rem;
-    }
+  .card {
+    max-width: 540px;
+    padding: 3.2rem 2.8rem;
+  }
+  h1 {
+    font-size: 2.2rem;
+  }
+  input {
+    font-size: 1.1rem;
+    padding: 1.1rem 1.2rem;
+  }
+  button, .btn {
+    font-size: 1.1rem;
+    padding: 1.2rem;
+  }
 }
 
 @media (min-width: 1024px) {
-    .glass-card {
-        width: 480px;
-        padding: 4rem 3.5rem;
-    }
+  .card {
+    max-width: 700px;
+    padding: 4rem 3.5rem;
+  }
+  h1 {
+    font-size: 2.7rem;
+  }
+}
 
-    h1 {
-        font-size: 2.5rem;
-    }
+/* ===== RETURN HOME BUTTON ===== */
+.return-home-btn {
+  display: inline-block;
+  background: linear-gradient(135deg, #ffb400 0%, #118800 100%);
+  color: #fff;
+  font-weight: 600;
+  padding: 0.6rem 1.3rem;
+  border-radius: 30px;
+  box-shadow: 0 2px 10px rgba(17,136,0,0.08);
+  font-size: 1rem;
+  letter-spacing: .3px;
+  transition: background 0.2s, box-shadow 0.3s, transform 0.2s;
+  border: none;
+  outline: none;
+  z-index: 10;
+}
+.return-home-btn:hover {
+  background: linear-gradient(135deg, #ffa600 0%, #0c7c00 100%);
+  box-shadow: 0 6px 22px rgba(17,136,0,0.16);
+  transform: translateY(-2px) scale(1.04);
+  color: #fff;
+  text-decoration: none;
 }

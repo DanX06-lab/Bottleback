@@ -69,7 +69,17 @@ header {
   padding: 0.45rem 1.2rem;
   border-radius: 6px;
   color: #fff;
-  font-weight: 600
+  font-weight: 600;
+  animation: shimmer-btn 2.2s linear infinite alternate;
+}
+
+@keyframes shimmer-btn {
+  0% {
+    box-shadow: 0 1px 8px rgba(19,136,8,0.10);
+  }
+  100% {
+    box-shadow: 0 6px 28px rgba(19,136,8,0.16);
+  }
 }
 
 /* =======================================================
@@ -84,6 +94,18 @@ header {
   border-radius: 20px;
   overflow: hidden;
   box-shadow: var(--shadow);
+  animation: fade-in-right 0.8s cubic-bezier(.39,.575,.565,1.000);
+}
+
+@keyframes fade-in-right {
+  0% {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .hero-left {
@@ -216,7 +238,19 @@ header {
   background: var(--white);
   border-radius: 12px;
   padding: 2rem;
-  box-shadow: var(--shadow)
+  box-shadow: var(--shadow);
+  animation: pop-in 0.7s cubic-bezier(.39,.575,.565,1.000);
+}
+
+@keyframes pop-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.95) translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 .why-item h3 {

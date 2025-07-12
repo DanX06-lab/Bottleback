@@ -1,8 +1,8 @@
 require('dotenv').config();
 const mysql = require('mysql2/promise');
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 
-// Local Database Configuration
+// Database Configuration
 const dbConfig = {
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -66,19 +66,19 @@ class UserModel {
     }
 
     // Create new user
-    async createUser(phone, name, wallet_balance = 0, total_returns = 0) {
+    async createUser(phoneNumber, name, wallet_balance = 0, bottles_returned = 0) {
         const query = `
-            INSERT INTO users (phone, name, wallet_balance, total_returns) 
+            INSERT INTO users (phone_number, name, wallet_balance, bottles_returned) 
             VALUES (?, ?, ?, ?)
         `;
-        const result = await this.db.executeQuery(query, [phone, name, wallet_balance, total_returns]);
+        const result = await this.db.executeQuery(query, [phoneNumber, name, wallet_balance, bottles_returned]);
         return result.insertId;
     }
 
     // Get user by phone number
-    async getUserByPhone(phone) {
-        const query = 'SELECT * FROM users WHERE phone = ?';
-        const users = await this.db.executeQuery(query, [phone]);
+    async getUserByPhone(phoneNumber) {
+        const query = 'SELECT * FROM users WHERE phone_number = ?';
+        const users = await this.db.executeQuery(query, [phoneNumber]);
         return users[0];
     }
 
@@ -87,7 +87,7 @@ class UserModel {
         const query = `
             UPDATE users 
             SET wallet_balance = wallet_balance + ?, 
-                total_returns = total_returns + 1 
+                bottles_returned = bottles_returned + 1 
             WHERE user_id = ?
         `;
         return await this.db.executeQuery(query, [amount, userId]);
@@ -100,13 +100,13 @@ class UserModel {
     }
 
     // Store QR code for user
-    async storeQRCode(phone, qrCode) {
+    async storeQRCode(phoneNumber, qrCode) {
         const query = `
             UPDATE users 
             SET qr_code_value = ? 
-            WHERE phone = ?
+            WHERE phone_number = ?
         `;
-        return await this.db.executeQuery(query, [qrCode, phone]);
+        return await this.db.executeQuery(query, [qrCode, phoneNumber]);
     }
 
     // Get user by QR code
@@ -349,20 +349,20 @@ class SampleData {
     // Insert sample users
     async insertSampleUsers() {
         const users = [
-            { phone: '+919876543210', name: 'Rahul Sharma', wallet_balance: 15.50, total_returns: 8 },
-            { phone: '+919876543211', name: 'Priya Patel', wallet_balance: 8.25, total_returns: 4 },
-            { phone: '+919876543212', name: 'Amit Kumar', wallet_balance: 22.75, total_returns: 12 },
-            { phone: '+919876543213', name: 'Neha Singh', wallet_balance: 5.00, total_returns: 2 },
-            { phone: '+919876543214', name: 'Vikram Malhotra', wallet_balance: 18.75, total_returns: 9 },
-            { phone: '+919876543215', name: 'Anjali Desai', wallet_balance: 12.50, total_returns: 6 },
-            { phone: '+919876543216', name: 'Rajesh Gupta', wallet_balance: 30.00, total_returns: 15 },
-            { phone: '+919876543217', name: 'Sneha Iyer', wallet_balance: 7.25, total_returns: 3 },
-            { phone: '+919876543218', name: 'Karan Mehta', wallet_balance: 25.50, total_returns: 13 },
-            { phone: '+919876543219', name: 'Pooja Reddy', wallet_balance: 9.75, total_returns: 5 }
+            { phoneNumber: '+919876543210', name: 'Rahul Sharma', wallet_balance: 15.50, bottles_returned: 8 },
+            { phoneNumber: '+919876543211', name: 'Priya Patel', wallet_balance: 8.25, bottles_returned: 4 },
+            { phoneNumber: '+919876543212', name: 'Amit Kumar', wallet_balance: 22.75, bottles_returned: 12 },
+            { phoneNumber: '+919876543213', name: 'Neha Singh', wallet_balance: 5.00, bottles_returned: 2 },
+            { phoneNumber: '+919876543214', name: 'Vikram Malhotra', wallet_balance: 18.75, bottles_returned: 9 },
+            { phoneNumber: '+919876543215', name: 'Anjali Desai', wallet_balance: 12.50, bottles_returned: 6 },
+            { phoneNumber: '+919876543216', name: 'Rajesh Gupta', wallet_balance: 30.00, bottles_returned: 15 },
+            { phoneNumber: '+919876543217', name: 'Sneha Iyer', wallet_balance: 7.25, bottles_returned: 3 },
+            { phoneNumber: '+919876543218', name: 'Karan Mehta', wallet_balance: 25.50, bottles_returned: 13 },
+            { phoneNumber: '+919876543219', name: 'Pooja Reddy', wallet_balance: 9.75, bottles_returned: 5 }
         ];
 
         for (const user of users) {
-            await this.userModel.createUser(user.phone, user.name, user.wallet_balance, user.total_returns);
+            await this.userModel.createUser(user.phoneNumber, user.name, user.wallet_balance, user.bottles_returned);
         }
         console.log('✅ Sample users inserted with balances and returns');
     }

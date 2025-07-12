@@ -29,7 +29,18 @@ body {
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   text-align: center;
-  animation: fade-in .8s ease;
+  animation: scale-in 0.7s cubic-bezier(.39,.575,.565,1.000);
+}
+
+@keyframes scale-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.95) translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 h1 {
   font-size: 1.9rem;
@@ -54,7 +65,24 @@ button {
   color: #fff;
   cursor: pointer;
   background: linear-gradient(135deg, #ffb400 0%, #118800 100%);
-  transition: opacity .25s;
+  transition: opacity .25s, box-shadow .4s, transform .4s;
+  box-shadow: 0 2px 12px rgba(255,180,0,0.10);
+  animation: shimmer 2.5s linear infinite alternate;
+}
+
+@keyframes shimmer {
+  0% {
+    box-shadow: 0 2px 12px rgba(255,180,0,0.10);
+  }
+  100% {
+    box-shadow: 0 6px 32px rgba(17,136,0,0.18);
+  }
+}
+
+button:hover {
+  opacity: .95;
+  transform: translateY(-2px) scale(1.04) rotate(-1deg);
+  box-shadow: 0 10px 32px rgba(17,136,0,0.18);
 }
 button:hover {
   opacity: .9
@@ -115,3 +143,28 @@ p a {
     font-size: 2.7rem;
   }
 }
+
+/* ===== RETURN HOME BUTTON ===== */
+.return-home-btn {
+  display: inline-block;
+  background: linear-gradient(135deg, #ffb400 0%, #118800 100%);
+  color: #fff;
+  font-weight: 600;
+  padding: 0.6rem 1.3rem;
+  border-radius: 30px;
+  box-shadow: 0 2px 10px rgba(17,136,0,0.08);
+  font-size: 1rem;
+  letter-spacing: .3px;
+  transition: background 0.2s, box-shadow 0.3s, transform 0.2s;
+  border: none;
+  outline: none;
+  z-index: 10;
+}
+.return-home-btn:hover {
+  background: linear-gradient(135deg, #ffa600 0%, #0c7c00 100%);
+  box-shadow: 0 6px 22px rgba(17,136,0,0.16);
+  transform: translateY(-2px) scale(1.04);
+  color: #fff;
+  text-decoration: none;
+}
+
