@@ -5,11 +5,8 @@
 /* ===== THEME VARIABLES ===== */
 :root {
   --primary: #ff9933;
-  /* saffron */
   --accent: #138808;
-  /* green   */
   --dark: #0d1a72;
-  /* navy    */
   --bg: whitesmoke;
   --white: #ffffff;
 
@@ -43,8 +40,8 @@ header {
   max-width: 1200px;
   margin: auto;
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
   position: relative;
 }
 
@@ -54,11 +51,28 @@ header {
   font-weight: 800;
   display: flex;
   align-items: center;
+  gap: 8px;
 }
 
 .logo img {
   width: 40px;
-  margin-right: 10px;
+  margin-right: 5px;
+}
+
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.menu-toggle div {
+  width: 25px;
+  height: 3px;
+  background-color: white;
+  border-radius: 2px;
 }
 
 .nav-links {
@@ -85,19 +99,6 @@ header {
   box-shadow: var(--shadow);
   z-index: 100;
   align-items: center;
-}
-
-.menu-toggle {
-  display: none;
-  flex-direction: column;
-  cursor: pointer;
-  gap: 4px;
-}
-
-.menu-toggle div {
-  width: 25px;
-  height: 3px;
-  background-color: white;
 }
 
 .btn-link {
@@ -402,10 +403,15 @@ footer {
    RESPONSIVE: ANDROID / MOBILE (≤600px)
    ======================================================= */
 @media (max-width: 600px) {
+  .navbar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
   .menu-toggle {
-    display: block;
-    cursor: pointer;
-    z-index: 999;
+    display: flex;
   }
 
   .menu-toggle div {
@@ -424,6 +430,7 @@ footer {
     padding: 1rem 0;
   }
 
+
   .nav-links.active {
     display: flex;
   }
@@ -433,14 +440,23 @@ footer {
   }
 
   .navbar {
-    flex-direction: column;
-    gap: 0.7rem;
-    padding: 0;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
   }
+
 
   .logo {
     font-size: 1.1rem;
   }
+
+  .logo span {
+    margin-left: 8px;
+    font-weight: 800;
+    color: white;
+  }
+
 
   .nav-links {
     gap: 0.7rem;
