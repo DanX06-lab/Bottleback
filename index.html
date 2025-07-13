@@ -5,16 +5,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BotalSePaisa India</title>
-  <!-- External stylesheet holds main styles -->
   <link rel="stylesheet" href="styles/index_style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;800&display=swap" rel="stylesheet" />
-
-  <!-- Fade‑in animation used across sections -->
-  <!-- removed embedded styles, now using extracted_styles.css -->
-
-  <link rel="stylesheet" href="styles/index_style.css">
 </head>
 
 <body>
@@ -25,7 +19,14 @@
         <img src="images/main.png" alt="BotalSePaisa Logo" width="40" height="40" style="margin-top:5px" />
         BotalSePaisa India
       </div>
-      <ul class="nav-links">
+
+      <div class="menu-toggle" onclick="toggleMenu()">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+
+      <ul class="nav-links" id="navLinks">
         <li><a href="#home">Home</a></li>
         <li><a href="how-it-works.html">How It Works</a></li>
         <li><a href="rewards.html">Rewards</a></li>
@@ -64,9 +65,7 @@
         <span></span><span></span><span></span><span></span>
       </div>
     </div>
-
   </section>
-
 
   <!-- ===== WHY BotalSePaisa ===== -->
   <section class="section fade-in" id="why" style="animation-delay:.5s">
@@ -139,7 +138,6 @@
 
   <footer class="fade-in" style="animation-delay:1.9s">&copy; 2025 BotalSePaisa India. All rights reserved.</footer>
 
-
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const slides = document.querySelectorAll("#pptSlider .slide");
@@ -153,26 +151,26 @@
 
       setInterval(() => { idx = (idx + 1) % slides.length; show(idx); }, 4000);
     });
+
+    function toggleMenu() {
+      const nav = document.getElementById("navLinks");
+      nav.classList.toggle("active");
+    }
   </script>
 
-  <!-- API call to backend example -->
   <script>
-    // Replace with your actual Render backend URL
     const BACKEND_URL = 'http://localhost:3000';
     document.addEventListener('DOMContentLoaded', () => {
       fetch(`${BACKEND_URL}/api/users`)
         .then(res => res.json())
         .then(data => {
           console.log('Users from backend:', data);
-          // Optionally, display in HTML
-          // document.body.insertAdjacentHTML('beforeend', `<pre>${JSON.stringify(data, null, 2)}</pre>`);
         })
         .catch(err => {
           console.error('Error fetching users:', err);
         });
     });
   </script>
-
 </body>
 
 </html>

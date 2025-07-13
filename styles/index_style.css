@@ -36,6 +36,7 @@ body {
 header {
   background: var(--primary);
   padding: 1rem 2rem;
+  position: relative;
 }
 
 .navbar {
@@ -43,25 +44,60 @@ header {
   margin: auto;
   display: flex;
   align-items: center;
-  justify-content: space-between
+  justify-content: space-between;
+  position: relative;
 }
 
 .logo {
   color: #fff;
   font-size: 1.6rem;
-  font-weight: 800
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+}
+
+.logo img {
+  width: 40px;
+  margin-right: 10px;
 }
 
 .nav-links {
   list-style: none;
   display: flex;
-  gap: 1.4rem
+  gap: 1.4rem;
 }
 
 .nav-links a {
   color: #fff;
   text-decoration: none;
-  font-weight: 500
+  font-weight: 500;
+}
+
+.nav-links.active {
+  display: flex !important;
+  flex-direction: column;
+  background-color: var(--primary);
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  padding: 1rem 0;
+  box-shadow: var(--shadow);
+  z-index: 100;
+  align-items: center;
+}
+
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+  gap: 4px;
+}
+
+.menu-toggle div {
+  width: 25px;
+  height: 3px;
+  background-color: white;
 }
 
 .btn-link {
@@ -75,12 +111,15 @@ header {
 
 @keyframes shimmer-btn {
   0% {
-    box-shadow: 0 1px 8px rgba(19,136,8,0.10);
+    box-shadow: 0 1px 8px rgba(19, 136, 8, 0.10);
   }
+
   100% {
-    box-shadow: 0 6px 28px rgba(19,136,8,0.16);
+    box-shadow: 0 6px 28px rgba(19, 136, 8, 0.16);
   }
 }
+
+/* Continue with the rest of your original CSS here... (unchanged sections like hero, sections, grid, footer, and media queries) */
 
 /* =======================================================
    HERO SECTION
@@ -94,7 +133,7 @@ header {
   border-radius: 20px;
   overflow: hidden;
   box-shadow: var(--shadow);
-  animation: fade-in-right 0.8s cubic-bezier(.39,.575,.565,1.000);
+  animation: fade-in-right 0.8s cubic-bezier(.39, .575, .565, 1.000);
 }
 
 @keyframes fade-in-right {
@@ -102,6 +141,7 @@ header {
     opacity: 0;
     transform: translateX(50px);
   }
+
   100% {
     opacity: 1;
     transform: none;
@@ -239,7 +279,7 @@ header {
   border-radius: 12px;
   padding: 2rem;
   box-shadow: var(--shadow);
-  animation: pop-in 0.7s cubic-bezier(.39,.575,.565,1.000);
+  animation: pop-in 0.7s cubic-bezier(.39, .575, .565, 1.000);
 }
 
 @keyframes pop-in {
@@ -247,6 +287,7 @@ header {
     opacity: 0;
     transform: scale(0.95) translateY(30px);
   }
+
   100% {
     opacity: 1;
     transform: scale(1) translateY(0);
@@ -361,83 +402,132 @@ footer {
    RESPONSIVE: ANDROID / MOBILE (≤600px)
    ======================================================= */
 @media (max-width: 600px) {
+  .menu-toggle {
+    display: block;
+    cursor: pointer;
+    z-index: 999;
+  }
+
+  .menu-toggle div {
+    width: 25px;
+    height: 3px;
+    background: white;
+    margin: 4px 0;
+    transition: 0.4s;
+  }
+
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    background-color: var(--primary);
+    padding: 1rem 0;
+  }
+
+  .nav-links.active {
+    display: flex;
+  }
+
   header {
     padding: 0.7rem 0.7rem;
   }
+
   .navbar {
     flex-direction: column;
     gap: 0.7rem;
     padding: 0;
   }
+
   .logo {
     font-size: 1.1rem;
   }
+
   .nav-links {
     gap: 0.7rem;
     flex-direction: column;
     width: 100%;
     align-items: center;
   }
+
   .btn-link {
     padding: 0.5rem 1rem;
     font-size: 0.95rem;
   }
+
   .hero {
     margin: 1.2rem 0.2rem;
     flex-direction: column;
     border-radius: 12px;
     box-shadow: none;
   }
+
   .hero-left {
     padding: 1.2rem 0.5rem;
   }
+
   .hero-left h1 {
     font-size: 1.5rem;
   }
+
   .hero-left p {
     font-size: 0.97rem;
     margin-bottom: 1.2rem;
   }
+
   .hero-right {
     padding: 0.7rem 0.5rem;
     max-width: 100%;
   }
+
   .ppt-slider {
     width: 100%;
     height: 170px;
     max-width: 100%;
   }
+
   .section {
     margin: 2rem 0.2rem;
     padding: 0 0.2rem;
   }
+
   .section h2 {
     font-size: 1.4rem;
   }
-  .grid, .why-grid, .steps-grid {
+
+  .grid,
+  .why-grid,
+  .steps-grid {
     gap: 0.8rem;
     grid-template-columns: 1fr !important;
   }
-  .why-item, .step {
+
+  .why-item,
+  .step {
     padding: 1rem;
   }
+
   .impact {
     flex-direction: column;
     gap: 1.2rem;
   }
+
   .counter {
     padding: 1rem 0.5rem;
   }
+
   .counter h3 {
     font-size: 1.2rem;
   }
+
   .cta-banner {
     padding: 1.5rem 0.5rem;
     margin-top: 2rem;
   }
+
   .cta-banner h2 {
     font-size: 1.3rem;
   }
+
   footer {
     padding: 0.6rem 0;
     font-size: 0.95rem;
@@ -452,69 +542,91 @@ footer {
   header {
     padding: 0.9rem 1.2rem;
   }
+
   .navbar {
     max-width: 100%;
     gap: 1.1rem;
   }
+
   .logo {
     font-size: 1.3rem;
   }
+
   .nav-links {
     gap: 1.1rem;
   }
+
   .hero {
     margin: 2rem 0.5rem;
     border-radius: 16px;
   }
+
   .hero-left {
     padding: 2rem 1.2rem;
   }
+
   .hero-left h1 {
     font-size: 2rem;
   }
+
   .hero-left p {
     font-size: 1.05rem;
     margin-bottom: 1.5rem;
   }
+
   .hero-right {
     padding: 1.2rem 0.7rem;
     max-width: 100%;
   }
+
   .ppt-slider {
     width: 100%;
     height: 210px;
     max-width: 100%;
   }
+
   .section {
     margin: 2.5rem 0.5rem;
     padding: 0 0.5rem;
   }
+
   .section h2 {
     font-size: 1.7rem;
   }
-  .grid, .why-grid, .steps-grid {
+
+  .grid,
+  .why-grid,
+  .steps-grid {
     gap: 1.1rem;
     grid-template-columns: 1fr 1fr !important;
   }
-  .why-item, .step {
+
+  .why-item,
+  .step {
     padding: 1.3rem;
   }
+
   .impact {
     gap: 2rem;
   }
+
   .counter {
     padding: 1.2rem 1rem;
   }
+
   .counter h3 {
     font-size: 1.5rem;
   }
+
   .cta-banner {
     padding: 2rem 0.7rem;
     margin-top: 3rem;
   }
+
   .cta-banner h2 {
     font-size: 1.6rem;
   }
+
   footer {
     padding: 0.8rem 0;
     font-size: 1rem;
@@ -529,69 +641,91 @@ footer {
   header {
     padding: 1.2rem 2.5rem;
   }
+
   .navbar {
     max-width: 1200px;
     gap: 1.4rem;
   }
+
   .logo {
     font-size: 1.6rem;
   }
+
   .nav-links {
     gap: 1.4rem;
   }
+
   .hero {
     margin: 3rem auto;
     border-radius: 20px;
   }
+
   .hero-left {
     padding: 3rem 2.5rem;
   }
+
   .hero-left h1 {
     font-size: 2.8rem;
   }
+
   .hero-left p {
     font-size: 1.15rem;
     margin-bottom: 2rem;
   }
+
   .hero-right {
     padding: 2rem 1.5rem;
     max-width: 340px;
   }
+
   .ppt-slider {
     width: 160%;
     height: 260px;
     max-width: 320px;
   }
+
   .section {
     margin: 4rem auto;
     padding: 0 1rem;
   }
+
   .section h2 {
     font-size: 2.2rem;
   }
-  .grid, .why-grid, .steps-grid {
+
+  .grid,
+  .why-grid,
+  .steps-grid {
     gap: 1.5rem;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)) !important;
   }
-  .why-item, .step {
+
+  .why-item,
+  .step {
     padding: 2rem;
   }
+
   .impact {
     gap: 3rem;
   }
+
   .counter {
     padding: 1.5rem 2rem;
   }
+
   .counter h3 {
     font-size: 2rem;
   }
+
   .cta-banner {
     padding: 3rem 1rem;
     margin-top: 4rem;
   }
+
   .cta-banner h2 {
     font-size: 2.2rem;
   }
+
   footer {
     padding: 1rem 0;
     font-size: 1.08rem;
