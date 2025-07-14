@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Fetch and display bottles returned and UPI earned for the logged-in user
     if (token) {
-        fetch(`${API_BASE}/user/profile`, {
+        fetch(`${API_BASE}/user/:id`, {
             headers: {
                 'Authorization': 'Bearer ' + token
             }
