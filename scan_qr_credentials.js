@@ -88,7 +88,7 @@ function processQRCode(qrCode, userId) {
             // Defensive: handle missing or malformed response
             if (data && typeof data.success !== 'undefined') {
                 if (data.success) {
-                    document.getElementById('scan-status').textContent = data.message || '1 rs added to your wallet';
+                    document.getElementById('scan-status').textContent = data.message || 'Sent for vendor verification. Money will be added to your account shortly.';
                 } else {
                     document.getElementById('scan-status').textContent = 'Error: ' + (data.message || 'Failed to process QR');
                 }

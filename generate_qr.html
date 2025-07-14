@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Generate QR Code</title>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+  <style>
+    #qr-container { margin: 30px 0; }
+    #qr-code { margin: 0 auto; display: block; }
+    input, button { font-size: 1.1em; }
+  </style>
+</head>
+<body>
+  <h2>Generate a New QR Code</h2>
+  <form id="qr-form" onsubmit="event.preventDefault(); generateQR();">
+    <label>QR Code Value:
+      <input type="text" id="qr-value" required placeholder="Enter unique QR value" readonly>
+    </label>
+    <button type="submit">Generate QR</button>
+<button type="button" onclick="generateNewQR()">Generate New QR</button>
+  </form>
+  <div id="qr-container">
+    <canvas id="qr-code"></canvas>
+  </div>
+  <div id="qr-status"></div>
+  <script>
+    // Generate a UUID v4 (simple version)
+    function generateUUID() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    }
+    // Generate a new QR and update everything
+    function generateNewQR() {
+      const uuid = generateUUID();
+      document.getElementById('qr-value').value = uuid;
+      generateQR();
+    }
+
+    // Generate a UUID v4 (simple version)
+    function generateUUID() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    }
+    // On page load, set a unique QR value and generate QR
+    window.onload = function() {
+      const uuid = generateUUID();
+      document.getElementById('qr-value').value = uuid;
+      generateQR();
+    };
+
+    function generateQR() {
+      const value = document.getElementById('qr-value').value.trim();
+      if (!value) return;
+      QRCode.toCanvas(document.getElementById('qr-code'), value, { width: 256 }, function (error) {
+        if (error) {
+          document.getElementById('qr-status').textContent = 'Error generating QR code.';
+        } else {
+          document.getElementById('qr-status').textContent = 'QR code generated! Print or display for scanning.';
+        }
+      });
+      // Optionally, send to backend to register QR code
+      fetch('/api/register-qr', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ qr_code_value: value })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          document.getElementById('qr-status').textContent += ' QR registered in system.';
+        } else {
+          document.getElementById('qr-status').textContent += ' Failed to register QR: ' + (data.message || 'Unknown error');
+        }
+      })
+      .catch(() => {
+        document.getElementById('qr-status').textContent += ' Failed to register QR (server error).';
+      });
+    }
+  </script>
+</body>
+</html>

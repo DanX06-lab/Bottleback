@@ -119,6 +119,16 @@ class UserModel {
 
 // QR Code Model
 class QRCodeModel {
+    // Mark QR code as pending (for vendor verification)
+    async markQRCodeAsPending(qrCode, userId, kioskId) {
+        const query = `
+            UPDATE qr_code_values
+            SET status = 'pending', assigned_to_user_id = ?, kiosk_id = ?, used_at = NOW()
+            WHERE qr_code_value = ?
+        `;
+        return await this.db.executeQuery(query, [userId, kioskId, qrCode]);
+    }
+
     constructor(db) {
         this.db = db;
     }

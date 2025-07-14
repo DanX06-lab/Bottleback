@@ -483,6 +483,58 @@ app.get('/api/user/activity', auth, async (req, res) => {
     }
 });
 
+// Vendor: View pending returns
+app.get('/api/vendor/pending-returns', async (req, res) => {
+    try {
+        await bottleBackDB.initialize();
+        const pendingReturns = await bottleBackDB.db.executeQuery(`
+            SELECT rl.id as return_id, qcv.qr_code_value, u.full_name, u.phone, rl.returned_at, qcv.status
+            FROM return_logs rl
+            JOIN qr_code_values qcv ON rl.qr_code_id = qcv.id
+            JOIN users u ON rl.user_id = u.user_id
+            WHERE qcv.status = 'pending'
+            ORDER BY rl.returned_at ASC
+        `);
+        res.json(pendingReturns);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch pending returns' });
+    }
+});
+
+// Vendor: Approve return
+app.post('/api/vendor/approve-return', async (req, res) => {
+    try {
+        await bottleBackDB.initialize();
+        const { returnId, rewardAmount } = req.body;
+
+        // Get return log and QR info
+        const returnLog = await bottleBackDB.db.executeQuery(
+            'SELECT * FROM return_logs WHERE id = ?', [returnId]
+        );
+        if (!returnLog.length) return res.status(404).json({ error: 'Return log not found' });
+
+        const qrCodeId = returnLog[0].qr_code_id;
+        const userId = returnLog[0].user_id;
+
+        // Mark QR as used
+        await bottleBackDB.db.executeQuery(
+            "UPDATE qr_code_values SET status = 'used' WHERE id = ?", [qrCodeId]
+        );
+
+        // Update return log with reward
+        await bottleBackDB.db.executeQuery(
+            "UPDATE return_logs SET reward_amount = ? WHERE id = ?", [rewardAmount, returnId]
+        );
+
+        // Credit user
+        await bottleBackDB.userModel.updateWalletBalance(userId, rewardAmount);
+
+        res.json({ success: true, message: 'Return approved and reward credited.' });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to approve return' });
+    }
+});
+
 // Registration endpoint for signup page
 app.post('/api/register', async (req, res) => {
     const { full_name, email, phone, password } = req.body;
@@ -551,16 +603,18 @@ app.post('/api/scan-qr', async (req, res) => {
             });
         }
 
-        // Mark QR code as used
-        await bottleBackDB.qrCodeModel.markQRCodeAsUsed(qrCode, user.user_id, 1); // Using kiosk_id 1 as default
+        // Mark QR as pending (not used)
+        await bottleBackDB.qrCodeModel.markQRCodeAsPending(qrCode, user.user_id, 1); // 1 = kiosk_id, adjust as needed
 
-        // Add ₹1 to user's wallet
-        await bottleBackDB.userModel.updateWalletBalance(user.user_id, 1.00);
+        // Log return with 0 reward (pending)
+        await bottleBackDB.returnLogModel.logReturn(user.user_id, qrCodeData.id, 1, 0.00);
 
-        // Log the return
-        await bottleBackDB.returnLogModel.logReturn(user.user_id, qrCodeData.id, 1, 1.00);
-
-        // Create reward transaction
+        res.json({
+            success: true,
+            message: 'QR code scanned and sent for vendor verification. Money will be added after approval.',
+            data: { status: 'pending' }
+        });
+        return;
         await bottleBackDB.rewardTransactionModel.createTransaction(
             user.user_id,
             1.00,
