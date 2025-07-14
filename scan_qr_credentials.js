@@ -19,7 +19,8 @@ function startScanner() {
                 var qrResult = document.getElementById('qr-result');
                 var scanStatus = document.getElementById('scan-status');
                 if (resultContainer) resultContainer.classList.remove('hidden');
-                if (qrResult) qrResult.textContent = `QR Code: ${qrCodeMessage}`;
+                // Do not show the QR code value to the user
+// if (qrResult) qrResult.textContent = `QR Code: ${qrCodeMessage}`;
                 if (scanStatus) scanStatus.textContent = 'Bottle successfully scanned!';
                 sendQRToBackend(qrCodeMessage);
             }
@@ -57,17 +58,11 @@ function restartScanner() {
 function sendQRToBackend(qrCode) {
     // Get user ID from localStorage
     let userId = localStorage.getItem('currentUserId');
-
     if (!userId) {
-        // Show phone input container
-        scannedQRCode = qrCode;
-        document.getElementById('phone-input-container').style.display = 'block';
-        document.getElementById('qr-result').textContent = `QR Code: ${qrCode}`;
-        document.getElementById('scan-status').textContent = 'Please enter your phone number to claim your reward';
+        // If user is not logged in, show an error and do not proceed
+        document.getElementById('scan-status').textContent = 'You must be logged in to scan.';
         return;
     }
-
-    // Proceed with the API call
     processQRCode(qrCode, userId);
 }
 
