@@ -15,7 +15,7 @@ window.addEventListener('load', function () {
 });
 
 function startScanner() {
-    html5QrCode = new Html5Qrcode("reader");
+    html5QrCode = new Html5QrCode("reader");
 
     html5QrCode.start(
         { facingMode: "environment" },
@@ -62,36 +62,25 @@ function showScanResult(qrCode) {
 }
 
 function sendQRToBackend(qrCode) {
-    const userId = localStorage.getItem('currentUserId');
-
-    if (!userId) {
-        alert("You're not logged in. Please login first.");
-        window.location.href = 'login.html';
-        return;
-    }
-
-    processQRCode(qrCode, userId);
-}
-
-function processQRCode(qrCode, userId) {
-    fetch('/api/scan-qr', {
+    // Just send QR code to backend without login
+    fetch('/api/store-qr', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ qrCode, userId })
+        body: JSON.stringify({ qr_code: qrCode })
     })
         .then(response => response.json())
         .then(data => {
             const scanStatus = document.getElementById('scan-status');
             if (data && typeof data.success !== 'undefined') {
                 scanStatus.textContent = data.success
-                    ? 'Bottle successfully scanned and sent for verification.'
-                    : ('Error: ' + (data.message || 'Failed to process QR'));
+                    ? 'Bottle QR code stored successfully.'
+                    : ('Error: ' + (data.message || 'Failed to store QR'));
             } else {
                 scanStatus.textContent = 'Error: Unexpected server response.';
             }
         })
         .catch(error => {
-            document.getElementById('scan-status').textContent = 'Error: Failed to process bottle';
+            document.getElementById('scan-status').textContent = 'Error: Failed to submit QR';
             console.error('Error:', error);
         });
 }
