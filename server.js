@@ -46,47 +46,80 @@ app.get('/api/users', async (req, res) => {
     }
 });
 
-app.post('/api/scan-qr', async (req, res) => {
+// Store QR code in database
+app.post('/api/store-qr', async (req, res) => {
     try {
         await bottleBackDB.initialize();
-        const { qrCode, userId } = req.body;
+        const { qr_code } = req.body;
 
-        if (!qrCode || !userId) {
-            return res.status(400).json({ success: false, message: 'QR code and user ID are required' });
+        // Check if QR code already exists
+        const existing = await bottleBackDB.qrCodeModel.getQRCode(qr_code);
+        if (existing) {
+            return res.status(400).json({
+                success: false,
+                error: 'QR code already exists in database'
+            });
         }
 
-        const user = await bottleBackDB.userModel.getUserByPhone(userId);
-        if (!user) {
-            return res.status(404).json({ success: false, message: 'User not found' });
-        }
+        // Extract timestamp from QR code
+        const timestamp = qr_code.split('_')[2]; // Assuming format BOTTLE_000001_timestamp
 
-        const qrCodeData = await bottleBackDB.qrCodeModel.getQRCode(qrCode);
-        if (!qrCodeData) {
-            return res.status(404).json({ success: false, message: 'Invalid QR code' });
-        }
-
-        if (qrCodeData.status === 'used') {
-            return res.status(400).json({ success: false, message: 'QR code has already been used' });
-        }
-
-        // Mark the QR code as pending instead of used
-        await bottleBackDB.qrCodeModel.markQRCodeAsPending(qrCode, user.user_id, 1);
-
-        // Log the return without crediting wallet
-        await bottleBackDB.returnLogModel.logReturn(user.user_id, qrCodeData.qr_id, 1, 0.00);
+        // Store QR code in qr_code_values table
+        await bottleBackDB.qrCodeModel.createQRCode(qr_code, 1, timestamp); // Using 1 as default company_id
 
         res.json({
             success: true,
-            message: 'Bottle scanned and marked as pending. Awaiting vendor confirmation.',
+            message: 'QR code stored successfully',
             data: {
-                qr_code: qrCode,
-                user_id: user.user_id,
-                status: 'pending'
+                qr_code: qr_code,
+                created_at: timestamp,
+                status: 'unused'
             }
         });
     } catch (error) {
-        console.error('Error scanning QR code:', error);
-        res.status(500).json({ success: false, message: 'Failed to process QR code' });
+        console.error('Error storing QR code:', error);
+        res.status(500).json({
+            success: false,
+            error: error.message
+        });
+    }
+});
+// Store QR code in database
+app.post('/api/store-qr', async (req, res) => {
+    try {
+        await bottleBackDB.initialize();
+        const { qr_code } = req.body;
+
+        // Check if QR code already exists
+        const existing = await bottleBackDB.qrCodeModel.getQRCode(qr_code);
+        if (existing) {
+            return res.status(400).json({
+                success: false,
+                error: 'QR code already exists in database'
+            });
+        }
+
+        // Extract timestamp from QR code
+        const timestamp = qr_code.split('_')[2]; // Assuming format BOTTLE_000001_timestamp
+
+        // Store QR code in qr_code_values table
+        await bottleBackDB.qrCodeModel.createQRCode(qr_code, 1, timestamp); // Using 1 as default company_id
+
+        res.json({
+            success: true,
+            message: 'QR code stored successfully',
+            data: {
+                qr_code: qr_code,
+                created_at: timestamp,
+                status: 'unused'
+            }
+        });
+    } catch (error) {
+        console.error('Error storing QR code:', error);
+        res.status(500).json({
+            success: false,
+            error: error.message
+        });
     }
 });
 
@@ -525,7 +558,7 @@ app.post('/api/scan-qr', async (req, res) => {
         await bottleBackDB.userModel.updateWalletBalance(user.user_id, 1.00);
 
         // Log the return
-        await bottleBackDB.returnLogModel.logReturn(user.user_id, qrCodeData.qr_id, 1, 1.00);
+        await bottleBackDB.returnLogModel.logReturn(user.user_id, qrCodeData.id, 1, 1.00);
 
         // Create reward transaction
         await bottleBackDB.rewardTransactionModel.createTransaction(
