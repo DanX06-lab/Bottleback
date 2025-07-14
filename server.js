@@ -46,42 +46,47 @@ app.get('/api/users', async (req, res) => {
     }
 });
 
-// Store QR code in database
-app.post('/api/store-qr', async (req, res) => {
+app.post('/api/scan-qr', async (req, res) => {
     try {
         await bottleBackDB.initialize();
-        const { qr_code } = req.body;
+        const { qrCode, userId } = req.body;
 
-        // Check if QR code already exists
-        const existing = await bottleBackDB.qrCodeModel.getQRCode(qr_code);
-        if (existing) {
-            return res.status(400).json({
-                success: false,
-                error: 'QR code already exists in database'
-            });
+        if (!qrCode || !userId) {
+            return res.status(400).json({ success: false, message: 'QR code and user ID are required' });
         }
 
-        // Extract timestamp from QR code
-        const timestamp = qr_code.split('_')[2]; // Assuming format BOTTLE_000001_timestamp
+        const user = await bottleBackDB.userModel.getUserByPhone(userId);
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
 
-        // Store QR code in qr_code_values table
-        await bottleBackDB.qrCodeModel.createQRCode(qr_code, 1, timestamp); // Using 1 as default company_id
+        const qrCodeData = await bottleBackDB.qrCodeModel.getQRCode(qrCode);
+        if (!qrCodeData) {
+            return res.status(404).json({ success: false, message: 'Invalid QR code' });
+        }
+
+        if (qrCodeData.status === 'used') {
+            return res.status(400).json({ success: false, message: 'QR code has already been used' });
+        }
+
+        // Mark the QR code as pending instead of used
+        await bottleBackDB.qrCodeModel.markQRCodeAsPending(qrCode, user.user_id, 1);
+
+        // Log the return without crediting wallet
+        await bottleBackDB.returnLogModel.logReturn(user.user_id, qrCodeData.qr_id, 1, 0.00);
 
         res.json({
             success: true,
-            message: 'QR code stored successfully',
+            message: 'Bottle scanned and marked as pending. Awaiting vendor confirmation.',
             data: {
-                qr_code: qr_code,
-                created_at: timestamp,
-                status: 'unused'
+                qr_code: qrCode,
+                user_id: user.user_id,
+                status: 'pending'
             }
         });
     } catch (error) {
-        console.error('Error storing QR code:', error);
-        res.status(500).json({
-            success: false,
-            error: error.message
-        });
+        console.error('Error scanning QR code:', error);
+        res.status(500).json({ success: false, message: 'Failed to process QR code' });
     }
 });
 
@@ -303,79 +308,49 @@ app.get('/api/user/dashboard', auth, async (req, res) => {
     });
 });
 
-// Scan QR code and add reward to user wallet
 app.post('/api/scan-qr', async (req, res) => {
     try {
         await bottleBackDB.initialize();
         const { qrCode, userId } = req.body;
 
         if (!qrCode || !userId) {
-            return res.status(400).json({
-                success: false,
-                message: 'QR code and user ID are required'
-            });
+            return res.status(400).json({ success: false, message: 'QR code and user ID are required' });
         }
 
-        // Check if user exists
         const user = await bottleBackDB.userModel.getUserByPhone(userId);
         if (!user) {
-            return res.status(404).json({
-                success: false,
-                message: 'User not found'
-            });
+            return res.status(404).json({ success: false, message: 'User not found' });
         }
 
-        // Check if QR code exists and is unused
         const qrCodeData = await bottleBackDB.qrCodeModel.getQRCode(qrCode);
         if (!qrCodeData) {
-            return res.status(404).json({
-                success: false,
-                message: 'Invalid QR code'
-            });
+            return res.status(404).json({ success: false, message: 'Invalid QR code' });
         }
 
-        if (qrCodeData.status === 'used') {
-            return res.status(400).json({
-                success: false,
-                message: 'QR code has already been used'
-            });
+        if (qrCodeData.status !== 'unused') {
+            return res.status(400).json({ success: false, message: 'QR code has already been scanned or processed' });
         }
 
-        // Mark QR code as used
-        await bottleBackDB.qrCodeModel.markQRCodeAsUsed(qrCode, user.user_id, 1); // Using kiosk_id 1 as default
+        await bottleBackDB.qrCodeModel.markQRCodeAsPending(qrCode, user.user_id, 1);
 
-        // Add ₹1 to user's wallet
-        await bottleBackDB.userModel.updateWalletBalance(user.user_id, 1.00);
-
-        // Log the return
-        await bottleBackDB.returnLogModel.logReturn(user.user_id, qrCodeData.id, 1, 1.00);
-
-        // Create reward transaction
-        await bottleBackDB.rewardTransactionModel.createTransaction(
-            user.user_id,
-            1.00,
-            'QR_SCAN',
-            'Bottle return reward'
-        );
+        await bottleBackDB.returnLogModel.logReturn(user.user_id, qrCodeData.qr_id, 1, 0.00);
 
         res.json({
             success: true,
-            message: '1 rs added to your wallet',
+            message: 'QR code scanned and marked as pending. Awaiting vendor verification.',
             data: {
                 qr_code: qrCode,
                 user_id: user.user_id,
-                reward_amount: 1.00,
-                new_balance: user.wallet_balance + 1.00
+                reward_amount: 0.00,
+                status: 'pending'
             }
         });
     } catch (error) {
         console.error('Error scanning QR code:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Failed to process QR code'
-        });
+        res.status(500).json({ success: false, message: 'Failed to process QR code' });
     }
 });
+
 
 // GET  /api/user/leaderboard
 

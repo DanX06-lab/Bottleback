@@ -8,8 +8,6 @@
 
     <!-- Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Icons (Heroicons) -->
     <script src="https://unpkg.com/feather-icons"></script>
 
     <style>
@@ -21,44 +19,50 @@
             --gray: #f7f7f7;
             --gray-dark: #444;
         }
+
         body {
             background: linear-gradient(135deg, #e3f0ff 0%, #f7f7f7 100%);
         }
+
         .gpay-header {
-            background: rgba(24,24,24,0.92);
+            background: rgba(24, 24, 24, 0.92);
             color: var(--white);
-            box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
             backdrop-filter: blur(8px);
         }
+
         .scanner-card {
-            background: rgba(255,255,255,0.85);
+            background: rgba(255, 255, 255, 0.85);
             border-radius: 2rem;
             box-shadow: 0 8px 32px 0 rgba(24, 24, 24, 0.16);
             max-width: 430px;
             margin: 52px auto 0 auto;
             padding: 2.8rem 2.1rem 2.1rem 2.1rem;
             border: 2.5px solid var(--blue);
-            position: relative;
             backdrop-filter: blur(16px);
             transition: box-shadow 0.3s;
         }
+
         .scanner-card:hover {
-            box-shadow: 0 12px 40px 0 rgba(25, 118, 210, 0.11), 0 1.5px 8px 0 rgba(25, 118, 210, 0.09);
+            box-shadow: 0 12px 40px rgba(25, 118, 210, 0.11),
+                0 1.5px 8px rgba(25, 118, 210, 0.09);
         }
+
         .scanner-title {
             color: var(--black);
             font-size: 2.1rem;
             font-weight: 800;
             margin-bottom: 0.4rem;
-            letter-spacing: -0.5px;
             text-shadow: 0 1px 0 #fff, 0 2px 8px #e3f0ff;
         }
+
         .scanner-desc {
             color: var(--gray-dark);
             font-size: 1.13rem;
             margin-bottom: 1.35rem;
             font-weight: 500;
         }
+
         .scanner-container {
             position: relative;
             width: 100%;
@@ -72,45 +76,17 @@
             margin-bottom: 1.2rem;
             animation: pulse 2s infinite;
         }
+
         @keyframes pulse {
             0% {
                 border-color: var(--blue);
             }
+
             100% {
                 border-color: var(--blue-glow);
             }
         }
-        .scan-message {
-            color: var(--black);
-            font-size: 1.2em;
-            font-weight: 600;
-            text-shadow: none;
-        }
 
-        .result-container {
-            margin: 28px 0 0 0;
-            text-align: center;
-        }
-        .qr-result {
-            font-size: 1.18em;
-            color: var(--blue);
-            margin: 14px 0 6px 0;
-            font-weight: 700;
-            letter-spacing: 0.01em;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5em;
-        }
-        .qr-result::before {
-            content: '\f029';
-            font-family: 'Font Awesome 5 Free';
-            font-weight: 900;
-            margin-right: 0.4em;
-            color: var(--blue-glow);
-            font-size: 1.1em;
-            display: inline-block;
-        }
         .scan-status {
             color: var(--blue-glow);
             font-weight: 600;
@@ -118,70 +94,52 @@
             font-size: 1.08em;
         }
 
+        .qr-result {
+            font-size: 1.18em;
+            color: var(--blue);
+            margin: 14px 0 6px 0;
+            font-weight: 700;
+        }
+
+        .gpay-btn,
+        .gpay-btn-alt {
+            padding: 12px 32px;
+            font-size: 1.13em;
+            font-weight: 700;
+            border-radius: 999px;
+            outline: none;
+            transition: all 0.18s;
+            cursor: pointer;
+        }
+
         .gpay-btn {
             background: linear-gradient(90deg, var(--blue) 60%, var(--blue-glow) 100%);
             color: #fff;
-            padding: 12px 32px;
-            font-size: 1.13em;
             border: none;
-            border-radius: 999px;
-            font-weight: 700;
-            box-shadow: 0 3px 12px 0 rgba(25, 118, 210, 0.11);
-            transition: background 0.18s, transform 0.18s, box-shadow 0.18s;
-            cursor: pointer;
-            outline: none;
-            letter-spacing: 0.04em;
+            box-shadow: 0 3px 12px rgba(25, 118, 210, 0.11);
         }
-        .gpay-btn:hover, .gpay-btn:focus {
+
+        .gpay-btn:hover {
             background: linear-gradient(90deg, #125ea7 60%, #4fc3f7 100%);
-            transform: translateY(-2px) scale(1.04);
-            box-shadow: 0 6px 20px 0 rgba(25, 118, 210, 0.18);
+            transform: scale(1.04);
         }
 
         .gpay-btn-alt {
-            background: rgba(255,255,255,0.92);
+            background: rgba(255, 255, 255, 0.92);
             color: var(--blue);
             border: 2px solid var(--blue);
-            padding: 12px 32px;
-            font-size: 1.13em;
-            border-radius: 999px;
-            font-weight: 700;
-            box-shadow: 0 2px 8px 0 rgba(25, 118, 210, 0.09);
-            transition: background 0.18s, color 0.18s, transform 0.18s, box-shadow 0.18s;
-            cursor: pointer;
-            outline: none;
-        }
-        .gpay-btn-alt:hover, .gpay-btn-alt:focus {
-            background: var(--blue);
-            color: #fff;
-            transform: translateY(-2px) scale(1.04);
-            box-shadow: 0 6px 20px 0 rgba(25, 118, 210, 0.18);
+            box-shadow: 0 2px 8px rgba(25, 118, 210, 0.09);
         }
 
-        .phone-input-container {
-            margin: 24px 0 14px 0;
-            text-align: center;
-        }
-        .phone-input-container input {
-            font-size: 1.17em;
-            text-align: center;
-            border: 2px solid var(--blue);
-            border-radius: 1rem;
-            padding: 12px 0;
-            background: rgba(255,255,255,0.8);
-            box-shadow: 0 1.5px 6px 0 rgba(25, 118, 210, 0.07);
-            outline: none;
-            transition: border 0.18s, box-shadow 0.18s;
-        }
-        .phone-input-container input:focus {
-            border: 2px solid var(--blue-glow);
-            box-shadow: 0 3px 14px 0 rgba(79,195,247,0.11);
+        .gpay-btn-alt:hover {
+            background: var(--blue);
+            color: #fff;
+            transform: scale(1.04);
         }
     </style>
 </head>
 
 <body class="bg-slate-50 min-h-screen flex flex-col">
-    <!-- ░░ TOP NAV ░░ -->
     <header class="gpay-header sticky top-0 z-40">
         <div class="max-w-7xl mx-auto flex items-center justify-between px-4 py-3">
             <div class="flex items-center gap-2">
@@ -191,23 +149,15 @@
         </div>
     </header>
 
-    <!-- ░░ MAIN CONTENT ░░ -->
     <main class="flex-1 overflow-y-auto flex flex-col items-center justify-center">
         <div class="scanner-card">
             <div class="text-center mb-2">
                 <h1 class="scanner-title">QR Scanner</h1>
                 <p class="scanner-desc">Scan the QR code on your bottle to begin the return process</p>
             </div>
+
             <div class="scanner-container">
                 <div id="reader" style="width: 300px;"></div>
-            </div>
-
-            <!-- Phone Number Input -->
-            <div class="phone-input-container" id="phone-input-container" style="display: none;">
-                <p class="scanner-desc">Enter your phone number to claim your reward:</p>
-                <input type="tel" id="phone-input" placeholder="Enter phone number"
-                    class="w-full p-3 border border-gray-300 rounded-lg mb-3" pattern="[0-9]{10,12}" maxlength="12">
-                <button class="gpay-btn w-full" onclick="submitPhoneNumber()">Submit</button>
             </div>
 
             <div class="result-container hidden" id="result-container">
@@ -215,6 +165,7 @@
                 <div id="scan-status" class="scan-status"></div>
                 <button class="gpay-btn" onclick="restartScanner()">Scan Another Bottle</button>
             </div>
+
             <div class="text-center mt-6">
                 <button class="gpay-btn-alt" onclick="window.location.href='user_dashboard.html'">Back to
                     Dashboard</button>
@@ -226,14 +177,6 @@
     <script src="scan_qr_credentials.js"></script>
     <script>
         feather.replace();
-        // Defensive check for required elements
-        [
-            'reader', 'result-container', 'phone-input-container', 'phone-input', 'qr-result', 'scan-status'
-        ].forEach(function (id) {
-            if (!document.getElementById(id)) {
-                alert('Critical error: Required element #' + id + ' is missing from the page. Please contact support.');
-            }
-        });
     </script>
 </body>
 
