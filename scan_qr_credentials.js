@@ -66,7 +66,7 @@ function sendQRToBackend(qrCode) {
 
     if (!userId) {
         alert("You're not logged in. Please login first.");
-        window.location.href = 'login.html'; // or your actual login page
+        window.location.href = 'login.html';
         return;
     }
 
@@ -77,17 +77,14 @@ function processQRCode(qrCode, userId) {
     fetch('/api/scan-qr', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            qrCode: qrCode,
-            userId: userId
-        })
+        body: JSON.stringify({ qrCode, userId })
     })
         .then(response => response.json())
         .then(data => {
             const scanStatus = document.getElementById('scan-status');
             if (data && typeof data.success !== 'undefined') {
                 scanStatus.textContent = data.success
-                    ? (data.message || '1 rs added to your wallet')
+                    ? 'Bottle successfully scanned and sent for verification.'
                     : ('Error: ' + (data.message || 'Failed to process QR'));
             } else {
                 scanStatus.textContent = 'Error: Unexpected server response.';
