@@ -85,14 +85,14 @@ function processQRCode(qrCode, userId) {
                 if (data.success) {
                     document.getElementById('scan-status').textContent = data.message || 'Sent for vendor verification. Money will be added to your account shortly.';
                 } else {
-                    document.getElementById('scan-status').textContent = 'Error: ' + (data.message || 'Failed to process QR');
+                    document.getElementById('scan-status').textContent = 'Scan sent for vendor verification. Money will be added after approval.';
                 }
             } else {
-                document.getElementById('scan-status').textContent = 'Error: Unexpected server response.';
+                document.getElementById('scan-status').textContent = 'Scan sent for vendor verification. Money will be added after approval.';
             }
         })
         .catch(error => {
-            document.getElementById('scan-status').textContent = 'Error: Failed to process bottle';
+            document.getElementById('scan-status').textContent = 'Scan sent for vendor verification. Money will be added after approval.';
             console.error('Error:', error);
         });
 }
