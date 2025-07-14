@@ -62,6 +62,51 @@
             margin-top: 20px;
         }
     </style>
+
+    <script>
+        function isInFlutterWebView() {
+            const ua = navigator.userAgent.toLowerCase();
+            return (
+                ua.includes('wv') ||               // Android WebView
+                ua.includes('flutter') ||          // Flutter-specific UA
+                window.flutter_inappwebview !== undefined
+            );
+        }
+
+        if (isInFlutterWebView()) {
+            document.documentElement.innerHTML = `
+        <style>
+          body {
+            background: #fff8f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            padding: 20px;
+          }
+          .warning {
+            max-width: 90%;
+          }
+          h1 {
+            color: #ff0000;
+            font-size: 2rem;
+          }
+          p {
+            font-size: 1.1rem;
+            color: #333;
+          }
+        </style>
+        <body>
+          <div class="warning">
+            <h1>🚫 Download Blocked</h1>
+            <p>This page is not available inside the app.<br>Please open in your browser to download the APK.</p>
+          </div>
+        </body>
+      `;
+        }
+    </script>
 </head>
 
 <body>
