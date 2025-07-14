@@ -6,313 +6,30 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
 const app = express();
+const PORT = process.env.PORT || 3000;
+const SECRET = process.env.SECRET || 'your_jwt_secret';
 
 const allowedOrigins = [
     'http://localhost:3000',
     'http://127.0.0.1:3000',
-    process.env.FRONTEND_URL // e.g., https://your-username.github.io/your-repo
+    process.env.FRONTEND_URL
 ].filter(Boolean);
 
-app.use(cors({
-    origin: allowedOrigins,
-    credentials: false
-}));
-
-const PORT = process.env.PORT || 3000;
-const SECRET = process.env.SECRET || 'your_jwt_secret';
-
-// Middleware
+app.use(cors({ origin: allowedOrigins, credentials: false }));
 app.use(express.json());
-// Serve all static files from the root directory
 app.use(express.static(__dirname));
 
-// Initialize database
 const bottleBackDB = new BottleBackDatabase();
 
-// Routes
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'Bottleback', 'index.html'));
 });
 
-// API Routes
-app.get('/api/users', async (req, res) => {
-    try {
-        await bottleBackDB.initialize();
-        const users = await bottleBackDB.userModel.getAllUsers();
-        res.json(users);
-    } catch (error) {
-        console.error('Error fetching users:', error);
-        res.status(500).json({ error: 'Failed to fetch users' });
-    }
-});
-
-// Store QR code in database
-app.post('/api/store-qr', async (req, res) => {
-    try {
-        await bottleBackDB.initialize();
-        const { qr_code } = req.body;
-
-        // Check if QR code already exists
-        const existing = await bottleBackDB.qrCodeModel.getQRCode(qr_code);
-        if (existing) {
-            return res.status(400).json({
-                success: false,
-                error: 'QR code already exists in database'
-            });
-        }
-
-        // Extract timestamp from QR code
-        const timestamp = qr_code.split('_')[2]; // Assuming format BOTTLE_000001_timestamp
-
-        // Store QR code in qr_code_values table
-        await bottleBackDB.qrCodeModel.createQRCode(qr_code, 1, timestamp); // Using 1 as default company_id
-
-        res.json({
-            success: true,
-            message: 'QR code stored successfully',
-            data: {
-                qr_code: qr_code,
-                created_at: timestamp,
-                status: 'unused'
-            }
-        });
-    } catch (error) {
-        console.error('Error storing QR code:', error);
-        res.status(500).json({
-            success: false,
-            error: error.message
-        });
-    }
-});
-// Store QR code in database
-app.post('/api/store-qr', async (req, res) => {
-    try {
-        await bottleBackDB.initialize();
-        const { qr_code } = req.body;
-
-        // Check if QR code already exists
-        const existing = await bottleBackDB.qrCodeModel.getQRCode(qr_code);
-        if (existing) {
-            return res.status(400).json({
-                success: false,
-                error: 'QR code already exists in database'
-            });
-        }
-
-        // Extract timestamp from QR code
-        const timestamp = qr_code.split('_')[2]; // Assuming format BOTTLE_000001_timestamp
-
-        // Store QR code in qr_code_values table
-        await bottleBackDB.qrCodeModel.createQRCode(qr_code, 1, timestamp); // Using 1 as default company_id
-
-        res.json({
-            success: true,
-            message: 'QR code stored successfully',
-            data: {
-                qr_code: qr_code,
-                created_at: timestamp,
-                status: 'unused'
-            }
-        });
-    } catch (error) {
-        console.error('Error storing QR code:', error);
-        res.status(500).json({
-            success: false,
-            error: error.message
-        });
-    }
-});
-
-app.post('/api/users', async (req, res) => {
-    try {
-        const { phone, userName, initialBalance } = req.body;
-
-        if (!phone || !userName) {
-            return res.status(400).json({ error: 'Phone number and name are required' });
-        }
-
-        await bottleBackDB.initialize();
-
-        // Check if user already exists
-        const existingUser = await bottleBackDB.userModel.getUserByPhone(phone);
-        if (existingUser) {
-            return res.status(400).json({ error: 'User with this phone number already exists' });
-        }
-
-        // Create new user with initial balance
-        await bottleBackDB.userModel.createUser(phone, userName, initialBalance || 0);
-
-        const newUser = await bottleBackDB.userModel.getUserByPhone(phone);
-        res.status(201).json(newUser);
-    } catch (error) {
-        console.error('Error creating user:', error);
-        res.status(500).json({ error: 'Failed to create user: ' + error.message });
-    }
-});
-
-app.put('/api/users/:id', async (req, res) => {
-    try {
-        const userId = parseInt(req.params.id);
-        const { phone, userName } = req.body;
-
-        if (!phone || !userName) {
-            return res.status(400).json({ error: 'Phone number and name are required' });
-        }
-
-        await bottleBackDB.initialize();
-
-        // Get current user
-        const currentUser = await bottleBackDB.db.executeQuery('SELECT * FROM users WHERE user_id = ?', [userId]);
-        if (currentUser.length === 0) {
-            return res.status(404).json({ error: 'User not found' });
-        }
-
-        // Check if phone number is already taken by another user
-        const existingUser = await bottleBackDB.db.executeQuery(
-            'SELECT * FROM users WHERE phone = ? AND user_id != ?',
-            [phone, userId]
-        );
-        if (existingUser.length > 0) {
-            return res.status(400).json({ error: 'Phone number is already registered by another user' });
-        }
-
-        // Update user
-        await bottleBackDB.db.executeQuery(
-            'UPDATE users SET name = ?, phone = ? WHERE user_id = ?',
-            [userName, phone, userId]
-        );
-
-        const updatedUser = await bottleBackDB.db.executeQuery('SELECT * FROM users WHERE user_id = ?', [userId]);
-        res.json(updatedUser[0]);
-    } catch (error) {
-        console.error('Error updating user:', error);
-        res.status(500).json({ error: 'Failed to update user: ' + error.message });
-    }
-});
-
-// Update user wallet balance
-app.put('/api/users/:id/wallet', async (req, res) => {
-    try {
-        const userId = parseInt(req.params.id);
-        const { amount } = req.body;
-
-        if (amount === undefined || amount === null) {
-            return res.status(400).json({ error: 'Amount is required' });
-        }
-
-        await bottleBackDB.initialize();
-
-        // Check if user exists
-        const user = await bottleBackDB.db.executeQuery('SELECT * FROM users WHERE user_id = ?', [userId]);
-        if (user.length === 0) {
-            return res.status(404).json({ error: 'User not found' });
-        }
-
-        // Update wallet balance
-        await bottleBackDB.userModel.updateWalletBalance(userId, amount);
-
-        const updatedUser = await bottleBackDB.db.executeQuery('SELECT * FROM users WHERE user_id = ?', [userId]);
-        res.json(updatedUser[0]);
-    } catch (error) {
-        console.error('Error updating wallet:', error);
-        res.status(500).json({ error: 'Failed to update wallet: ' + error.message });
-    }
-});
-
-app.delete('/api/users/:id', async (req, res) => {
-    try {
-        const userId = parseInt(req.params.id);
-
-        await bottleBackDB.initialize();
-
-        // Check if user exists
-        const user = await bottleBackDB.db.executeQuery('SELECT * FROM users WHERE user_id = ?', [userId]);
-        if (user.length === 0) {
-            return res.status(404).json({ error: 'User not found' });
-        }
-
-        // Delete user
-        await bottleBackDB.db.executeQuery('DELETE FROM users WHERE user_id = ?', [userId]);
-
-        res.json({ message: 'User deleted successfully' });
-    } catch (error) {
-        console.error('Error deleting user:', error);
-        res.status(500).json({ error: 'Failed to delete user: ' + error.message });
-    }
-});
-
-// Get user statistics
-app.get('/api/stats', async (req, res) => {
-    try {
-        await bottleBackDB.initialize();
-
-        const stats = await bottleBackDB.db.executeQuery(`
-            SELECT 
-                COUNT(*) as total_users,
-                SUM(total_returns) as total_returns,
-                SUM(wallet_balance) as total_rewards
-            FROM users
-        `);
-
-        res.json(stats[0]);
-    } catch (error) {
-        console.error('Error fetching stats:', error);
-        res.status(500).json({ error: 'Failed to fetch statistics' });
-    }
-});
-
-// User Signup
-app.post('/api/auth/signup', async (req, res) => {
-    const { name, phone, password } = req.body;
-    if (!name || !phone || !password) return res.status(400).json({ error: 'All fields required' });
-
-    await bottleBackDB.initialize();
-    const existing = await bottleBackDB.userModel.getUserByPhone(phone);
-    if (existing) return res.status(400).json({ error: 'Phone already registered' });
-
-    const hash = await bcrypt.hash(password, 10);
-    // Save password_hash in a new column in users table (add this column if not present)
-    await bottleBackDB.db.executeQuery(
-        'INSERT INTO users (name, phone, password_hash) VALUES (?, ?, ?)',
-        [name, phone, hash]
-    );
-    res.json({ message: 'Signup successful' });
-});
-
-// User Login
-app.post('/api/auth/login', async (req, res) => {
-    console.log('LOGIN BODY:', req.body);
-    const { phone, password } = req.body;
-    if (!phone || !password) return res.status(400).json({ error: 'All fields required' });
-
-    await bottleBackDB.initialize();
-    const user = await bottleBackDB.db.executeQuery(
-        'SELECT * FROM users WHERE phone = ?',
-        [phone]
-    );
-    if (!user[0]) return res.status(400).json({ error: 'Invalid credentials' });
-
-    console.log('password:', password, typeof password);
-    let hash = user[0].password_hash;
-    if (Buffer.isBuffer(hash)) {
-        hash = hash.toString('utf8');
-    }
-    console.log('hash after conversion:', hash, typeof hash);
-    if (typeof password !== 'string' || typeof hash !== 'string') {
-        return res.status(500).json({ error: 'Server error: password or hash not set correctly' });
-    }
-    const valid = await bcrypt.compare(password, hash);
-    if (!valid) return res.status(400).json({ error: 'Invalid credentials' });
-
-    // Create JWT
-    const token = jwt.sign({ user_id: user[0].user_id, username: user[0].name }, SECRET, { expiresIn: '2h' });
-    res.json({ token });
-});
-
-// Middleware to check JWT
+// --- AUTH MIDDLEWARE ---
 function auth(req, res, next) {
     const authHeader = req.headers.authorization;
     if (!authHeader) return res.status(401).json({ error: 'No token' });
+
     const token = authHeader.split(' ')[1];
     try {
         req.user = jwt.verify(token, SECRET);
@@ -322,211 +39,183 @@ function auth(req, res, next) {
     }
 }
 
-// User Dashboard Data
-app.get('/api/user/dashboard', auth, async (req, res) => {
-    await bottleBackDB.initialize();
-    const user = await bottleBackDB.db.executeQuery('SELECT * FROM users WHERE user_id = ?', [req.user.user_id]);
-    if (!user[0]) return res.status(404).json({ error: 'User not found' });
-
-    // Fetch recent returns (last 5)
-
-
-    res.json({
-        name: user[0].name,
-        phone: user[0].phone,
-        wallet_balance: user[0].wallet_balance,
-        total_returns: user[0].total_returns,
-        reward_points: user[0].wallet_balance, // or another field if you track points separately
-        recent_returns: returns
-    });
+// --- USER ROUTES ---
+app.get('/api/users', async (req, res) => {
+    try {
+        await bottleBackDB.initialize();
+        const users = await bottleBackDB.userModel.getAllUsers();
+        res.json(users);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch users' });
+    }
 });
 
+app.post('/api/users', async (req, res) => {
+    try {
+        const { phone, userName, initialBalance } = req.body;
+        if (!phone || !userName) return res.status(400).json({ error: 'Phone and name are required' });
+
+        await bottleBackDB.initialize();
+        const existingUser = await bottleBackDB.userModel.getUserByPhone(phone);
+        if (existingUser) return res.status(400).json({ error: 'User already exists' });
+
+        await bottleBackDB.userModel.createUser(phone, userName, initialBalance || 0);
+        const newUser = await bottleBackDB.userModel.getUserByPhone(phone);
+        res.status(201).json(newUser);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to create user: ' + error.message });
+    }
+});
+
+app.put('/api/users/:id', async (req, res) => {
+    try {
+        const userId = parseInt(req.params.id);
+        const { phone, userName } = req.body;
+        if (!phone || !userName) return res.status(400).json({ error: 'Phone and name required' });
+
+        await bottleBackDB.initialize();
+        const currentUser = await bottleBackDB.db.executeQuery('SELECT * FROM users WHERE user_id = ?', [userId]);
+        if (currentUser.length === 0) return res.status(404).json({ error: 'User not found' });
+
+        const existing = await bottleBackDB.db.executeQuery(
+            'SELECT * FROM users WHERE phone = ? AND user_id != ?',
+            [phone, userId]
+        );
+        if (existing.length > 0) return res.status(400).json({ error: 'Phone taken by another user' });
+
+        await bottleBackDB.db.executeQuery('UPDATE users SET name = ?, phone = ? WHERE user_id = ?', [userName, phone, userId]);
+        const updatedUser = await bottleBackDB.db.executeQuery('SELECT * FROM users WHERE user_id = ?', [userId]);
+        res.json(updatedUser[0]);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to update user: ' + error.message });
+    }
+});
+
+app.put('/api/users/:id/wallet', async (req, res) => {
+    try {
+        const userId = parseInt(req.params.id);
+        const { amount } = req.body;
+        if (amount == null) return res.status(400).json({ error: 'Amount required' });
+
+        await bottleBackDB.initialize();
+        const user = await bottleBackDB.db.executeQuery('SELECT * FROM users WHERE user_id = ?', [userId]);
+        if (user.length === 0) return res.status(404).json({ error: 'User not found' });
+
+        await bottleBackDB.userModel.updateWalletBalance(userId, amount);
+        const updatedUser = await bottleBackDB.db.executeQuery('SELECT * FROM users WHERE user_id = ?', [userId]);
+        res.json(updatedUser[0]);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to update wallet: ' + error.message });
+    }
+});
+
+app.delete('/api/users/:id', async (req, res) => {
+    try {
+        const userId = parseInt(req.params.id);
+        await bottleBackDB.initialize();
+        const user = await bottleBackDB.db.executeQuery('SELECT * FROM users WHERE user_id = ?', [userId]);
+        if (user.length === 0) return res.status(404).json({ error: 'User not found' });
+
+        await bottleBackDB.db.executeQuery('DELETE FROM users WHERE user_id = ?', [userId]);
+        res.json({ message: 'User deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to delete user: ' + error.message });
+    }
+});
+
+// --- QR STORAGE ---
+app.post('/api/store-qr', async (req, res) => {
+    try {
+        await bottleBackDB.initialize();
+        const { qr_code } = req.body;
+
+        const existing = await bottleBackDB.qrCodeModel.getQRCode(qr_code);
+        if (existing) return res.status(400).json({ success: false, error: 'QR code already exists' });
+
+        const timestamp = qr_code.split('_')[2];
+        await bottleBackDB.qrCodeModel.createQRCode(qr_code, 1, timestamp);
+
+        res.json({
+            success: true,
+            message: 'QR code stored',
+            data: { qr_code, created_at: timestamp, status: 'unused' }
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// --- QR SCAN BY USER ---
 app.post('/api/scan-qr', async (req, res) => {
     try {
         await bottleBackDB.initialize();
         const { qrCode, userId } = req.body;
-
-        if (!qrCode || !userId) {
-            return res.status(400).json({ success: false, message: 'QR code and user ID are required' });
-        }
+        if (!qrCode || !userId) return res.status(400).json({ success: false, message: 'Missing data' });
 
         const user = await bottleBackDB.userModel.getUserByPhone(userId);
-        if (!user) {
-            return res.status(404).json({ success: false, message: 'User not found' });
-        }
+        if (!user) return res.status(404).json({ success: false, message: 'User not found' });
 
         const qrCodeData = await bottleBackDB.qrCodeModel.getQRCode(qrCode);
-        if (!qrCodeData) {
-            return res.status(404).json({ success: false, message: 'Invalid QR code' });
-        }
-
-        if (qrCodeData.status !== 'unused') {
-            return res.status(400).json({ success: false, message: 'QR code has already been scanned or processed' });
-        }
+        if (!qrCodeData) return res.status(404).json({ success: false, message: 'Invalid QR' });
+        if (qrCodeData.status !== 'unused') return res.status(400).json({ success: false, message: 'Already used' });
 
         await bottleBackDB.qrCodeModel.markQRCodeAsPending(qrCode, user.user_id, 1);
-
         await bottleBackDB.returnLogModel.logReturn(user.user_id, qrCodeData.qr_id, 1, 0.00);
 
         res.json({
             success: true,
-            message: 'QR code scanned and marked as pending. Awaiting vendor verification.',
-            data: {
-                qr_code: qrCode,
-                user_id: user.user_id,
-                reward_amount: 0.00,
-                status: 'pending'
-            }
+            message: 'QR marked as pending',
+            data: { qr_code: qrCode, user_id: user.user_id, status: 'pending' }
         });
     } catch (error) {
-        console.error('Error scanning QR code:', error);
-        res.status(500).json({ success: false, message: 'Failed to process QR code' });
+        res.status(500).json({ success: false, message: 'Failed to process QR' });
     }
 });
 
+// --- AUTH ---
+app.post('/api/auth/signup', async (req, res) => {
+    const { name, phone, password } = req.body;
+    if (!name || !phone || !password) return res.status(400).json({ error: 'All fields required' });
 
-// GET  /api/user/leaderboard
+    await bottleBackDB.initialize();
+    const existing = await bottleBackDB.userModel.getUserByPhone(phone);
+    if (existing) return res.status(400).json({ error: 'Phone already registered' });
 
-// Top recycler endpoint
-// GET /api/leaderboard/top
-app.get('/api/leaderboard', async (req, res) => {
-    try {
-        await bottleBackDB.initialize();
-        const users = await bottleBackDB.db.executeQuery(
-            'SELECT full_name, total_points FROM users ORDER BY total_points DESC'
-        );
-        res.json(users.map((user, i) => ({
-            rank: i + 1,
-            name: user.full_name,
-            total_points: user.total_points
-        })));
-    } catch (error) {
-        console.error('Error fetching leaderboard:', error);
-        res.status(500).json({ error: 'Failed to fetch leaderboard' });
-    }
+    const hash = await bcrypt.hash(password, 10);
+    await bottleBackDB.db.executeQuery('INSERT INTO users (name, phone, password_hash) VALUES (?, ?, ?)', [name, phone, hash]);
+    res.json({ message: 'Signup successful' });
 });
 
-app.get('/api/user/profile', auth, async (req, res) => {
-    try {
-        await bottleBackDB.initialize();
-        const user = await bottleBackDB.db.executeQuery(
-            'SELECT bottles_returned, upi_earned FROM users WHERE user_id = ?',
-            [req.user.user_id]
-        );
-        if (!user.length) return res.status(404).json({ error: 'User not found' });
-        res.json({
-            bottles_returned: user[0].bottles_returned,
-            upi_earned: user[0].upi_earned
-        });
-    } catch (err) {
-        res.status(500).json({ error: 'Failed to fetch user stats' });
-    }
+app.post('/api/auth/login', async (req, res) => {
+    const { phone, password } = req.body;
+    if (!phone || !password) return res.status(400).json({ error: 'All fields required' });
+
+    await bottleBackDB.initialize();
+    const user = await bottleBackDB.db.executeQuery('SELECT * FROM users WHERE phone = ?', [phone]);
+    if (!user[0]) return res.status(400).json({ error: 'Invalid credentials' });
+
+    const hash = Buffer.isBuffer(user[0].password_hash) ? user[0].password_hash.toString('utf8') : user[0].password_hash;
+    const valid = await bcrypt.compare(password, hash);
+    if (!valid) return res.status(400).json({ error: 'Invalid credentials' });
+
+    const token = jwt.sign({ user_id: user[0].user_id, username: user[0].name }, SECRET, { expiresIn: '2h' });
+    res.json({ token });
 });
 
-app.get('/api/user/leaderboard', auth, async (req, res) => {
-    try {
-        // 1. Make sure DB is ready
-        await bottleBackDB.initialize();
-
-        // 2. Pull every user, highest points first
-        const users = await bottleBackDB.db.executeQuery(
-            'SELECT user_id, total_points, city FROM users ORDER BY total_points DESC'
-        );
-
-        const userId = req.user.user_id;
-        let rank = null;
-        let userPoints = null;
-        let userCity = null;
-
-        // 3. Locate the current user in the list
-        for (let i = 0; i < users.length; i++) {
-            if (users[i].user_id === userId) {
-                rank = i + 1;
-                userPoints = users[i].total_points;
-                userCity = users[i].city;
-                break;
-            }
-        }
-
-        // 4. Work out the next milestone, if any
-        const milestones = [100, 250, 500, 1000];  // customise as you like
-        const nextMilestone =
-            userPoints !== null ? milestones.find((m) => m > userPoints) ?? null : null;
-
-        // 5. Send the response
-        res.json({
-            rank,
-            total_points: userPoints,
-            city: userCity,
-            next_milestone: nextMilestone
-        });
-    } catch (error) {
-        console.error('Error fetching leaderboard:', error);
-        res.status(500).json({ error: 'Failed to fetch leaderboard' });
-    }
-});
-
-// Return history endpoint
-app.get('/api/user/activity', auth, async (req, res) => {
-    try {
-        await bottleBackDB.initialize();
-        const userId = req.user.user_id;
-        // Fetch directly from bottles_returned for the logged-in user
-        const bottles = await bottleBackDB.db.executeQuery(
-            'SELECT bottle_id, date, status, upi_earned, city FROM bottles_returned WHERE user_id = ? ORDER BY date DESC',
-            [userId]
-        );
-        res.json(bottles);
-    } catch (error) {
-        console.error('Error fetching return history:', error);
-        res.status(500).json({ error: 'Failed to fetch return history' });
-    }
-});
-
-// Vendor: View pending returns
-app.get('/api/vendor/pending-returns', async (req, res) => {
-    try {
-        await bottleBackDB.initialize();
-        const pendingReturns = await bottleBackDB.db.executeQuery(`
-            SELECT rl.id as return_id, qcv.qr_code_value, u.full_name, u.phone, rl.returned_at, qcv.status
-            FROM return_logs rl
-            JOIN qr_code_values qcv ON rl.qr_code_id = qcv.id
-            JOIN users u ON rl.user_id = u.user_id
-            WHERE qcv.status = 'pending'
-            ORDER BY rl.returned_at ASC
-        `);
-        res.json(pendingReturns);
-    } catch (error) {
-        res.status(500).json({ error: 'Failed to fetch pending returns' });
-    }
-});
-
-// Vendor: Approve return
+// --- VENDOR: Approve Return ---
 app.post('/api/vendor/approve-return', async (req, res) => {
     try {
         await bottleBackDB.initialize();
         const { returnId, rewardAmount } = req.body;
 
-        // Get return log and QR info
-        const returnLog = await bottleBackDB.db.executeQuery(
-            'SELECT * FROM return_logs WHERE id = ?', [returnId]
-        );
+        const returnLog = await bottleBackDB.db.executeQuery('SELECT * FROM return_logs WHERE id = ?', [returnId]);
         if (!returnLog.length) return res.status(404).json({ error: 'Return log not found' });
 
         const qrCodeId = returnLog[0].qr_code_id;
         const userId = returnLog[0].user_id;
 
-        // Mark QR as used
-        await bottleBackDB.db.executeQuery(
-            "UPDATE qr_code_values SET status = 'used' WHERE id = ?", [qrCodeId]
-        );
-
-        // Update return log with reward
-        await bottleBackDB.db.executeQuery(
-            "UPDATE return_logs SET reward_amount = ? WHERE id = ?", [rewardAmount, returnId]
-        );
-
-        // Credit user
+        await bottleBackDB.db.executeQuery("UPDATE qr_code_values SET status = 'used' WHERE id = ?", [qrCodeId]);
+        await bottleBackDB.db.executeQuery("UPDATE return_logs SET reward_amount = ? WHERE id = ?", [rewardAmount, returnId]);
         await bottleBackDB.userModel.updateWalletBalance(userId, rewardAmount);
 
         res.json({ success: true, message: 'Return approved and reward credited.' });
@@ -535,138 +224,16 @@ app.post('/api/vendor/approve-return', async (req, res) => {
     }
 });
 
-// Registration endpoint for signup page
-app.post('/api/register', async (req, res) => {
-    const { full_name, email, phone, password } = req.body;
-    if (!full_name || !email || !phone || !password) {
-        return res.status(400).json({ error: 'All fields are required.' });
-    }
-    try {
-        await bottleBackDB.initialize();
-        // Check if user already exists by email or phone
-        const existingUser = await bottleBackDB.db.executeQuery(
-            'SELECT * FROM users WHERE email = ? OR phone = ?',
-            [email, phone]
-        );
-        if (existingUser.length > 0) {
-            return res.status(409).json({ error: 'User already exists.' });
-        }
-        // Hash password
-        const hash = await bcrypt.hash(password, 10);
-        // Insert user
-        await bottleBackDB.db.executeQuery(
-            'INSERT INTO users (full_name, email, phone, password_hash) VALUES (?, ?, ?, ?)',
-            [full_name, email, phone, hash]
-        );
-        res.json({ message: 'Signup successful!' });
-    } catch (err) {
-        console.error('Registration error:', err);
-        res.status(500).json({ error: 'Registration failed.' });
-    }
-});
-
-// Scan QR code and add reward to user wallet
-app.post('/api/scan-qr', async (req, res) => {
-    try {
-        await bottleBackDB.initialize();
-        const { qrCode, userId } = req.body;
-
-        if (!qrCode || !userId) {
-            return res.status(400).json({
-                success: false,
-                message: 'QR code and user ID are required'
-            });
-        }
-
-        // Check if user exists
-        const user = await bottleBackDB.userModel.getUserByPhone(userId);
-        if (!user) {
-            return res.status(404).json({
-                success: false,
-                message: 'User not found'
-            });
-        }
-
-        // Check if QR code exists and is unused
-        const qrCodeData = await bottleBackDB.qrCodeModel.getQRCode(qrCode);
-        if (!qrCodeData) {
-            return res.status(404).json({
-                success: false,
-                message: 'Invalid QR code'
-            });
-        }
-
-        if (qrCodeData.status === 'used') {
-            return res.status(400).json({
-                success: false,
-                message: 'QR code has already been used'
-            });
-        }
-
-        // Mark QR as pending (not used)
-        await bottleBackDB.qrCodeModel.markQRCodeAsPending(qrCode, user.user_id, 1); // 1 = kiosk_id, adjust as needed
-
-        // Log return with 0 reward (pending)
-        await bottleBackDB.returnLogModel.logReturn(user.user_id, qrCodeData.id, 1, 0.00);
-
-        res.json({
-            success: true,
-            message: 'QR code scanned and sent for vendor verification. Money will be added after approval.',
-            data: { status: 'pending' }
-        });
-        return;
-        await bottleBackDB.rewardTransactionModel.createTransaction(
-            user.user_id,
-            1.00,
-            'QR_SCAN',
-            'Bottle return reward'
-        );
-
-        res.json({
-            success: true,
-            message: '1 rs added to your wallet',
-            data: {
-                qr_code: qrCode,
-                user_id: user.user_id,
-                reward_amount: 1.00,
-                new_balance: user.wallet_balance + 1.00
-            }
-        });
-    } catch (error) {
-        console.error('Error scanning QR code:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Failed to process QR code'
-        });
-    }
-});
-
-
-// Error handling middleware
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).json({ error: 'Something went wrong!' });
-});
-
-// 404 handler
-app.use((req, res) => {
-    res.status(404).json({ error: 'Route not found' });
-});
-
-// Start server
+// --- SERVER START ---
 const server = app.listen(PORT, () => {
-    console.log(`🚀 BottleBack India Server running on http://localhost:3000`);
-    console.log(`📊 User Management Dashboard: http://localhost:3000`);
-    console.log(`🔗 API Base URL: http://localhost:3000/api`);
+    console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
 
-// Graceful shutdown: only on SIGINT
+// --- SHUTDOWN HANDLER ---
 process.on('SIGINT', async () => {
-    console.log('\n🛑 Shutting down server...');
+    console.log('\n🛑 Shutting down...');
     await bottleBackDB.close();
-    server.close(() => {
-        process.exit(0);
-    });
+    server.close(() => process.exit(0));
 });
 
-module.exports = app; 
+module.exports = app;

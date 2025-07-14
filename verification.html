@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Account Verification | BotalSePaisa</title>
     <link rel="stylesheet" href="styles/verification.css" />
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <script src="vendor_scan_qr.js"></script>
 </head>
 
 <body>
@@ -20,6 +22,16 @@
             <h2>Vendor ID</h2>
             <p>VNDR-1025</p>
         </div>
+    </div>
+    <div class="card">
+        <h2>Scan Bottle QR (Vendor)</h2>
+        <div id="vendor-qr-reader" style="width:300px;"></div>
+        <div id="vendor-scan-status" style="margin-top:10px;"></div>
+        <script>
+          window.onload = function() {
+            startVendorScanner();
+          };
+        </script>
     </div>
 </body>
 

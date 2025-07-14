@@ -57,7 +57,28 @@
     </div>
 
 
-    <div class="footer">
+    <div class="card">
+        <h2>Scan Bottle QR (Vendor)</h2>
+        <div id="vendor-qr-reader" style="width:300px;"></div>
+        <div id="vendor-scan-status" style="margin-top:10px;"></div>
+    </div>
+
+    <div class="card">
+        <h2>Pending Bottle Returns</h2>
+        <table id="pending-table" border="1">
+            <thead>
+                <tr>
+                    <th>QR Code</th><th>User</th><th>Phone</th><th>Returned At</th><th>Action</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <script src="vendor_scan_qr.js"></script>
+    <script src="vendor_pending_returns.js"></script>
+
         Made with ❤️ for Recyclers · BotalSePaisa 2025
     </div>
 
