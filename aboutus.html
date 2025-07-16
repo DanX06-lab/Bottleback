@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - BottleBack India</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/countup.js/2.0.8/countUp.min.js"></script>
+    <style>
+        .animate-slide-in {
+            animation: slideIn 1s ease-out both;
+        }
+
+        @keyframes slideIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-white text-gray-800 font-sans">
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-[#FF9933] via-white to-[#138808] py-16 text-center animate-slide-in">
+        <h1 class="text-5xl font-bold text-gray-900">About botalsepaisa</h1>
+        <p class="mt-4 text-lg max-w-3xl mx-auto">Empowering sustainability through digital innovation. Our mission is
+            simple – reward recycling, reduce plastic, and build a cleaner India.</p>
+    </section>
+
+    <!-- Mission Section -->
+    <section class="py-12 px-6 max-w-5xl mx-auto animate-slide-in">
+        <h2 class="text-3xl font-semibold text-center mb-6">Our Mission</h2>
+        <p class="text-center text-lg">BottleBack India aims to revolutionize the way we view plastic bottles by
+            introducing a deposit-return system powered by QR technology. We’re blending sustainability with incentives
+            to make eco-friendly actions part of everyday life.</p>
+    </section>
+
+    <!-- What We Do -->
+    <section class="bg-gray-50 py-12 px-6 animate-slide-in">
+        <div class="max-w-5xl mx-auto">
+            <h2 class="text-3xl font-semibold text-center mb-8">What We Do</h2>
+            <div class="grid md:grid-cols-3 gap-8 text-center">
+                <div class="p-6 bg-white shadow rounded-lg border-t-4 border-[#FF9933]">
+                    <i class="ph ph-barcode text-4xl text-[#FF9933]"></i>
+                    <h3 class="text-xl font-bold mt-4">Scan</h3>
+                    <p>Users scan the QR code from any BottleBack-enabled bottle via our web/app platform.</p>
+                </div>
+                <div class="p-6 bg-white shadow rounded-lg border-t-4 border-gray-400">
+                    <i class="ph ph-recycle text-4xl text-gray-600"></i>
+                    <h3 class="text-xl font-bold mt-4">Return</h3>
+                    <p>Bottles are dropped off at verified kiosks by users or vendors.</p>
+                </div>
+                <div class="p-6 bg-white shadow rounded-lg border-t-4 border-[#138808]">
+                    <i class="ph ph-wallet text-4xl text-[#138808]"></i>
+                    <h3 class="text-xl font-bold mt-4">Earn</h3>
+                    <p>Get instant cashback to your UPI and track rewards transparently.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="py-12 px-6 animate-slide-in">
+        <h2 class="text-3xl font-semibold text-center mb-10">Meet the Team-X Hunters</h2>
+        <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <div class="bg-white p-6 shadow-md rounded-lg border-t-4 border-[#FF9933]">
+                <h3 class="text-xl font-bold text-[#FF9933]">Souvik Biswas</h3>
+                <p class="text-sm font-medium mt-1">Founder & Product Lead</p>
+                <p class="mt-2 text-sm">The brain behind BotalSePaisa. Souvik blends sustainability with smart tech,
+                    turning everyday recycling into a reward-driven habit. He leads product design, user experience, and
+                    overall vision.</p>
+            </div>
+            <div class="bg-white p-6 shadow-md rounded-lg border-t-4 border-gray-400">
+                <h3 class="text-xl font-bold text-gray-600">Sheikh Rahul</h3>
+                <p class="text-sm font-medium mt-1">Tech & Data Head</p>
+                <p class="mt-2 text-sm">From QR scanning to UPI integration, Rahul builds and manages the platform’s
+                    core systems. He also tracks bottle returns and user insights to measure real-world impact.</p>
+            </div>
+            <div class="bg-white p-6 shadow-md rounded-lg border-t-4 border-[#138808]">
+                <h3 class="text-xl font-bold text-[#138808]">Sritam Sarkar</h3>
+                <p class="text-sm font-medium mt-1">Partnerships & Growth</p>
+                <p class="mt-2 text-sm">Sritam handles on-ground operations, brand tie-ups, and kiosk expansion. With a
+                    sharp sense for scale and collaboration, he ensures BotalSePaisa reaches every corner of the
+                    community.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline Section -->
+    <section class="bg-gray-100 py-12 px-6 animate-slide-in">
+        <div class="max-w-5xl mx-auto">
+            <h2 class="text-3xl font-semibold text-center mb-6">Our Journey</h2>
+            <div class="space-y-6">
+                <div>
+                    <h4 class="font-bold text-[#FF9933]">Jun 2025</h4>
+                    <p class="ml-2">Ideation and problem discovery.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-600">Jun & July 2025</h4>
+                    <p class="ml-2">Initial MVP with QR and backend integration launched.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-[#138808]">Not Yet</h4>
+                    <p class="ml-2">Pilot testing with early users and vendor onboarding.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Animated Counters -->
+    <section class="py-12 px-6 bg-white animate-slide-in">
+        <div class="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            <div>
+                <p class="text-4xl font-bold text-[#FF9933]" id="usersCount">0</p>
+                <p class="text-sm">Users Registered</p>
+            </div>
+            <div>
+                <p class="text-4xl font-bold text-gray-600" id="vendorsCount">0</p>
+                <p class="text-sm">Vendors Onboarded</p>
+            </div>
+            <div>
+                <p class="text-4xl font-bold text-[#138808]" id="citiesCount">0</p>
+                <p class="text-sm">Cities Covered</p>
+            </div>
+            <div>
+                <p class="text-4xl font-bold text-green-700" id="bottlesCount">0</p>
+                <p class="text-sm">Bottles Scanned</p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Counter animation
+        window.onload = () => {
+            const options = { duration: 2 };
+            new CountUp('usersCount', 1200, options).start();
+            new CountUp('vendorsCount', 85, options).start();
+            new CountUp('citiesCount', 6, options).start();
+            new CountUp('bottlesCount', 2500, options).start();
+        };
+    </script>
+</body>
+
+</html>
