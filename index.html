@@ -4,141 +4,424 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BotalSePaisa India</title>
-  <link rel="stylesheet" href="styles/index_style.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;800&display=swap" rel="stylesheet" />
+  <title>botalsepaisa</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/feather-icons"></script>
+  <!-- AOS CSS -->
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <style>
+    .mobile-menu {
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .mobile-menu.hidden {
+      transform: translateY(-100%);
+    }
+
+    .mobile-menu.visible {
+      transform: translateY(0);
+    }
+  </style>
 </head>
 
-<body>
-  <!-- ===== NAVBAR ===== -->
-  <header class="fade-in" style="animation-delay:.1s">
-    <nav class="navbar">
-      <div class="navbar-header">
-        <div class="logo">
-          <img src="images/main.png" alt="BotalSePaisa Logo" width="40" height="40" />
-          <span>BotalSePaisa India</span>
-        </div>
-        <div class="menu-toggle" onclick="toggleMenu()">
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
+<body class="bg-black text-white relative">
+
+  <!-- Background Video or Image -->
+  <div class="absolute inset-0 z-0 h-screen">
+    <video autoplay muted loop class="w-full h-full object-cover opacity-30">
+      <source src="images/home.mp4" type="video/mp4">
+      <!-- fallback image -->
+      <img src="background.jpg" class="w-full h-full object-cover opacity-30" />
+    </video>
+  </div>
+
+  <!-- Overlay -->
+  <div class="relative z-10">
+
+    <nav class="flex justify-between items-center px-6 py-4 relative z-20">
+      <div class="text-xl font-bold flex items-center space-x-2">
+        <img src="images/main_logo.jpg" alt="logo" class="w-10 h-10">
+        <span>botalsepaisa</span>
       </div>
 
-      <ul class="nav-links" id="navLinks">
-        <li><a href="#home">Home</a></li>
-        <li><a href="how-it-works.html">How It Works</a></li>
-        <li><a href="rewards.html">Rewards</a></li>
-        <li><a href="signup.html">Signup</a></li>
-        <li><a href="contact.html">Contact</a></li>
-        <li><a href="login.html">Login</a></li>
-        <li id="download-menu"><a href="download.html">Download</a></li>
-      </ul>
+      <!-- Desktop Menu -->
+      <div class="hidden md:flex space-x-6 text-sm">
+        <a href="how-it-works.html" class="hover:underline">How it works</a>
+        <div class="relative">
+          <button onclick="toggleDropdown()"
+            class="flex items-center space-x-1 text-sm text-white hover:text-gray-300 focus:outline-none">
+            <span>Company</span>
+            <svg class="w-3 h-3 fill-current" viewBox="0 0 20 20">
+              <path d="M5.5 7l4.5 4.5L14.5 7z" />
+            </svg>
+          </button>
+          <div id="companyDropdown"
+            class="absolute left-0 hidden bg-black text-white py-2 mt-2 rounded-md shadow-lg min-w-[160px] z-50">
+            <a href="about.html" class="block px-4 py-2 hover:bg-gray-800">About Us</a>
+            <a href="contact.html" class="block px-4 py-2 hover:bg-gray-800">Contact</a>
+          </div>
+        </div>
+        <a href="rewards.html" class="hover:underline">Rewards</a>
+      </div>
+
+      <div class="hidden md:flex space-x-3">
+        <button class="border px-4 py-1 rounded-full text-sm hover:bg-white hover:text-black">Check Rate List</button>
+        <button class="bg-white text-black px-4 py-1 rounded-full text-sm"><a href="login.html">Login</a></button>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <div class="md:hidden">
+        <button onclick="document.getElementById('mobileMenu').classList.toggle('hidden')">
+          <i data-feather="menu"></i>
+        </button>
+      </div>
     </nav>
-  </header>
 
-  <!-- ===== HERO ===== -->
-  <section class="hero fade-in" id="home" style="animation-delay:.2s">
-    <!-- LEFT -->
-    <div class="hero-left fade-in" style="animation-delay:.3s">
-      <h2 class="tagline">Hi, there!</h2>
-      <h1><span class="dark-text">Return Your Bottle.</span><br><span class="accent-text">Earn Your Rupee.</span></h1>
-      <p class="lead">Join India’s most rewarding recycling loop — scan, return, and get instant cashback while keeping
-        our planet clean.</p>
-      <a href="how-it-works.html" class="cta-primary">Get Started</a>
+    <!-- Mobile Menu Dropdown -->
+    <div id="mobileMenu" class="md:hidden bg-gray-800 px-6 py-4 hidden">
+      <a href="how-it-works.html" class="block py-2 text-white">How it works</a>
+      <a href="about.html" class="block py-2 text-white">About Us</a>
+      <a href="contact.html" class="block py-2 text-white">Contact</a>
+      <a href="rewards.html" class="block py-2 text-white">Rewards</a>
+      <a href="login.html" class="block py-2 text-white">Login</a>
+      <button class="mt-4 w-full border border-white text-white py-2 rounded">Check Rate List</button>
     </div>
 
-    <!-- RIGHT column -->
-    <div class="hero-right fade-in" style="animation-delay:.4s">
-      <div class="ppt-slider" id="pptSlider">
-        <div class="slide active"><img src="images/ppt1.jpg" /></div>
-        <div class="slide"><img src="images/ppt2.jpg" /></div>
-        <div class="slide"><img src="images/ppt3.jpg" /></div>
-        <div class="slide"><img src="images/ppt4.jpg" /></div>
-        <div class="slide"><img src="images/ppt5.jpg" /></div>
-        <div class="slide"><img src="images/ppt6.jpg" /></div>
-        <div class="slide"><img src="images/ppt7.jpg" /></div>
+    <!-- HERO SECTION -->
+    <section class="flex flex-col items-center justify-center text-center min-h-screen px-4">
+      <h1 class="text-5xl md:text-7xl font-bold leading-tight space-y-6">
+        <div>
+          <span class="text-orange-500">Hi Indians....!</span>
+        </div>
+        <div class="mt-6 ml-10">
+          Return Your Bottle,Earn Your Rupee!
+        </div>
+      </h1>
+
+      <p class="mt-8 text-lg md:text-xl text-green-600 max-w-xl">
+        Join India's most rewarding recycling loop – scan, return, and get instant cashback while keeping our planet
+        clean.
+      </p>
+
+      <div class="mt-10 flex space-x-4">
+        <a id="download-app-btn" href="download.html"
+          class="bg-orange-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg text-lg">Download the app</a>
+        <a href="signup.html"
+          class="border border-white px-5 py-2 rounded-lg text-lg hover:bg-white hover:text-black">For Business</a>
+      </div>
+    </section>
+
+
+
+
+  </div>
+
+  <section class="bg-white pt-32 pb-12 px-4">
+    <div class="max-w-6xl mx-auto space-y-10">
+
+      <!-- USER Card -->
+      <div class="flex flex-col md:flex-row bg-[#FF9933] rounded-xl shadow-lg overflow-hidden">
+        <!-- Image -->
+        <div class="w-full md:w-1/2">
+          <img src="images/user.png" alt="Users" class="w-full h-full object-cover object-[center_20%]" />
+        </div>
+
+        <!-- Text -->
+        <div class="p-6 md:p-10 w-full md:w-1/2 text-white flex flex-col justify-center">
+          <p class="text-sm">For</p>
+          <h2 class="text-3xl font-bold mb-2">Users</h2>
+          <p class="mb-4">
+            Login here to track your bottle returns, payments, and earn rewards through our recycling system.
+          </p>
+          <a href="login.html"
+            class="inline-block bg-[#138808] text-white px-5 py-2 rounded-md hover:bg-green-700 transition">
+            Login →
+          </a>
+        </div>
       </div>
 
-      <div class="ppt-dots">
-        <span class="active-dot"></span><span></span><span></span>
-        <span></span><span></span><span></span><span></span>
+      <!-- VENDOR Card -->
+      <div
+        class="flex flex-col-reverse md:flex-row bg-white rounded-xl shadow-lg overflow-hidden border border-gray-300">
+        <!-- Text -->
+        <div class="p-6 md:p-10 w-full md:w-1/2 text-black flex flex-col justify-center">
+          <p class="text-sm text-gray-600">For</p>
+          <h2 class="text-3xl font-bold text-[#FF9933] mb-2">Vendors</h2>
+          <p class="mb-4">Log in to scan returned bottles, update status, and receive payments from the BotalSePaisa
+            system.</p>
+          <a href="/vendor-login.html"
+            class="inline-block bg-[#138808] text-white px-5 py-2 rounded-md hover:bg-green-700 transition">
+            Login →
+          </a>
+        </div>
+
+        <!-- Image -->
+        <div class="w-full md:w-1/2">
+          <img src="images/vendor.png" alt="Vendors" class="w-full h-full object-cover object-[center_20%]">
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <section class="bg-white py-20 px-4 relative overflow-hidden">
+    <div class="max-w-6xl mx-auto text-center">
+      <h2 class="text-5xl font-bold mb-16 text-gray-900 tracking-wide">The Rewarding Loop</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+
+        <!-- Step -->
+        <div
+          class="relative bg-white/30 backdrop-blur-xl border border-gray-200 p-6 rounded-2xl shadow-lg group transition-transform transform hover:-translate-y-2">
+          <div class="w-20 h-20 mx-auto flex items-center justify-center rounded-full bg-[#ff9933] shadow-md">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M6 2l3 7h9l-3 9H6z" />
+            </svg>
+          </div>
+          <h3 class="mt-6 text-xl font-semibold text-gray-800">Buy</h3>
+          <p class="mt-2 text-sm text-gray-600">Get any BotalSePaisa-enabled drink with a scannable QR code.</p>
+        </div>
+
+        <!-- Step -->
+        <div
+          class="relative bg-white/30 backdrop-blur-xl border border-gray-200 p-6 rounded-2xl shadow-lg group transition-transform transform hover:-translate-y-2">
+          <div class="w-20 h-20 mx-auto flex items-center justify-center rounded-full bg-gray-400 shadow-md">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M4 4h5v2H6v3H4V4zm12 0h4v5h-2V6h-3V4zm0 12h3v-3h2v5h-5v-2zm-12 0h2v3h3v2H4v-5z" />
+            </svg>
+          </div>
+          <h3 class="mt-6 text-xl font-semibold text-gray-800">Scan</h3>
+          <p class="mt-2 text-sm text-gray-600">Scan the QR using our app or website to register the bottle.</p>
+        </div>
+
+        <!-- Step -->
+        <div
+          class="relative bg-white/30 backdrop-blur-xl border border-gray-200 p-6 rounded-2xl shadow-lg group transition-transform transform hover:-translate-y-2">
+          <div class="w-20 h-20 mx-auto flex items-center justify-center rounded-full bg-[#138808] shadow-md">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M3 3h18v2H3zM5 6h14v14H5z" />
+            </svg>
+          </div>
+          <h3 class="mt-6 text-xl font-semibold text-gray-800">Drop</h3>
+          <p class="mt-2 text-sm text-gray-600">Return the bottle to any nearby BotalSePaisa smart bin.</p>
+        </div>
+
+        <!-- Step -->
+        <div
+          class="relative bg-white/30 backdrop-blur-xl border border-gray-200 p-6 rounded-2xl shadow-lg group transition-transform transform hover:-translate-y-2">
+          <div class="w-20 h-20 mx-auto flex items-center justify-center rounded-full bg-yellow-400 shadow-md">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M12 8c-2.2 0-4 1.8-4 4h8c0-2.2-1.8-4-4-4zM12 16c2.2 0 4-1.8 4-4H8c0 2.2 1.8 4 4 4z" />
+            </svg>
+          </div>
+          <h3 class="mt-6 text-xl font-semibold text-gray-800">Earn</h3>
+          <p class="mt-2 text-sm text-gray-600">Receive instant cashback directly to your UPI wallet.</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Decorative floating lights -->
+    <div
+      class="absolute top-[-60px] left-[-60px] w-[200px] h-[200px] bg-[#ff9933] rounded-full opacity-20 blur-3xl animate-pulse">
+    </div>
+    <div
+      class="absolute bottom-[-60px] right-[-60px] w-[200px] h-[200px] bg-[#138808] rounded-full opacity-20 blur-3xl animate-pulse">
+    </div>
+  </section>
+
+  <!-- IMPACT STATS SECTION -->
+  <section class="relative bg-white py-20 px-4">
+    <div class="max-w-7xl mx-auto text-center">
+      <h2 class="text-4xl font-extrabold mb-12 text-black tracking-wide" data-aos="fade-up">Farak Padta Hai</h2>
+
+      <!-- Banner with Central Highlight -->
+      <div class="relative bg-cover bg-center bg-no-repeat mb-16 shadow-lg rounded-xl overflow-hidden"
+        style="background-image: url('your-impact-image.jpg');" data-aos="zoom-in">
+        <div class="bg-black bg-opacity-70 py-14 px-6 rounded-xl">
+          <h3 class="text-6xl font-extrabold text-green-400 drop-shadow-md">81,10,504</h3>
+          <p class="text-lg text-white mt-2">kilograms of plastic waste diverted from landfills</p>
+        </div>
+      </div>
+
+      <!-- Stat Cards -->
+      <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-[1200px] mx-auto"
+        data-aos="fade-up" data-aos-delay="100">
+
+        <div class="bg-blue-800 text-white rounded-2xl p-6 shadow-xl hover:scale-105 transition-all duration-300"
+          data-aos="zoom-in" data-aos-delay="200">
+          <span class="text-3xl font-bold block">13.8 crores</span>
+          <p class="mt-2 text-sm">Litres of Water Saved</p>
+        </div>
+
+        <div class="bg-red-700 text-white rounded-2xl p-6 shadow-xl hover:scale-105 transition-all duration-300"
+          data-aos="zoom-in" data-aos-delay="250">
+          <span class="text-3xl font-bold block">5,65,536</span>
+          <p class="mt-2 text-sm">KWh of Electricity Saved</p>
+        </div>
+
+        <div class="bg-yellow-500 text-white rounded-2xl p-6 shadow-xl hover:scale-105 transition-all duration-300"
+          data-aos="zoom-in" data-aos-delay="300">
+          <span class="text-3xl font-bold block">2.5 lakhs</span>
+          <p class="mt-2 text-sm">Litres of Oil Saved</p>
+        </div>
+
+        <div class="bg-green-700 text-white rounded-2xl p-6 shadow-xl hover:scale-105 transition-all duration-300"
+          data-aos="zoom-in" data-aos-delay="350">
+          <span class="text-3xl font-bold block">10,243</span>
+          <p class="mt-2 text-sm">Number of Trees Saved</p>
+        </div>
+
+        <div class="bg-indigo-700 text-white rounded-2xl p-6 shadow-xl hover:scale-105 transition-all duration-300"
+          data-aos="zoom-in" data-aos-delay="400">
+          <span class="text-3xl font-bold block">2.1 million</span>
+          <p class="mt-2 text-sm">kg CO₂ Emissions Prevented</p>
+        </div>
+
+        <div class="bg-gray-900 text-white rounded-2xl p-6 shadow-xl hover:scale-105 transition-all duration-300"
+          data-aos="zoom-in" data-aos-delay="450">
+          <span class="text-3xl font-bold block">6,500+</span>
+          <p class="mt-2 text-sm">Cubic Meters of Landfill Space Saved</p>
+        </div>
+
+        <div class="bg-pink-700 text-white rounded-2xl p-6 shadow-xl hover:scale-105 transition-all duration-300"
+          data-aos="zoom-in" data-aos-delay="500">
+          <span class="text-3xl font-bold block">2.4+ lakh</span>
+          <p class="mt-2 text-sm">Lives Impacted Across India</p>
+        </div>
+
       </div>
     </div>
   </section>
 
-  <!-- ===== WHY BotalSePaisa ===== -->
-  <section class="section fade-in" id="why" style="animation-delay:.5s">
-    <h2>Why botalSePaisa?</h2>
-    <p class="lead">India generates 3.5 million tonnes of plastic waste every year. BotalSePaisa’s deposit‑return model
-      offers a simple, instant‑reward solution.</p>
-    <div class="grid why-grid">
-      <div class="why-item fade-in" style="animation-delay:.6s">
-        <h3>Plastic Problem</h3>
-        <p>Mounting bottles in landfills & rivers.</p>
-      </div>
-      <div class="why-item fade-in" style="animation-delay:.7s">
-        <h3>Instant Reward</h3>
-        <p>Scan & get ₹1 via UPI in seconds.</p>
-      </div>
-      <div class="why-item fade-in" style="animation-delay:.8s">
-        <h3>Swachh Bharat</h3>
-        <p>Every return keeps streets & oceans cleaner.</p>
+  <!-- CONTACT SECTION -->
+  <section class="bg-white py-16">
+    <div class="max-w-6xl mx-auto px-6">
+      <h2 class="text-4xl font-bold text-center mb-2 text-black">Get in touch with us</h2>
+      <p class="text-center text-gray-600 mb-10">Any question or remarks? Just write us a <span
+          class="text-green-600 font-semibold">message!</span></p>
+
+      <div class="grid md:grid-cols-2 gap-10 bg-gray-100 rounded-2xl overflow-hidden shadow-xl">
+
+        <!-- Left Contact Info -->
+        <div class="bg-[#f3ffe6] p-8 flex flex-col justify-between">
+          <div>
+            <h3 class="text-2xl font-semibold text-gray-900 mb-4">Contact Information</h3>
+            <p class="text-gray-700 mb-6">Fill up the form and our team will get back to you within 24 hours</p>
+
+            <div class="space-y-4 text-sm">
+              <div class="flex items-center space-x-2 text-black">
+                <span>📞</span>
+                <span>+91-9674947239</span>
+              </div>
+              <div class="flex items-center space-x-2 text-black">
+                <span>📧</span>
+                <span>botalsepaisa@gmail.com</span>
+              </div>
+              <div class="flex items-start space-x-2 text-black">
+                <span>📍</span>
+                <span>
+                  Kolkata,</br>
+                  West Bengal
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Contact Form -->
+        <form class="bg-white p-8 space-y-6">
+          <div class="grid md:grid-cols-2 gap-4">
+            <input type="text" placeholder="Name"
+              class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-500" />
+            <input type="text" placeholder="Phone Number"
+              class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-500" />
+          </div>
+          <input type="email" placeholder="Email Address"
+            class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-500" />
+          <input type="text" placeholder="Subject"
+            class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-500" />
+          <textarea placeholder="Message" rows="4"
+            class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-500"></textarea>
+          <button type="submit"
+            class="bg-[#138808] hover:bg-green-700 text-white px-6 py-2 rounded-md text-lg font-semibold shadow">
+            Send Message
+          </button>
+        </form>
+
       </div>
     </div>
   </section>
 
-  <!-- ===== HOW IT WORKS SNAPSHOT ===== -->
-  <section class="section fade-in" id="snapshot" style="animation-delay:.9s">
-    <h2>How It Works</h2>
-    <div class="grid steps-grid">
-      <div class="step fade-in" style="animation-delay:1s"><span>1</span>
-        <h4>Buy</h4>
-        <p>Grab any BotalSePaisa‑enabled drink.</p>
+  <!-- Footer Section -->
+  <footer class="bg-black text-white pt-16 pb-8 px-6">
+    <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 border-b border-gray-700 pb-10">
+
+      <!-- Businesses -->
+      <div>
+        <h4 class="text-green-500 font-semibold mb-3">Businesses</h4>
+        <ul class="space-y-2 text-sm">
+          <li><a href="#" class="hover:text-green-400">Vendor</a></li>
+
+        </ul>
       </div>
-      <div class="step fade-in" style="animation-delay:1.1s"><span>2</span>
-        <h4>Scan</h4>
-        <p>Scan the QR with our app/website.</p>
+
+      <!-- Individuals -->
+      <div>
+        <h4 class="text-green-500 font-semibold mb-3">Users</h4>
+        <ul class="space-y-2 text-sm">
+          <li><a href="login.html" class="hover:text-green-400">User Dashboard</a></li>
+          <li><a href="signup.html" class="hover:text-green-400">User Sign Up</a></li>
+        </ul>
       </div>
-      <div class="step fade-in" style="animation-delay:1.2s"><span>3</span>
-        <h4>Drop</h4>
-        <p>Return bottle at the nearest kiosk.</p>
+
+      <!-- Company -->
+      <div>
+        <h4 class="text-green-500 font-semibold mb-3">Company</h4>
+        <ul class="space-y-2 text-sm">
+          <li><a href="about.html" class="hover:text-green-400">About Us</a></li>
+
+        </ul>
       </div>
-      <div class="step fade-in" style="animation-delay:1.3s"><span>4</span>
-        <h4>Earn</h4>
-        <p>Instantly receive ₹1 to your UPI.</p>
+
+      <!-- Help -->
+      <div>
+        <h4 class="text-green-500 font-semibold mb-3">Help</h4>
+        <ul class="space-y-2 text-sm">
+          <li><a href="contact.html" class="hover:text-green-400">Contact Us</a></li>
+        </ul>
+      </div>
+
+      <!-- Contact Info -->
+      <div>
+        <div class="flex items-center gap-2 mb-2">
+          <img src="images/main_logo.jpg" alt="Logo" class="h-8 w-8">
+          <span class="text-green-500 font-semibold text-lg">botalsepaisa</span>
+        </div>
+        <ul class="text-sm space-y-2">
+          <li>📞 +91-9674947239</li>
+          <li>✉️ botalsepaisa@gmail.com</li>
+          <li>📍 Kolkata, West Bengal</li>
+        </ul>
+        <div class="flex gap-3 mt-4">
+          <a href="#" class="hover:text-gray-300"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="hover:text-gray-300"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="hover:text-gray-300"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="hover:text-gray-300"><i class="fab fa-linkedin-in"></i></a>
+        </div>
       </div>
     </div>
-  </section>
 
-  <!-- ===== IMPACT COUNTERS ===== -->
-  <section class="section fade-in" id="impact" style="animation-delay:1.4s">
-    <h2>Our Impact So Far</h2>
-    <div class="impact">
-      <div class="counter fade-in" style="animation-delay:1.5s">
-        <h3>0</h3>
-        <p>Bottles Returned</p>
-      </div>
-      <div class="counter fade-in" style="animation-delay:1.6s">
-        <h3>0</h3>
-        <p>Rewards Issued</p>
-      </div>
-      <div class="counter fade-in" style="animation-delay:1.7s">
-        <h3>0</h3>
-        <p>Kiosks Active</p>
-      </div>
+    <!-- Bottom Line -->
+    <div class="text-center mt-6 text-sm text-gray-400">
+
+      <p>Made with <span class="text-red-500">❤️</span> in India, for the World</p>
     </div>
-  </section>
+  </footer>
 
-  <!-- ===== CTA BANNER ===== -->
-  <section class="cta-banner fade-in" style="animation-delay:1.8s">
-    <h2>Ready to earn as you recycle?</h2>
-    <a href="signup.html">Join Now</a>
-  </section>
-
-  <footer class="fade-in" style="animation-delay:1.9s">&copy; 2025 BotalSePaisa India. All rights reserved.</footer>
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
@@ -169,14 +452,14 @@
     }
 
     if (isFlutterWebView()) {
-      const downloadBtn = document.getElementById("download-menu");
+      const downloadBtn = document.getElementById("download-app-btn");
       if (downloadBtn) {
         downloadBtn.style.display = "none";
       }
     }
   </script>
 
-  </script>
+
 
   <script>
     const BACKEND_URL = 'http://localhost:3000';
@@ -190,6 +473,47 @@
           console.error('Error fetching users:', err);
         });
     });
+  </script>
+
+  <script>
+    function toggleDropdown() {
+      const dropdown = document.getElementById('companyDropdown');
+      dropdown.classList.toggle('hidden');
+    }
+
+    // Optional: Hide dropdown if clicked outside
+    window.addEventListener('click', function (e) {
+      const dropdown = document.getElementById('companyDropdown');
+      const button = e.target.closest('button');
+      const isInsideDropdown = e.target.closest('#companyDropdown');
+
+      if (!button && !isInsideDropdown) {
+        dropdown.classList.add('hidden');
+      }
+    });
+  </script>
+
+  <!-- AOS JS -->
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init({
+      once: true, // animation occurs only once per element
+      duration: 1000, // smooth animation speed in ms
+      offset: 120 // when to start the animation from bottom
+    });
+  </script>
+
+  <!-- Feather Icons Init -->
+  <script>
+    feather.replace();
+  </script>
+
+  <!-- Dropdown toggle script -->
+  <script>
+    function toggleDropdown() {
+      const dropdown = document.getElementById('companyDropdown');
+      dropdown.classList.toggle('hidden');
+    }
   </script>
 </body>
 
