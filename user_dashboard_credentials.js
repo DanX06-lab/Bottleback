@@ -1,7 +1,11 @@
 // Handles dashboard data fetching and display for user dashboard
 // Now matches the current user table fields
 
-const API_BASE = 'https://botalsepaisa.onrender.com/api';
+// Manual API environment switch
+const API_ENV = 'prod'; // Change to 'prod' for deployed backend
+const API_BASE = API_ENV === 'prod'
+    ? 'https://botalsepaisa.onrender.com/api'
+    : 'http://localhost:3000/api';
 
 document.addEventListener('DOMContentLoaded', function () {
     // Check authentication
@@ -26,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (document.getElementById('leaderboard-city'))
                     document.getElementById('leaderboard-city').textContent = topUser.city || 'Top Recycler';
                 if (document.getElementById('leaderboard-milestone'))
-                    document.getElementById('leaderboard-milestone').textContent = `${topUser.name} — ${topUser.total_points} points`;
+                    document.getElementById('leaderboard-milestone').textContent = `${topUser.name} — ₹${topUser.upi_earned}`;
             } else if (document.getElementById('leaderboard-milestone')) {
                 document.getElementById('leaderboard-milestone').textContent = 'No top user found';
                 if (document.getElementById('leaderboard-rank'))
@@ -42,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Fetch and display bottles returned and UPI earned for the logged-in user
     if (token) {
-        fetch(`${API_BASE}/user/:id`, {
+        fetch(`${API_BASE}/user/profile`, {
             headers: {
                 'Authorization': 'Bearer ' + token
             }

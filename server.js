@@ -172,6 +172,47 @@ app.post('/api/scan-qr', async (req, res) => {
     }
 });
 
+// --- USER DASHBOARD & LEADERBOARD ENDPOINTS ---
+
+// Leaderboard: GET /api/user/leaderboard (JWT required)
+app.get('/api/user/leaderboard', auth, async (req, res) => {
+    try {
+        await bottleBackDB.initialize();
+        // Fetch users with city if available, else fallback to name and upi_earned
+        const users = await bottleBackDB.db.executeQuery(
+            'SELECT full_name as name, upi_earned, city FROM users ORDER BY upi_earned DESC'
+        );
+        const leaderboard = users.map((user, i) => ({
+            rank: i + 1,
+            name: user.name,
+            upi_earned: user.upi_earned,
+            city: user.city || null
+        }));
+        res.json(leaderboard);
+    } catch (error) {
+        console.error('Error fetching leaderboard:', error);
+        res.status(500).json({ error: 'Failed to fetch leaderboard' });
+    }
+});
+
+// User profile: GET /api/user/profile (JWT required)
+app.get('/api/user/profile', auth, async (req, res) => {
+    try {
+        await bottleBackDB.initialize();
+        const user = await bottleBackDB.db.executeQuery(
+            'SELECT bottles_returned, upi_earned FROM users WHERE user_id = ?',
+            [req.user.user_id]
+        );
+        if (!user.length) return res.status(404).json({ error: 'User not found' });
+        res.json({
+            bottles_returned: user[0].bottles_returned,
+            upi_earned: user[0].upi_earned
+        });
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to fetch user stats' });
+    }
+});
+
 // --- AUTH ---
 app.post('/api/auth/signup', async (req, res) => {
     const { name, phone, password } = req.body;

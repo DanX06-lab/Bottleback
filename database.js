@@ -14,6 +14,17 @@ const dbConfig = {
     queueLimit: 0
 };
 
+const localConfig = {
+    host: process.env.LOCAL_DB_HOST,
+    user: process.env.LOCAL_DB_USER,
+    password: process.env.LOCAL_DB_PASSWORD,
+    database: process.env.LOCAL_DB_NAME,
+    port: process.env.LOCAL_DB_PORT ? parseInt(process.env.LOCAL_DB_PORT, 10) : 3306,
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
+};
+
 // Create connection pool
 const pool = mysql.createPool(dbConfig);
 
